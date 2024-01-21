@@ -1,0 +1,111 @@
+/* ================================================== */
+/* Общие настройки */
+@font-face {
+    font-family: 'Sofia Sans';
+    src: url('/font/SofiaSans-Regular.woff2') format('woff2'), 
+    url('/font/SofiaSans-Regular.woff') format('woff');
+}
+body
+{
+    font-family: 'Sofia Sans', sans-serif;
+    font-size: 12pt;
+    color: rgba(51, 51, 51, 0.5);
+    margin: 0;
+    background-color: #F9F6F2;
+}
+/* ================================================== */
+/* Меню */
+.menu
+{
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    background-color: #E8DDD2;
+    height: 95%;
+    top: 50%;
+    transform: translateY(-50%);
+    border-top-right-radius: 30px;
+    border-bottom-right-radius: 30px;
+}
+.menu__logo
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #735C4F;
+    margin: 20px 50px 50px 30px;
+}
+.menu__logo-icon
+{
+    display: flex;
+    width: 50px;
+    height: 50px;
+    border: 3px solid #735C4F;
+    border-radius: 10px;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+    font-size: 25pt;
+}
+.menu__logo-text
+{
+    font-size: 25pt;
+    font-weight: 900;
+}
+.menu__grammar
+{
+    display: flex;
+    padding: 10px 0 10px 0;
+    width: 90%;
+}
+.menu__cards
+{
+    display: flex;
+    padding: 10px 0 10px 0;
+    width: 90%;
+}
+.menu__training
+{
+    display: flex;
+    padding: 10px 0 10px 0;
+    width: 90%;
+}
+.menu__personal-area
+{
+    display: flex;
+    padding: 10px 0 10px 0;
+    width: 90%;
+}
+.menu__icon
+{
+    margin: 0 10px 0 30px;
+    width: 50px;
+    height: 50px;
+}
+.svg
+{
+    fill: rgba(51, 51, 51, 0.5);
+}
+.svg_active
+{
+    fill: #333333;
+}
+.menu_active
+{
+    background-color: #CDB7A0;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+.menu__text
+{
+    display: flex;
+    align-items: center;
+    margin: 0 20px 0 10px;
+    font-weight: 400;
+}
+.menu__text_active
+{
+    font-weight: 600;
+    color: #333333;
+}
+/* ================================================== */
