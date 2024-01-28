@@ -7,7 +7,78 @@
     <link rel="stylesheet" href="Style/style.css">
 </head>
 <body>
-    <div class="menu">
+    <div id="enter-register" style="display: none;">
+        <div class="background">
+            <div class="enter-register__logo">
+                <div class="enter-register__logo-icon">
+                    LB
+                </div>
+                <div class="enter-register__logo-text">
+                    LaNbook
+                </div>
+            </div>
+            <div class="enter-register__description">
+                Описание сервиса. Прежде всего, постоянное информационно-пропагандистское обеспечение нашей деятельности обеспечивает актуальность соответствующих 
+                условий активизации. 
+            </div>
+        </div>
+        <div id="form-enter">
+            <div id="enter-register_exit-enter">
+                <svg width="36" height="36" viewBox="0 0 36 36">
+                    <path d="M3 3.44705L32.8484 33" stroke="#333333" stroke-width="5" stroke-linecap="round"/>
+                    <path d="M3.15161 32.5529L33 3.00001" stroke="#333333" stroke-width="5" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <h1>
+                Вход
+            </h1>
+            <form action="PHP/enter.php" method="POST" onsubmit="return validateFormForEnter()">
+                <label for="email-input">
+                    E-mail
+                </label>
+                <input type="email" name="userEmail" id="email-input" autocomplete="off">
+                <label for="password-input">
+                    Пароль:
+                </label>
+                <input type="password" name="userPassword" id="password-input" autocomplete="off">
+                <button type="submit" class="button-form">
+                    Вход
+                </button>
+            </form>
+            <button id="create-account">
+                Создать аккаунт
+            </button>
+        </div>
+        <div id="form-register" style="display: none;">
+            <div id="enter-register_exit-register">
+                <svg width="36" height="36" viewBox="0 0 36 36">
+                    <path d="M3 3.44705L32.8484 33" stroke="#333333" stroke-width="5" stroke-linecap="round"/>
+                    <path d="M3.15161 32.5529L33 3.00001" stroke="#333333" stroke-width="5" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <h1>
+                Регистрация
+            </h1>
+            <form action="PHP/registration.php" method="POST" onsubmit="return validateFormForRegister()">
+                <label for="name-register">
+                    Имя:
+                </label>
+                <input type="text" name="userName" id="name-register" autocomplete="off"> 
+                <label for="email-register">
+                    E-mail
+                </label>
+                <input type="email" name="userEmail" id="email-register" autocomplete="off">
+                <label for="password-register">
+                    Пароль:
+                </label>
+                <input type="password" name="userPassword" id="password-register" autocomplete="off">
+                <button type="submit" class="button-form">
+                    Регистрация
+                </button>
+            </form>
+        </div>
+    </div>
+    <div id="menu">
         <div class="menu__logo">
             <div class="menu__logo-icon">
                 LB
@@ -30,7 +101,7 @@
                 Грамматика
             </div>
         </div>
-        <div class="menu__cards menu_active">
+        <div class="menu_active" id="menu__cards">
             <div class="menu__icon">
                 <svg width="35" height="45" viewBox="0 0 35 45" class = "svg_active">
                     <path d="M19.7754 34.4531H3.95508C1.77416 34.4531 0 32.679 0 30.498V3.95508C0 1.77416 1.77416 0 3.95508 0H19.7754C21.9563 0 23.7305 1.77416 23.7305 3.95508V30.498C23.7305 32.679 21.9563 34.4531 19.7754 34.4531Z"/>
@@ -41,7 +112,7 @@
                 Карточки
             </div>
         </div>
-        <div class="menu__training">
+        <div id="menu__training">
             <div class="menu__icon">
                 <svg width="45" height="45" viewBox="0 0 45 45">
                     <path d="M13.2533 26.3793H10.8621V40.3448H18.7541C19.8124 40.3448 20.8265 40.6187 21.7241 41.1245V28.6471C20.7908 29.1887 19.7309 29.4827 18.6207 29.4827C16.3296 29.4827 14.3286 28.2313 13.2533 26.3793ZM20.1724 38.7931H12.4138V37.2413H20.1724V38.7931ZM20.1724 35.6896H12.4138V34.1379H20.1724V35.6896ZM20.1724 32.5862H12.4138V31.0344H20.1724V32.5862Z"/>
@@ -59,7 +130,7 @@
                 Тренировки
             </div>
         </div>
-        <div class="menu__personal-area">
+        <div id="menu__personal-area">
             <div class="menu__icon">
                 <svg width="45" height="45" viewBox="0 0 45 45">
                     <path d="M0 5V40C0 42.75 2.25 45 5 45H40C42.75 45 45 42.75 45 40V5C45 2.25 42.75 0 40 0H5C2.25 0 0 2.25 0 5ZM30 15C30 19.25 26.75 22.5 22.5 22.5C18.25 22.5 15 19.25 15 15C15 10.75 18.25 7.5 22.5 7.5C26.75 7.5 30 10.75 30 15ZM7.5 35C7.5 30 17.5 27.25 22.5 27.25C27.5 27.25 37.5 30 37.5 35V37.5H7.5V35Z"/>
@@ -70,7 +141,7 @@
             </div>
         </div>
     </div>
-    <div class="body">
+    <div id="body">
         <div class="header">
             <form class="search__container">
                 <input type="search" name="search" class="search__input" placeholder="Поиск..." autocomplete="off">
@@ -78,9 +149,9 @@
                     <path d="M8.875 0.75C11.0299 0.75 13.0965 1.60602 14.6202 3.12976C16.144 4.65349 17 6.72012 17 8.875C17 10.8875 16.2625 12.7375 15.05 14.1625L15.3875 14.5H16.375L22.625 20.75L20.75 22.625L14.5 16.375V15.3875L14.1625 15.05C12.7375 16.2625 10.8875 17 8.875 17C6.72012 17 4.65349 16.144 3.12976 14.6202C1.60602 13.0965 0.75 11.0299 0.75 8.875C0.75 6.72012 1.60602 4.65349 3.12976 3.12976C4.65349 1.60602 6.72012 0.75 8.875 0.75ZM8.875 3.25C5.75 3.25 3.25 5.75 3.25 8.875C3.25 12 5.75 14.5 8.875 14.5C12 14.5 14.5 12 14.5 8.875C14.5 5.75 12 3.25 8.875 3.25Z"/>
                 </svg>
             </form>
-            <div class="exit">
-                <div class="user">
-                    Pavel
+            <div id="exit" style = "display: none;">
+                <div id="user">
+
                 </div>
                 <svg class="exit__button" width="29" height="25" viewBox="0 0 29 25">
                     <path d="M21.375 5.625L19.4362 7.56375L22.9837 11.125H9V13.875H22.9837L19.4362 17.4225L21.375 19.375L28.25 12.5M3.5 2.875H14.5V0.125H3.5C1.9875 0.125 0.75 1.3625 0.75 2.875V22.125C0.75 23.6375 1.9875 24.875 3.5 24.875H14.5V22.125H3.5V2.875Z"/>
@@ -100,26 +171,12 @@
                 </span>
             </label>
         </div>
-        <div class="body__container">
-            <div class="body__categories">
-                <div class="group-category">
-                    Уровни
-                </div>
-                <div class="category__container">
-                    <div class="category">
-                        <div class="category-picture">
-                            <img src="Picture/Group/Level/A1 Oxford.png" alt="A1 Oxford" class="category-picture">
-                        </div>
-                        <div class="category-title">
-                            А1 Оксфорд
-                        </div>
-                        <div class="category-button">
-                            Добавить
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div id="body__container">
+
         </div>
     </div>
+    <script src="JS/switchTabs.js"></script>
+    <script src="JS/userAuthentication.js"></script>
+    <script src="JS/workingWithCards.js"></script>
 </body>
 </html>

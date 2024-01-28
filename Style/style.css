@@ -13,9 +13,142 @@ body
     color: rgba(51, 51, 51, 0.5);
     background-color: #F9F6F2;
 }
+form
+{
+    display: flex;
+    flex-direction: column;
+}
+input
+{
+    padding: 0 0 0 10px;
+    margin: 10px 0;
+    width: 500px;
+    height: 50px;
+    border: 1px solid #999999;
+    border-radius: 10px;
+    background-color: #F2EFE9;
+}
+button
+{
+    padding: 0;
+    margin: 10px 0;
+    width: 500px;
+    height: 50px;
+    border-radius: 10px;
+    border: 1px solid #999999;
+    color: #F2EFE9;
+}
+/* ==================================================================================================== */
+/* ------------------------------------------Вход/Регистрация------------------------------------------ */
+#enter-register
+{
+    display: flex;
+    background-color: #E8DDD2;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+}
+.button-form
+{
+    background-color: #94A082;
+}
+#create-account
+{
+    background-color: #8294A0;
+}
+/* ================================================== */
+/* Задний фон */
+.background
+{
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+}
+.enter-register__logo
+{
+    display: flex;
+    align-items: center;
+}
+.enter-register__logo-icon
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 7px solid #735C4F;
+    color: #735C4F;
+    width: 100px;
+    height: 100px;
+    font-size: 64px;
+    border-radius: 20px;
+}
+.enter-register__logo-text
+{
+    font-size: 128px;
+    color: #735C4F;
+}
+.enter-register__description
+{
+    color: #333333;
+    font-size: 36px;
+    text-align: right;
+    width: 645px;
+}
+/* ================================================== */
+/* Форма входа */
+#form-enter
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 50px;
+    background-color: #CDB7A0;
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px;
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
+}
+#enter-register_exit-enter
+{
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 10px 10px 0 0;
+}
+/* ================================================== */
+/* Форма регистрации */
+#form-register
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 50px;
+    background-color: #CDB7A0;
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px;
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
+}
+#enter-register_exit-register
+{
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 10px 10px 0 0;
+}
+/* -------------------------------------------------- */
+/* Сообщение об ошибке */
+.error-message
+{
+    text-align: center;
+}
 /* ==================================================================================================== */
 /* ------------------------------------------------Меню------------------------------------------------ */
-.menu
+#menu
 {
     flex-shrink: 0;
     width: 285px;
@@ -57,21 +190,21 @@ body
     width: 90%;
     cursor: pointer;
 }
-.menu__cards
+#menu__cards
 {
     display: flex;
     padding: 10px 0 10px 0;
     width: 90%;
     cursor: pointer;
 }
-.menu__training
+#menu__training
 {
     display: flex;
     padding: 10px 0 10px 0;
     width: 90%;
     cursor: pointer;
 }
-.menu__personal-area
+#menu__personal-area
 {
     display: flex;
     padding: 10px 0 10px 0;
@@ -113,7 +246,7 @@ svg
 }
 /* ==================================================================================================== */
 /* ------------------------------------------------Тело------------------------------------------------ */
-.body
+#body
 {
     display: flex;
     flex-direction: column;
@@ -128,6 +261,7 @@ svg
     justify-content: flex-end;
     align-items: center;
     width: 100%;
+    margin: 20px 0 20px 0;
 }
 /* -------------------------------------------------- */
 /* Поиск */
@@ -164,12 +298,12 @@ svg
 }
 /* -------------------------------------------------- */
 /* Выход */
-.exit
+#exit
 {
     display: flex;
     margin-right: 50px;
 }
-.user
+#user
 {
     font-size: 14pt;
     text-decoration: underline;
@@ -239,11 +373,13 @@ input:checked + .slider:before
 }
 /* ================================================== */
 /* Тело */
-.body__container
+#body__container
 {
     display: flex;
+    overflow-y: auto;
     height: 100%;
-    margin: 30px 50px 0px 50px;
+    margin: 20px 40px 0px 40px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
     background-color: #F2EFE9;
     border-top-left-radius: 30px;
     border-top-right-radius: 30px;
@@ -253,32 +389,160 @@ input:checked + .slider:before
 .body__categories
 {
     display: flex;
+    
+    width: 100%;
+    height: 100%;
     flex-direction: column;
 }
 .group-category
 {
+    display: flex;
     width: 100%;
-
+    justify-content: center;
+    color: #2D2D2D;
+    font-size: 40px;
+    margin: 10px 0;
+}
+.category__container
+{
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+.category
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    width: 300px;
+    height: 250px;
+    background-color: #CDB7A0;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    margin: 20px;
 }
 .category-picture
 {
     width: 200px;
     height: 150px;
+    outline: 1px solid #735C4F;
+    border-radius: 10px;
+}
+.category-title
+{
+    display: flex;
+    align-items: center;
+    height: 30px;
+    font-size: 24px;
+    color: #2D2D2D;
+    margin: 10px 0;
+}
+.category-button
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 30px;
+    font-size: 16px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    background-color: rgba(148, 160, 130, 0.5);
+    color: #F9F6F2;
 }
 /* ==================================================================================================== */
 /* --------------------------------------------Медиа запросы------------------------------------------- */
+/* 768px */
 @media (max-width: 768px)
 {
     body
     {
         flex-direction: column-reverse;
     }
-    .menu
+    #menu
     {
-        height: 150px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: flex-end;
+        height: 130px;
         width: 95%;
         border-bottom-right-radius: 0;
         border-top-left-radius: 30px;
     }
+    .menu__logo
+    {
+        display: none;
+    }
+    .menu__grammar
+    {
+        align-items: center;
+        flex-direction: column;
+        padding: 10px;
+        width: auto;
+    }
+    #menu__cards
+    {
+        align-items: center;
+        flex-direction: column;
+        padding: 10px;
+        width: auto;
+    }
+    #menu__training
+    {
+        align-items: center;
+        flex-direction: column;
+        padding: 10px;
+        width: auto;
+    }
+    #menu__personal-area
+    {
+        align-items: center;
+        flex-direction: column;
+        padding: 10px;
+        width: auto;
+    }
+    #menu__personal-area .menu__text
+    {
+        margin: 0;
+    }
+    .menu__icon
+    {
+        width: 30px;
+        height: 30px;
+        margin: 0 0 10px 0;
+    }
+    .menu__text
+    {
+        max-width: 100px;
+        margin: 0 0 20px 0;
+        text-align: center;
+        word-wrap: break-word;
+    }
+    .menu_active
+    {
+        border-top-left-radius: 20px;
+        border-bottom-right-radius: 0;
+    }
+    svg
+    {
+        width: 30px;
+        height: 30px;
+    }
+    .slider > svg
+    {
+        width: 20px;
+        height: 20px;
+    }
+    #body
+    {
+        height: 90%;
+    }
+}
+/* 480px */
+@media (max-width: 480px)
+{
+
 }
 /* ==================================================================================================== */
