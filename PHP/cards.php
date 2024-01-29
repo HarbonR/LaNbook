@@ -11,20 +11,24 @@
     }
 
     $userId = $_SESSION['userId'];
+    $idCategory = $_POST['idCategory'];
     $sql = "
         SELECT
-            card.Id
-            ,card.Picture
-            ,card.Eng
-            ,card.Rus
-            ,CASE WHEN user.IdUser IS NOT NULL THEN 1 ELSE 0 END AS added
+            Dictionary.Id
+            ,Dictionary.Picture
+            ,Dictionary.Eng
+            ,Dictionary.Rus
+            ,CASE WHEN UserDictionary.IdUser IS NOT NULL THEN 1 ELSE 0 END AS added
         FROM
-            cardEngRus AS card
-        LEFT JOIN userCardEngRus user ON card.Id = user.IdCardEngRus AND user.IdUser = '$userId'"; // SQL запрос
+            Dictionary
+        INNER JOIN DictionaryCategory ON DictionaryCategory.IdDictionary = Dictionary.Id
+        LEFT JOIN UserDictionary ON Dictionary.Id = UserDictionary.IdDictionary AND UserDictionary.IdUser = '$userId'
+        WHERE
+            DictionaryCategory.IdCategory = '$idCategory'"; // SQL запрос
     $result = mysqli_query($Connect, $sql); // выполнение запроса
     $data = array(); // Создаем пустой массив для хранения данных
 
-    if (mysqli_num_rows($result) > 0) 
+    if (mysqli_num_rows($result) > 0)
     {
         while($row = mysqli_fetch_assoc($result)) // выводим данные из каждой строки
         {

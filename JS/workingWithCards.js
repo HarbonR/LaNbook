@@ -29,14 +29,21 @@ function createGroupCategory(idGroupCategory, titleGroup)
 }
 //--------------------------------------------------
 // Создаём функцию для создания категорий
-function createCategory(title, linkToPicture)
+function createCategory(idCategory, title, linkToPicture)
 {
     
     let category = document.createElement('div');
     category.classList.add('category');
+    category.id = "idCategory: " + idCategory;
+    category.onclick = function()
+    {
+        document.getElementById("body__container").innerHTML = "";
+        getCards("../PHP/cards.php", "Card", idCategory);
+    }
 
     let categoryPicture = document.createElement('div');
     categoryPicture.classList.add('category-picture');
+
     let pictureImg = document.createElement('img');
     pictureImg.src = linkToPicture;
     pictureImg.classList.add('category-picture');
@@ -49,6 +56,11 @@ function createCategory(title, linkToPicture)
     let categoryButton = document.createElement('div');
     categoryButton.classList.add('category-button');
     categoryButton.textContent = 'Добавить';
+    categoryButton.onclick = function(event)
+    {
+        event.stopPropagation(); // Функция останавливает выполнение функции по нажатию на категорию
+        console.log("Кнопка добавить");
+    }
 
     // Добавление элементов в DOM
     category.appendChild(categoryPicture);
@@ -59,89 +71,118 @@ function createCategory(title, linkToPicture)
 }
 //--------------------------------------------------
 // Создаем функцию для создания карточки
-// function createCard(cardId, linkToPicture, wordsInTheTargetLanguage, wordsInNativeLanguage, added)
-// {
-//     // Создание основного контейнера карточки
-//     let card = document.createElement("div");
-//     card.className = "card";
-//     card.style.backgroundImage = `url("${linkToPicture}")`;
-//     card.id = cardId;
+function createCard(cardId, linkToPicture, wordsInTheTargetLanguage, wordsInNativeLanguage, added)
+{
+    // Создание основного контейнера карточки
+    let card = document.createElement('div');
+    card.className = 'card';
+    card.id = cardId;
 
-//     // Создание div для слова
-//     let wordDiv = document.createElement('div');
-//     wordDiv.className = "word";
-//     wordDiv.textContent = wordsInTheTargetLanguage;
-//     card.appendChild(wordDiv);
+    let cardPicture = document.createElement('div');
+    cardPicture.className = 'card-picture';
 
-//     // Создание div для перевода
-//     let translateDiv = document.createElement('div');
-//     translateDiv.className = "translate";
-//     translateDiv.textContent = wordsInNativeLanguage;
-//     card.appendChild(translateDiv);
+    let picture = document.createElement('img');
+    picture.src = linkToPicture;
+    picture.alt = '';
+    cardPicture.appendChild(picture);
 
-//     // Создание div для кнопок
-//     let buttons = document.createElement('div');
-//     buttons.className = "buttons";
+    let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("class", "card-level");
+    svg.setAttribute("width", "42");
+    svg.setAttribute("height", "43");
+    svg.setAttribute("viewBox", "0 0 42 43");
 
-//     // Создание div для кнопки "Добавить"
-//     let buttonAdd = document.createElement('div');
-//     buttonAdd.className = "button-add";
-//     buttonAdd.classList.add("enterButton");
-//     buttonAdd.textContent = '+';
-//     buttonAdd.style.width = "100px"
-//     if (added == 1)
-//     {
-//         buttonAdd.classList.add("enteredButton");
-//         buttonAdd.classList.remove("enterButton");
-//     }
-//     else
-//     {
-//         buttonAdd.classList.add("enterButton");
-//         buttonAdd.classList.remove("enteredButton");
-//     }
-//     buttonAdd.onclick = function()
-//     {
-//         if(buttonAdd.classList[1] == "enterButton") // Если карточка не добавлена, добавить
-//         {
-//             let xhr = new XMLHttpRequest(); // Создаем новый объект XMLHTTPrequest
-//             xhr.open("POST", "../PHP/addCard.php", true);
-//             // Отправляем запрос на сервер
-//             xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Устанавливаем заголовок Content-Type
-//             xhr.send("cardId=" + encodeURIComponent(cardId));
-//         }
-//         else // Иначе удалить
-//         {
-//             let xhr = new XMLHttpRequest(); // Создаем новый объект XMLHTTPrequest
-//             xhr.open("POST", "../PHP/deleteCard.php", true); 
-//             // Отправляем запрос на сервер
-//             xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Устанавливаем заголовок Content-Type
-//             xhr.send("cardId=" + encodeURIComponent(cardId));
-//         }
-//         switchButtonClass(buttonAdd);
-        
-//     }
-//     buttons.appendChild(buttonAdd);
+    let path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    path.setAttribute("d", "M1 1H41V41.5L21 30L1 41V1Z");
+    svg.appendChild(path);
+    cardPicture.appendChild(svg);
+    card.appendChild(cardPicture);
 
-//     // Создание div для кнопки "Звук"
-//     let buttonSound = document.createElement('div');
-//     buttonSound.className = "button-sound";
-//     buttonSound.style.width = "100px"
-//     let soundImage = document.createElement('img');
-//     soundImage.src = "Pictures/button-sound.svg";
-//     buttonSound.appendChild(soundImage);
-//     buttons.appendChild(buttonSound);
+    // Создание div для слова
+    let cardWord = document.createElement('div');
+    cardWord.className = 'card-word';
+    cardWord.textContent = wordsInTheTargetLanguage;
+    card.appendChild(cardWord);
 
-//     // Добавление div с кнопками в основной контейнер карточки
-//     card.appendChild(buttons);
+    // Создание div для перевода
+    let cardTranslate = document.createElement('div');
+    cardTranslate.className = 'card-translate';
+    cardTranslate.textContent = wordsInNativeLanguage;
+    card.appendChild(cardTranslate);
 
-//     // Создание div для градиента
-//     let gradient = document.createElement('div');
-//     gradient.className = "gradient";
-//     card.appendChild(gradient);
+    // Создание div для кнопок
+    let cardButtons = document.createElement('div');
+    cardButtons.className = 'card-buttons';
 
-//     // Возвращаем созданную карточку
-//     return card;
-// }
+    // Создание div для кнопки "Добавить"
+    let cardButtonAdd = document.createElement('div');
+    cardButtonAdd.className = 'card-button-add';
+    cardButtonAdd.innerText = '+';
+    cardButtons.appendChild(cardButtonAdd);
+    if (added == 1)
+    {
+        cardButtonAdd.classList.add("entered-button");
+        cardButtonAdd.classList.remove("enter-button");
+    }
+    else
+    {
+        cardButtonAdd.classList.add("enter-button");
+        cardButtonAdd.classList.remove("entered-button");
+    }
+    cardButtonAdd.onclick = function()
+    {
+        if(cardButtonAdd.classList[1] == "enter-button") // Если карточка не добавлена, добавить
+        {
+            let xhr = new XMLHttpRequest(); // Создаем новый объект XMLHTTPrequest
+            xhr.open("POST", "../PHP/addCard.php", true);
+            // Отправляем запрос на сервер
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Устанавливаем заголовок Content-Type
+            xhr.send("cardId=" + encodeURIComponent(cardId));
+        }
+        else // Иначе удалить
+        {
+            let xhr = new XMLHttpRequest(); // Создаем новый объект XMLHTTPrequest
+            xhr.open("POST", "../PHP/deleteCard.php", true); 
+            // Отправляем запрос на сервер
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Устанавливаем заголовок Content-Type
+            xhr.send("cardId=" + encodeURIComponent(cardId));
+        }
+        // switchButtonClass(cardButtonAdd);
+    }
+
+    // Создание div для кнопки "Звук"
+    let cardButtonSound = document.createElement('div');
+    cardButtonSound.className = 'card-button-sound';
+
+    let soundSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    soundSvg.setAttribute("width", "29");
+    soundSvg.setAttribute("height", "25");
+    soundSvg.setAttribute("viewBox", "0 0 29 25");
+
+    let soundPath1 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    soundPath1.setAttribute("d", "M21.8125 3.45654C25.0701 9.15209 25.0841 15.0339 21.8125 20.7395");
+    soundPath1.setAttribute("fill", "rgba(0,0,0,0)");
+    soundPath1.setAttribute("stroke", "black");
+
+    let soundPath2 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    soundPath2.setAttribute("d", "M26.709 2.30432C28.3378 7.32484 28.3448 16.8623 26.709 21.8917");
+    soundPath2.setAttribute("fill", "rgba(0,0,0,0)");
+    soundPath2.setAttribute("stroke", "black");
+
+    let soundPath3 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    soundPath3.setAttribute("d", "M1 16.0796V8.11651C1 7.56422 1.44772 7.11651 2 7.11651H7.98428C8.21762 7.11651 8.44363 7.0349 8.62315 6.88582L15.2761 1.36098C15.9277 0.819834 16.9149 1.28326 16.9149 2.1303V22.0658C16.9149 22.9129 15.9277 23.3763 15.2761 22.8351L8.62315 17.3103C8.44363 17.1612 8.21762 17.0796 7.98428 17.0796H2C1.44772 17.0796 1 16.6319 1 16.0796Z");
+    soundPath3.setAttribute("fill", "rgba(0,0,0,0)");
+    soundPath3.setAttribute("stroke", "black");
+
+    soundSvg.appendChild(soundPath1);
+    soundSvg.appendChild(soundPath2);
+    soundSvg.appendChild(soundPath3);
+    cardButtonSound.appendChild(soundSvg);
+    cardButtons.appendChild(cardButtonSound);
+    card.appendChild(cardButtons);
+
+    return card;
+}
 //--------------------------------------------------
 // Создаем функцию для создания карточки для пользователя
 // function createCardForUser(cardId, linkToPicture, wordsInTheTargetLanguage, wordsInNativeLanguage, train)
@@ -360,63 +401,61 @@ function createCategory(title, linkToPicture)
 // }
 //--------------------------------------------------
 // Функция для отображения карточек
-// function getCards(path, type)
-// {
-//     // Получение данных о карточках
-//     let cardsContainer = document.getElementById("Cards"); // Получаем элемент с ID "Cards"
-//     let xhrCards = new XMLHttpRequest(); // Создаем новый объект XMLHttpRequest
-//     //--------------------------------------------------
-//     xhrCards.onreadystatechange = function() // Устанавливаем функцию, которая будет вызываться при изменении состояния объекта `xhr`
-//     {
-//         if (xhrCards.readyState === 4 && xhrCards.status === 200) // Проверяем, что запрос завершен и успешен
-//         {
-//             let jsonData = JSON.parse(xhrCards.responseText); // Разбираем JSON-данные
+function getCards(path, type, idCategory)
+{
+    // Получение данных о карточках
+    let cardsContainer = document.createElement("div");
+    cardsContainer.className = "body__cards-container";
+    document.getElementById("body__container").appendChild(cardsContainer);
 
-//             cardsContainer.innerHTML = ""; // Очищаем контейнер перед добавлением новых карточек
+    let xhrCards = new XMLHttpRequest(); // Создаем новый объект XMLHttpRequest
+    //--------------------------------------------------
+    xhrCards.onreadystatechange = function() // Устанавливаем функцию, которая будет вызываться при изменении состояния объекта `xhr`
+    {
+        if (xhrCards.readyState === 4 && xhrCards.status === 200) // Проверяем, что запрос завершен и успешен
+        {
+            // console.log(xhrCards.responseText);
+            let jsonData = JSON.parse(xhrCards.responseText); // Разбираем JSON-данные
+            // console.log(jsonData);
+            cardsContainer.innerHTML = ""; // Очищаем контейнер перед добавлением новых карточек
 
-//             // Создаем карточки и добавляем их в контейнер
-//             if(type == "Card")
-//             {
-//                 for (let i = 0; i < jsonData.length; i++)
-//                 {
-//                     let cardData = jsonData[i];
-//                     let card = createCard(cardData.cardId, cardData.linkToPicture, cardData.wordsInTheTargetLanguage, cardData.wordsInNativeLanguage, cardData.added);
-//                     cardsContainer.appendChild(card);
-//                 }
-//             }
-//             else if(type == "User")
-//             {
-//                 for (let i = 0; i < jsonData.length; i++)
-//                 {
-//                     let cardData = jsonData[i];
-//                     let card = createCardForUser(cardData.cardId, cardData.linkToPicture, cardData.wordsInTheTargetLanguage, cardData.wordsInNativeLanguage, cardData.train);
-//                     cardsContainer.appendChild(card);
-//                 }
-//             }
-//             else if(type == "Train")
-//             {
-//                 for (let i = 0; i < jsonData.length; i++)
-//                 {
-//                     let cardData = jsonData[i];
-//                     if(cardData.train)
-//                     {
-//                         let card = createCardForTrain(cardData.cardId, cardData.linkToPicture, cardData.wordsInTheTargetLanguage, cardData.wordsInNativeLanguage, cardData.train);
-//                         cardsContainer.appendChild(card);
-//                     }
-//                 }
-//             }
-//         }
-//     };
-//     xhrCards.open("POST", path); // Открываем соединение с сервером с помощью метода "POST" и адреса "cards.php"
-//     xhrCards.send(); // Отправляем запрос на сервер
-//     //--------------------------------------------------
-//     // Стилизуем контейнер
-//     cardsContainer.style.maxWidth = "85%";
-//     cardsContainer.style.margin = "20px auto";
-//     cardsContainer.style.display = "flex";
-//     cardsContainer.style.justifyContent = "space-around";
-//     cardsContainer.style.flexWrap = "wrap";
-// }
+            // Создаем карточки и добавляем их в контейнер
+            if(type == "Card")
+            {
+                for (let i = 0; i < jsonData.length; i++)
+                {
+                    let cardData = jsonData[i];
+                    let card = createCard(cardData.cardId, cardData.linkToPicture, cardData.wordsInTheTargetLanguage, cardData.wordsInNativeLanguage, cardData.added);
+                    cardsContainer.appendChild(card);
+                }
+            }
+            else if(type == "User")
+            {
+                for (let i = 0; i < jsonData.length; i++)
+                {
+                    let cardData = jsonData[i];
+                    let card = createCardForUser(cardData.cardId, cardData.linkToPicture, cardData.wordsInTheTargetLanguage, cardData.wordsInNativeLanguage, cardData.train);
+                    cardsContainer.appendChild(card);
+                }
+            }
+            else if(type == "Train")
+            {
+                for (let i = 0; i < jsonData.length; i++)
+                {
+                    let cardData = jsonData[i];
+                    if(cardData.train)
+                    {
+                        let card = createCardForTrain(cardData.cardId, cardData.linkToPicture, cardData.wordsInTheTargetLanguage, cardData.wordsInNativeLanguage, cardData.train);
+                        cardsContainer.appendChild(card);
+                    }
+                }
+            }
+        }
+    };
+    xhrCards.open("POST", path); // Открываем соединение с сервером с помощью метода "POST" и адреса "cards.php"
+    xhrCards.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Устанавливаем заголовок Content-Type
+    xhrCards.send("idCategory=" + encodeURIComponent(idCategory));
+}
 //--------------------------------------------------
 // Функция для отображения групп категорий
 function getGroupCategories()
@@ -441,6 +480,7 @@ function getGroupCategories()
                 bodyCategories.appendChild(groupCategory[0]);
                 bodyCategories.appendChild(groupCategory[1]);
             }
+            getCategories();
         }
     };
     xhrGroupCategories.open("POST", "../PHP/groupCategories.php"); // Открываем соединение с сервером с помощью метода "POST" и адреса ""
@@ -450,7 +490,6 @@ function getGroupCategories()
 // Функция для отображения категорий
 function getCategories()
 {
-    getGroupCategories();
     // Получение данных о категорий
     let xhrCategories = new XMLHttpRequest(); // Создаем новый объект XMLHttpRequest
     xhrCategories.onreadystatechange = function() // Устанавливаем функцию, которая будет вызываться при изменении состояния объекта `xhr`
@@ -459,12 +498,10 @@ function getCategories()
         {
             let jsonData = JSON.parse(xhrCategories.responseText); // Разбираем JSON-данные
 
-            //bodyContainer.innerHTML = ""; // Очищаем контейнер перед добавлением новых карточек
-
             for (let i = 0; i < jsonData.length; i++)
             {
                 let categoryData = jsonData[i];
-                let category = createCategory(categoryData.title, categoryData.linkToPicture);
+                let category = createCategory(categoryData.idCategory, categoryData.title, categoryData.linkToPicture);
                 let categoryContainer = document.getElementById("groupCategory: " + categoryData.groupCategory);
                 categoryContainer.appendChild(category);
             }

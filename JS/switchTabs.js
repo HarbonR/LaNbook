@@ -12,12 +12,12 @@
 //--------------------------------------------------
 window.addEventListener('load', function() // Функция срабатывает при загрузке страницы
 {
-    getCategories();
+    getGroupCategories();
 });
 //--------------------------------------------------
 // menu__cards.onclick = function() // Выбираем вкладку карточки
 // {
-//     for (let i = 0; i < tabs.length; i++)
+//     for (let i = 0; i < tabs.length; i++)s
 //     {
 //         tabs[i].classList.remove("enteredTab");
 //     }

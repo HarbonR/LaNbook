@@ -10,7 +10,7 @@
     {
         die("Ошибка подключения: " . mysqli_connect_error());
     }
-    $sql = "SELECT IdGroupCategory, Title, Picture FROM Category"; // SQL запрос
+    $sql = "SELECT Id, IdGroupCategory, Title, Picture FROM Category"; // SQL запрос
     $result = mysqli_query($Connect, $sql); // выполнение запроса
     $data = array(); // Создаем пустой массив для хранения данных
 
@@ -19,6 +19,7 @@
         while($row = mysqli_fetch_assoc($result)) // выводим данные из каждой строки
         {
             $data[] = array(
+                'idCategory' => $row['Id'],
                 'groupCategory' => $row['IdGroupCategory'],
                 'title' => $row['Title'],
                 'linkToPicture' => $row['Picture']);
