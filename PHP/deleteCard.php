@@ -13,7 +13,7 @@
         }
         $userId = $_SESSION['userId'];
         $idCardEngRus = $_POST['cardId'];
-        $sql = "DELETE FROM userCardEngRus WHERE idCardEngRus = $idCardEngRus"; // SQL запрос
+        $sql = "DELETE FROM UserDictionary WHERE IdDictionary = $idCardEngRus"; // SQL запрос
         $result = mysqli_query($Connect, $sql); // выполнение запроса
         // Закрытие соединения
         mysqli_close($Connect);

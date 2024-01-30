@@ -5,14 +5,14 @@ let formRegister = document.getElementById('form-register');
 let formEnter = document.getElementById("form-enter");
 let createAccount = document.getElementById("create-account");
 let menu = document.getElementById("menu");
-let menu__personalArea = document.getElementById('menu__personal-area');
+let menuEnterRegister = document.getElementById('menu__enter-register');
 let body = document.getElementById("body");
 let enterRegisterExitEnter = document.getElementById("enter-register_exit-enter");
 let enterRegisterExitRegister = document.getElementById("enter-register_exit-register");
 let user = document.getElementById("user");
 let exit = document.getElementById("exit");
 //--------------------------------------------------
-menu__personalArea.onclick = function() // Функция для появления форм вход \ регистрация
+menuEnterRegister.onclick = function() // Функция для появления форм вход \ регистрация
 {
     menu.setAttribute("style","display:none;");
     body.setAttribute("style","display:none;");
@@ -115,6 +115,8 @@ xhrData.onreadystatechange = function() // Устанавливаем функц
             let userData = JSON.parse(xhrData.responseText);
             exit.removeAttribute("style");
             user.textContent = userData[0];
+            menuEnterRegister.style.display = "none";
+            menuPersonalArea.removeAttribute("style");
         }
     }
 };
@@ -125,6 +127,8 @@ xhrData.send(); // Отправляем запрос на сервер
 exit.onclick = function()
 {
     exit.style.display = "none";
+    menuEnterRegister.removeAttribute("style");
+    menuPersonalArea.style.display = "none";
     menu__cards.click();
     let xhr = new XMLHttpRequest();
     xhr.open('GET', '../PHP/exit.php', true); // Установлен параметр async в true

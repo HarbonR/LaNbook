@@ -2,60 +2,62 @@
 // Функционал для переключения вкладок
 // let header = document.getElementById("header");
 // let burger = document.getElementById("burger");
-// let tabs = header.getElementsByClassName("enteredTab");
-// let menu__cards = document.getElementById("menu__cards");
-// let menu__training = document.getElementById("menu__training");
-// let menu__personalArea = document.getElementById("menu__personal-area");
+let menuActive = menu.getElementsByClassName("menu_active");
+let svgActive = menu.getElementsByClassName("svg_active");
+let menuTextActive = menu.getElementsByClassName("menu__text_active");
+let menuCards = document.getElementById("menu__cards");
+let menuTraining = document.getElementById("menu__training");
+let menuPersonalArea = document.getElementById("menu__personal-area");
 // let user__data = document.getElementById("user__data");
 // let train__data = document.getElementById("train__data");
 // let search = document.getElementById("search");
 //--------------------------------------------------
 window.addEventListener('load', function() // Функция срабатывает при загрузке страницы
 {
-    getGroupCategories();
+    menuCards.click();
 });
 //--------------------------------------------------
-// menu__cards.onclick = function() // Выбираем вкладку карточки
-// {
-//     for (let i = 0; i < tabs.length; i++)s
-//     {
-//         tabs[i].classList.remove("enteredTab");
-//     }
-//     user__data.style.display = "none";
-//     train__data.style.display = "none";
-//     menu__cards.classList.add("enteredTab");
-//     search.style.marginTop = "130px";
-//     getCards("../PHP/cards.php", "Card");
-//     header.style.top = "-1000px"; // Скрываем бургер
-// };
+menuCards.onclick = function() // Выбираем вкладку карточки
+{
+    for (let i = 0; i < menuActive.length; i++)
+    {
+        menuActive[i].classList.remove("menu_active");
+        svgActive[i].classList.remove("svg_active");
+        menuTextActive[i].classList.remove("menu__text_active");
+    }
+    menuCards.classList.add("menu_active");
+    menuCards.getElementsByTagName("svg")[0].classList.add("svg_active");
+    menuCards.getElementsByClassName("menu__text")[0].classList.add("menu__text_active");
+    getGroupCategories();
+};
 //--------------------------------------------------
-// menu__training.onclick = function() // Выбираем вкладку тренировка
-// {
-//     for (let i = 0; i < tabs.length; i++)
-//     {
-//         tabs[i].classList.remove("enteredTab");
-//     }
-//     user__data.style.display = "none";
-//     train__data.removeAttribute("style");
-//     menu__training.className = "enteredTab";
-//     search.style.marginTop = "20px";
-//     getCards("../PHP/trainCards.php", "Train");
-//     header.style.top = "-1000px"; // Скрываем бургер
-// }
+menuTraining.onclick = function() // Выбираем вкладку тренировка
+{
+    for (let i = 0; i < menuActive.length; i++)
+    {
+        menuActive[i].classList.remove("menu_active");
+        svgActive[i].classList.remove("svg_active");
+        menuTextActive[i].classList.remove("menu__text_active");
+    }
+    menuTraining.classList.add("menu_active");
+    menuTraining.getElementsByTagName("svg")[0].classList.add("svg_active");
+    menuTraining.getElementsByClassName("menu__text")[0].classList.add("menu__text_active");
+    getCards("../PHP/trainCards.php", "Train");
+}
 //--------------------------------------------------
-// menu__personalArea.onclick = function() // Выбираем вкладку пользователь
-// {
-//     for (let i = 0; i < tabs.length; i++)
-//     {
-//         tabs[i].classList.remove("enteredTab");
-//     }
-//     user__data.removeAttribute("style");
-//     train__data.style.display = "none";
-//     user.className = "enteredTab";
-//     search.style.marginTop = "20px";
-//     getCards("../PHP/userCards.php", "User");
-//     header.style.top = "-1000px"; // Скрываем бургер
-// }
+menuPersonalArea.onclick = function() // Выбираем вкладку пользователь
+{
+    for (let i = 0; i < menuActive.length; i++)
+    {
+        menuActive[i].classList.remove("menu_active");
+        svgActive[i].classList.remove("svg_active");
+        menuTextActive[i].classList.remove("menu__text_active");
+    }
+    menuPersonalArea.classList.add("menu_active");
+    menuPersonalArea.getElementsByTagName("svg")[0].classList.add("svg_active");
+    menuPersonalArea.getElementsByClassName("menu__text")[0].classList.add("menu__text_active");
+    getCards("../PHP/userCards.php", "User");
+}
 //--------------------------------------------------
 // Для открытия и закрытия бургера
 // burger.onclick = function()

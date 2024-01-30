@@ -13,7 +13,7 @@
         }
         $userId = $_SESSION['userId'];
         $cardId = $_POST['cardId'];
-        $sql = "INSERT INTO userCardEngRus (IdUser, IdCardEngRus, Train) VALUES ('$userId', '$cardId', 0)"; // SQL запрос
+        $sql = "INSERT INTO UserDictionary (IdUser, IdDictionary, Train) VALUES ('$userId', '$cardId', 0)"; // SQL запрос
         $result = mysqli_query($Connect, $sql); // выполнение запроса
         // Закрытие соединения
         mysqli_close($Connect);

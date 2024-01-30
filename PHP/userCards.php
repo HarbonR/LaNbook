@@ -14,14 +14,14 @@
     $sql = "
         SELECT
             Picture
-            ,idCardEngRus
+            ,IdDictionary
             ,Eng
             ,Rus
             ,Train
         FROM
-            userCardEngRus
-        JOIN user ON userCardEngRus.idUser = user.Id
-        JOIN cardEngRus ON userCardEngRus.idCardEngRus = cardEngRus.id
+            UserDictionary
+        JOIN user ON UserDictionary.idUser = user.Id
+        JOIN Dictionary ON UserDictionary.IdDictionary = Dictionary.id
         WHERE
             user.Id = '$userId'"; // SQL запрос
     $result = mysqli_query($Connect, $sql); // выполнение запроса
@@ -32,7 +32,7 @@
         while($row = mysqli_fetch_assoc($result)) // выводим данные из каждой строки
         {
             $data[] = array(
-                'cardId' => $row['idCardEngRus'],
+                'cardId' => $row['IdDictionary'],
                 'linkToPicture' => $row['Picture'],
                 'wordsInTheTargetLanguage' => $row['Eng'],
                 'wordsInNativeLanguage' => $row['Rus'],

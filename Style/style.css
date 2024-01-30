@@ -204,7 +204,7 @@ button
     width: 90%;
     cursor: pointer;
 }
-#menu__personal-area
+#menu__personal-area, #menu__enter-register
 {
     display: flex;
     padding: 10px 0 10px 0;
@@ -517,6 +517,19 @@ input:checked + .slider:before
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
     cursor: pointer;
 }
+.card-button-train
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 95px;
+    height: 50px;
+    background-color: #E8DDD2;
+    border-radius: 15px;
+    font-size: 32px;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+}
 .card-button-sound
 {
     display: flex;
@@ -532,6 +545,19 @@ input:checked + .slider:before
 .card-button-sound:active
 {
     background-color: #8294A0;
+}
+.card-button-delete
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 95px;
+    height: 50px;
+    background-color: #E8DDD2;
+    border-radius: 15px;
+    font-size: 32px;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
 }
 .enter-button
 {
