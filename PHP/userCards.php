@@ -20,10 +20,10 @@
             ,Train
         FROM
             UserDictionary
-        JOIN user ON UserDictionary.idUser = user.Id
-        JOIN Dictionary ON UserDictionary.IdDictionary = Dictionary.id
+        JOIN User ON UserDictionary.IdUser = User.Id
+        JOIN Dictionary ON UserDictionary.IdDictionary = Dictionary.Id
         WHERE
-            user.Id = '$userId'"; // SQL запрос
+            User.Id = '$userId'"; // SQL запрос
     $result = mysqli_query($Connect, $sql); // выполнение запроса
     $data = array(); // Создаем пустой массив для хранения данных
 

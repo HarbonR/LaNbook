@@ -24,7 +24,7 @@
         $userPassword = password_hash($userPassword, PASSWORD_DEFAULT); // Хэшируем пароль
 
         // Подготовка и выполнение SQL-запроса
-        $sql = "INSERT INTO user (Name, Email, Password) VALUES ('$userName', '$userEmail', '$userPassword')";
+        $sql = "INSERT INTO User (Name, Email, Password) VALUES ('$userName', '$userEmail', '$userPassword')";
 
         if (mysqli_query($Connect, $sql)) // Проверяем, успешно ли выполнен SQL запрос
         {
