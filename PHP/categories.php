@@ -10,21 +10,48 @@
     {
         die("Ошибка подключения: " . mysqli_connect_error());
     }
-    $sql = "SELECT Id, IdGroupCategory, Title, Picture FROM Category"; // SQL запрос
-    $result = mysqli_query($Connect, $sql); // выполнение запроса
-    $data = array(); // Создаем пустой массив для хранения данных
 
-    if (mysqli_num_rows($result) > 0) 
+    // Запрос к первой таблице
+    $sql1 = "SELECT Id, Title FROM GroupCategory"; 
+    $result1 = mysqli_query($Connect, $sql1); 
+    $data1 = array(); 
+
+    if (mysqli_num_rows($result1) > 0) 
     {
-        while($row = mysqli_fetch_assoc($result)) // выводим данные из каждой строки
+        while($row1 = mysqli_fetch_assoc($result1)) 
         {
-            $data[] = array(
-                'idCategory' => $row['Id'],
-                'groupCategory' => $row['IdGroupCategory'],
-                'title' => $row['Title'],
-                'linkToPicture' => $row['Picture']);
+            $data1[] = array(
+                'idGroupCategory' => $row1['Id'],
+                'title' => $row1['Title']
+            );
         }
     }
+
+    // Запрос ко второй таблице
+    $sql2 = "SELECT Id, IdGroupCategory, Title, Picture FROM Category"; 
+    $result2 = mysqli_query($Connect, $sql2); 
+    $data2 = array(); 
+
+    if (mysqli_num_rows($result2) > 0) 
+    {
+        while($row2 = mysqli_fetch_assoc($result2)) 
+        {
+            $data2[] = array(
+                'idCategory' => $row2['Id'],
+                'groupCategory' => $row2['IdGroupCategory'],
+                'title' => $row2['Title'],
+                'linkToPicture' => $row2['Picture']
+            );
+        }
+    }
+
+    // Объединяем данные из двух таблиц в один массив
+    $data = array(
+        'groupCategoryData' => $data1,
+        'categoryData' => $data2
+    );
+
     $jsonData = json_encode($data); // Преобразуем массив в формат JSON
     echo $jsonData; // Отправляем JSON-данные в JavaScript
+    mysqli_close($Connect); // Закрываем соединение с базой данных
 ?>

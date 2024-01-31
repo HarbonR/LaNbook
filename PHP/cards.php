@@ -42,4 +42,5 @@
     }
     $jsonData = json_encode($data); // Преобразуем массив в формат JSON
     echo $jsonData; // Отправляем JSON-данные в JavaScript
+    mysqli_close($Connect); // Закрываем соединение с базой данных
 ?>

@@ -28,7 +28,7 @@ menuCards.onclick = function() // Выбираем вкладку карточк
     menuCards.classList.add("menu_active");
     menuCards.getElementsByTagName("svg")[0].classList.add("svg_active");
     menuCards.getElementsByClassName("menu__text")[0].classList.add("menu__text_active");
-    getGroupCategories();
+    getCategories();
 };
 //--------------------------------------------------
 menuTraining.onclick = function() // Выбираем вкладку тренировка

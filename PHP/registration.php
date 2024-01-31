@@ -36,7 +36,6 @@
             echo 'Ошибка: ' . mysqli_error($Connect);
         }
 
-        // Закрытие соединения
-        mysqli_close($Connect);
+        mysqli_close($Connect); // Закрываем соединение с базой данных
     }
 ?>

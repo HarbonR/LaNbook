@@ -15,7 +15,6 @@
         $idCardEngRus = $_POST['cardId'];
         $sql = "DELETE FROM UserDictionary WHERE IdDictionary = $idCardEngRus"; // SQL запрос
         $result = mysqli_query($Connect, $sql); // выполнение запроса
-        // Закрытие соединения
-        mysqli_close($Connect);
+        mysqli_close($Connect); // Закрываем соединение с базой данных
     }
 ?>

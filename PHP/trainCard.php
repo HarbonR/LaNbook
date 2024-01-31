@@ -23,7 +23,6 @@
             $valueForTrain = 0;
         $sqlTwo = "UPDATE UserDictionary SET Train = $valueForTrain WHERE IdUser = $userId AND IdDictionary = $cardId"; // SQL запрос
         $resultTwo = mysqli_query($Connect, $sqlTwo); // выполнение запроса
-        // Закрытие соединения
-        mysqli_close($Connect);
+        mysqli_close($Connect); // Закрываем соединение с базой данных
     }
 ?>

@@ -14,20 +14,6 @@ function switchButtonClass(buttonClass)
     }
 }
 //--------------------------------------------------
-// Создаём функцию для создания групп категорий
-function createGroupCategory(idGroupCategory, titleGroup)
-{
-    let groupCategory = document.createElement('div');
-    groupCategory.classList.add('group-category');
-    groupCategory.textContent = titleGroup;
-
-    let categoryContainer = document.createElement('div');
-    categoryContainer.classList.add('category__container');
-    categoryContainer.id = "groupCategory: " + idGroupCategory;
-    
-    return [groupCategory, categoryContainer];
-}
-//--------------------------------------------------
 // Создаём функцию для создания категорий
 function createCategory(idCategory, title, linkToPicture)
 {
@@ -410,51 +396,43 @@ function createCardForTrain(cardId, linkToPicture, wordsInTheTargetLanguage, wor
     return card;
 }
 //--------------------------------------------------
-// Функция для отображения групп категорий
-function getGroupCategories()
-{
-    let bodyContainer = document.getElementById("body__container");
-    bodyContainer.innerHTML = ""; // Отчищаем рабочую область перед добавление групп категорий
-    let bodyCategories = document.createElement('div');
-    bodyCategories.classList.add('body__categories');
-    bodyContainer.appendChild(bodyCategories);
-    let xhrGroupCategories = new XMLHttpRequest(); // Создаем новый объект XMLHttpRequest
-    xhrGroupCategories.onreadystatechange = function() // Устанавливаем функцию, которая будет вызываться при изменении состояния объекта `xhr`
-    {
-        if (xhrGroupCategories.readyState === 4 && xhrGroupCategories.status === 200) // Проверяем, что запрос завершен и успешен
-        {
-            let jsonData = JSON.parse(xhrGroupCategories.responseText); // Разбираем JSON-данные
-
-            bodyCategories.innerHTML = ""; // Очищаем контейнер перед добавлением новых карточек
-
-            for (let i = 0; i < jsonData.length; i++)
-            {
-                let groupCategoryData = jsonData[i];
-                let groupCategory = createGroupCategory(groupCategoryData.idGroupCategory, groupCategoryData.title);
-                bodyCategories.appendChild(groupCategory[0]);
-                bodyCategories.appendChild(groupCategory[1]);
-            }
-            getCategories();
-        }
-    };
-    xhrGroupCategories.open("POST", "../PHP/groupCategories.php"); // Открываем соединение с сервером с помощью метода "POST" и адреса ""
-    xhrGroupCategories.send(); // Отправляем запрос на сервер
-}
-//--------------------------------------------------
 // Функция для отображения категорий
 function getCategories()
 {
-    // Получение данных о категорий
+    let bodyContainer = document.getElementById("body__container");
+    bodyContainer.innerHTML = ""; // Отчищаем рабочую область перед добавление групп категорий
+    let bodyCategories = document.createElement('div'); // Создаём контейнер для категорий
+    bodyCategories.classList.add('body__categories');
+    bodyContainer.appendChild(bodyCategories);
+
+    // Получение данных о категориях
     let xhrCategories = new XMLHttpRequest(); // Создаем новый объект XMLHttpRequest
     xhrCategories.onreadystatechange = function() // Устанавливаем функцию, которая будет вызываться при изменении состояния объекта `xhr`
     {
         if (xhrCategories.readyState === 4 && xhrCategories.status === 200) // Проверяем, что запрос завершен и успешен
         {
             let jsonData = JSON.parse(xhrCategories.responseText); // Разбираем JSON-данные
-
-            for (let i = 0; i < jsonData.length; i++)
+            let groupCategoryJsonData = jsonData.groupCategoryData;
+            let categoryJsonData = jsonData.categoryData;
+            for (let i = 0; i < groupCategoryJsonData.length; i++) 
             {
-                let categoryData = jsonData[i];
+                let groupCategoryData = groupCategoryJsonData[i];
+
+                let groupCategory = document.createElement('div');
+                groupCategory.classList.add('group-category');
+                groupCategory.textContent = groupCategoryData.title;
+
+                let categoryContainer = document.createElement('div');
+                categoryContainer.classList.add('category__container');
+                categoryContainer.id = "groupCategory: " + groupCategoryData.idGroupCategory;
+
+                bodyCategories.appendChild(groupCategory);
+                bodyCategories.appendChild(categoryContainer);
+            }
+
+            for (let i = 0; i < categoryJsonData.length; i++)
+            {
+                let categoryData = categoryJsonData[i];
                 let category = createCategory(categoryData.idCategory, categoryData.title, categoryData.linkToPicture);
                 let categoryContainer = document.getElementById("groupCategory: " + categoryData.groupCategory);
                 categoryContainer.appendChild(category);
