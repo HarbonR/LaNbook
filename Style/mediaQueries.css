@@ -1,0 +1,87 @@
+/* 768px */
+@media (max-width: 768px)
+{
+    body
+    {
+        flex-direction: column-reverse;
+    }
+    #menu
+    {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: flex-end;
+        height: 130px;
+        width: 95%;
+        border-bottom-right-radius: 0;
+        border-top-left-radius: 30px;
+    }
+    .menu__logo
+    {
+        display: none;
+    }
+    .menu__grammar
+    {
+        align-items: center;
+        flex-direction: column;
+        padding: 10px;
+        width: auto;
+    }
+    #menu__cards
+    {
+        align-items: center;
+        flex-direction: column;
+        padding: 10px;
+        width: auto;
+    }
+    #menu__training
+    {
+        align-items: center;
+        flex-direction: column;
+        padding: 10px;
+        width: auto;
+    }
+    #menu__personal-area, #menu__enter-register
+    {
+        align-items: center;
+        flex-direction: column;
+        padding: 10px;
+        width: auto;
+    }
+    #menu__personal-area .menu__text
+    {
+        margin: 0;
+    }
+    .menu__icon
+    {
+        width: 30px;
+        height: 30px;
+        margin: 0 0 10px 0;
+    }
+    .menu__text
+    {
+        max-width: 100px;
+        margin: 0 0 20px 0;
+        text-align: center;
+        word-wrap: break-word;
+    }
+    .menu_active
+    {
+        border-top-left-radius: 20px;
+        border-bottom-right-radius: 0;
+    }
+    .menu__icon > svg
+    {
+        width: 30px;
+        height: 30px;
+    }
+    #body
+    {
+        height: 90%;
+    }
+}
+/* 480px */
+@media (max-width: 480px)
+{
+
+}

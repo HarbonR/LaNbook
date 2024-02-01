@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LaNbook</title>
-    <link rel="stylesheet" href="Style/style.css">
+    <link rel="stylesheet" href="Style/body.css">
+    <link rel="stylesheet" href="Style/generalSettings.css">
+    <link rel="stylesheet" href="Style/loginRegistration.css">
+    <link rel="stylesheet" href="Style/mediaQueries.css">
+    <link rel="stylesheet" href="Style/menu.css">
 </head>
 <body>
     <div id="enter-register" style="display: none;">
@@ -166,6 +170,31 @@
                 <svg class="exit__button" width="29" height="25" viewBox="0 0 29 25">
                     <path d="M21.375 5.625L19.4362 7.56375L22.9837 11.125H9V13.875H22.9837L19.4362 17.4225L21.375 19.375L28.25 12.5M3.5 2.875H14.5V0.125H3.5C1.9875 0.125 0.75 1.3625 0.75 2.875V22.125C0.75 23.6375 1.9875 24.875 3.5 24.875H14.5V22.125H3.5V2.875Z"/>
                 </svg>
+            </div>
+        </div>
+        <div id="body__training" style="display: none;">
+            <div id="words-to-practice">
+                Слова для тренировки
+            </div>
+            <div id="daily-workout">
+                Интервальное повторение
+            </div>
+            <div id="practice-words">
+                Тренировать слова
+            </div>
+            <div id="settings">
+                Настройки
+            </div>
+        </div>
+        <div id="body__user" style="display:none;">
+            <div id="dictionary">
+                Словарь
+            </div>
+            <div id="achievements">
+                Достижения
+            </div>
+            <div id="statistics">
+                Статистика
             </div>
         </div>
         <div class="view-cards">
