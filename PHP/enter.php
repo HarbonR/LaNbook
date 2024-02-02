@@ -40,22 +40,29 @@
                 if($booleanUserPassword) // Если пароль верный
                 {
                     $_SESSION['userEmail'] = $userEmail; // Сохраняем е-мейл пользователя в сессии
-                    header('Location: ../index.php'); // Перенаправляем на главную страницу
-                    exit;
+                    $data = ['answer' => 'Правильный логин и пароль', 'userName' => $_SESSION['userName']];
+                    $jsonData = json_encode($data); // Преобразуем массив в формат JSON
+                    echo $jsonData; // Отправляем JSON-данные в JavaScript
                 }
                 else
                 {
-                    echo '<p style="text-align: center;">' . 'Не правильный пароль' . '</p>'; // Сообщение о неверном пароле
+                    $data = ['answer' => 'Не правильный пароль'];
+                    $jsonData = json_encode($data); // Преобразуем массив в формат JSON
+                    echo $jsonData; // Отправляем JSON-данные в JavaScript
                 }
             }
             else
             {
-                echo '<p style="text-align: center;">' . 'Не правильный логин и пароль' . '</p>'; // Сообщение о неверном логине и пароле
+                $data = ['answer' => 'Не правильный логин и пароль'];
+                $jsonData = json_encode($data); // Преобразуем массив в формат JSON
+                echo $jsonData; // Отправляем JSON-данные в JavaScript
             }
         }
         else
         {
-            echo 'Ошибка: ' . mysqli_error($Connect); // Вывод ошибки при выполнении SQL-запроса
+            $data = ['answer' => 'Ошибка: ' . mysqli_error($Connect)];
+            $jsonData = json_encode($data); // Преобразуем массив в формат JSON
+            echo $jsonData; // Отправляем JSON-данные в JavaScript
         }
         mysqli_close($Connect); // Закрываем соединение с базой данных
     }

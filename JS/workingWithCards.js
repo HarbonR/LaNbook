@@ -1,4 +1,7 @@
-//==================================================
+/* ==================================================================================================== */
+/* ----------------------------------------------Переменные-------------------------------------------- */
+let viewCards = document.getElementById("view-cards");
+/* ==================================================================================================== */
 // Функция для смены класса выбрать, выбранная кнопка
 function switchButtonClass(buttonClass)
 {
@@ -24,7 +27,11 @@ function createCategory(idCategory, title, linkToPicture)
     category.id = "idCategory: " + idCategory;
     category.onclick = function()
     {
-        document.getElementById("body__container").innerHTML = "";
+        document.getElementById("body__container").innerHTML = "";   
+        let titleCategory = document.createElement("p");
+        titleCategory.id = "title-category";
+        titleCategory.textContent = title;
+        viewCards.prepend(titleCategory);
         getCards("../PHP/cards.php", "Card", idCategory);
     }
 
@@ -233,11 +240,22 @@ function createCardForUser(cardId, linkToPicture, wordsInTheTargetLanguage, word
     }
     buttonTrain.onclick = function()
     {
-        let xhr = new XMLHttpRequest(); // Создаем новый объект XMLHTTPrequest
-        xhr.open("POST", "../PHP/trainCard.php", true); 
-        // Отправляем запрос на сервер
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Устанавливаем заголовок Content-Type
-        xhr.send("cardId=" + encodeURIComponent(cardId));
+        if(buttonTrain.classList.contains("enter-button")) // Если карточка не добавлена, добавить
+        {
+            let xhr = new XMLHttpRequest(); // Создаем новый объект XMLHTTPrequest
+            xhr.open("POST", "../PHP/addTrainingCard.php", true); 
+            // Отправляем запрос на сервер
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Устанавливаем заголовок Content-Type
+            xhr.send("cardId=" + encodeURIComponent(cardId));
+        }
+        else
+        {
+            let xhr = new XMLHttpRequest(); // Создаем новый объект XMLHTTPrequest
+            xhr.open("POST", "../PHP/deleteTrainingCard.php", true); 
+            // Отправляем запрос на сервер
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Устанавливаем заголовок Content-Type
+            xhr.send("cardId=" + encodeURIComponent(cardId));
+        }
         switchButtonClass(buttonTrain);
     }
 
@@ -356,7 +374,7 @@ function createCardForTrain(cardId, linkToPicture, wordsInTheTargetLanguage, wor
     {
         document.getElementById(cardId).remove();
         let xhr = new XMLHttpRequest(); // Создаем новый объект XMLHTTPrequest
-        xhr.open("POST", "../PHP/trainCard.php", true); 
+        xhr.open("POST", "../PHP/deleteTrainingCard.php", true); 
         // Отправляем запрос на сервер
         xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Устанавливаем заголовок Content-Type
         xhr.send("cardId=" + encodeURIComponent(cardId));
@@ -527,7 +545,8 @@ function getCards(path, type, idCategory)
     document.getElementById("body__container").innerHTML = ""; // Отчищаем рабочую область перед добавление групп категорий
     let cardsContainer = document.createElement("div");
     cardsContainer.className = "body__cards-container";
-    document.getElementById("body__container").appendChild(cardsContainer);
+    let bodyContainer = document.getElementById("body__container");
+    bodyContainer.appendChild(cardsContainer);
     let xhrCards = new XMLHttpRequest(); // Создаем новый объект XMLHttpRequest
     //--------------------------------------------------
     xhrCards.onreadystatechange = function() // Устанавливаем функцию, которая будет вызываться при изменении состояния объекта `xhr`
@@ -540,6 +559,11 @@ function getCards(path, type, idCategory)
             // Создаем карточки и добавляем их в контейнер
             if(type == "Card")
             {
+                let addAll = document.createElement("div");
+                addAll.className = "button-all";
+                addAll.textContent = "Добавить всё";
+                bodyContainer.prepend(addAll);
+                bodyContainer.style.paddingTop = "100px";
                 for (let i = 0; i < jsonData.length; i++)
                 {
                     let cardData = jsonData[i];
@@ -549,6 +573,11 @@ function getCards(path, type, idCategory)
             }
             else if(type == "User")
             {
+                let addAll = document.createElement("div");
+                addAll.className = "button-all";
+                addAll.textContent = "Тренировать все";
+                bodyContainer.prepend(addAll);
+                bodyContainer.style.paddingTop = "100px";
                 for (let i = 0; i < jsonData.length; i++)
                 {
                     let cardData = jsonData[i];

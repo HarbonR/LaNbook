@@ -36,7 +36,7 @@
             <h1>
                 Вход
             </h1>
-            <form action="PHP/enter.php" method="POST" onsubmit="return validateFormForEnter()">
+            <form id="form-form-enter">
                 <label for="email-input">
                     E-mail
                 </label>
@@ -45,7 +45,7 @@
                     Пароль:
                 </label>
                 <input type="password" name="userPassword" id="password-input" autocomplete="off">
-                <button type="submit" class="button-form">
+                <button id="button-form-enter">
                     Вход
                 </button>
             </form>
@@ -63,7 +63,7 @@
             <h1>
                 Регистрация
             </h1>
-            <form action="PHP/registration.php" method="POST" onsubmit="return validateFormForRegister()">
+            <form id="form-form-register">
                 <label for="name-register">
                     Имя:
                 </label>
@@ -76,7 +76,7 @@
                     Пароль:
                 </label>
                 <input type="password" name="userPassword" id="password-register" autocomplete="off">
-                <button type="submit" class="button-form">
+                <button id="button-form-register">
                     Регистрация
                 </button>
             </form>
@@ -197,7 +197,7 @@
                 Статистика
             </div>
         </div>
-        <div class="view-cards">
+        <div id="view-cards">
             <label class="switch">
                 <input type="checkbox" name="" id="">
                 <span class="slider">

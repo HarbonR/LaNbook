@@ -33,6 +33,11 @@ menuCards.onclick = function()
 {
     bodyTraining.setAttribute("style", "display: none;");
     bodyUser.setAttribute("style", "display: none;");
+    if(document.getElementById("title-category")) // Удаление названия категории
+    {
+        document.getElementById("title-category").remove();
+    }
+    document.getElementById("body__container").style.paddingTop = "0";
     for (let i = 0; i < menuActive.length; i++)
     {
         menuActive[i].classList.remove("menu_active");
@@ -50,6 +55,11 @@ menuTraining.onclick = function()
 {
     bodyUser.setAttribute("style", "display: none;");
     bodyTraining.removeAttribute("style");
+    if(document.getElementById("title-category")) // Удаление названия категории
+    {
+        document.getElementById("title-category").remove();
+    }
+    document.getElementById("body__container").style.paddingTop = "0";
     for (let i = 0; i < menuActive.length; i++)
     {
         menuActive[i].classList.remove("menu_active");
@@ -67,6 +77,11 @@ menuPersonalArea.onclick = function()
 {
     bodyTraining.setAttribute("style", "display: none;");
     bodyUser.removeAttribute("style");
+    if(document.getElementById("title-category")) // Удаление названия категории
+    {
+        document.getElementById("title-category").remove();
+    }
+    document.getElementById("body__container").style.paddingTop = "0";
     for (let i = 0; i < menuActive.length; i++)
     {
         menuActive[i].classList.remove("menu_active");

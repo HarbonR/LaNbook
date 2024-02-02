@@ -6,13 +6,15 @@
     height: 100%;
     z-index: 3;
 }
-.button-form
+#button-form-enter, #button-form-register
 {
     background-color: #94A082;
+    cursor: pointer;
 }
 #create-account
 {
     background-color: #8294A0;
+    cursor: pointer;
 }
 /* ================================================== */
 /* Задний фон */

@@ -23,17 +23,45 @@
         $userPassword  = mysqli_real_escape_string($Connect, $userPassword);  // SQL-инъекции. Экранируем специальные символы в строке
         $userPassword = password_hash($userPassword, PASSWORD_DEFAULT); // Хэшируем пароль
 
-        // Подготовка и выполнение SQL-запроса
-        $sql = "INSERT INTO User (Name, Email, Password) VALUES ('$userName', '$userEmail', '$userPassword')";
-
-        if (mysqli_query($Connect, $sql)) // Проверяем, успешно ли выполнен SQL запрос
+        $sql1 = 'SELECT Email FROM User'; // SQL-запрос на выборку имени, е-мейла и пароля из таблицы пользователей
+        $result1 = mysqli_query($Connect, $sql1); // Выполнение SQL-запроса
+        if ($result1) // Проверка на успешность выполнения запроса
         {
-            header('Location: ../index.php'); // Перенаправляем на главную страницу
+            while ($row = mysqli_fetch_assoc($result1)) // Перебираем результаты запроса
+            {
+                if($row['Email'] == $userEmail) // Проверка на совпадение е-мейла
+                {
+                    $data = ['answer' => 'Такой пользователь уже существует'];
+                    $jsonData = json_encode($data); // Преобразуем массив в формат JSON
+                    echo $jsonData; // Отправляем JSON-данные в JavaScript
+                    exit;
+                }
+            }
+        }
+        else
+        {
+            $data = ['answer' => 'Ошибка: ' . mysqli_error($Connect)];
+            $jsonData = json_encode($data); // Преобразуем массив в формат JSON
+            echo $jsonData; // Отправляем JSON-данные в JavaScript
+            exit;
+        }
+
+        // Подготовка и выполнение SQL-запроса
+        $sql2 = "INSERT INTO User (Name, Email, Password) VALUES ('$userName', '$userEmail', '$userPassword')";
+
+        if (mysqli_query($Connect, $sql2)) // Проверяем, успешно ли выполнен SQL запрос
+        {
+            $data = ['answer' => 'Пользователь успешно зарегистрирован'];
+            $jsonData = json_encode($data); // Преобразуем массив в формат JSON
+            echo $jsonData; // Отправляем JSON-данные в JavaScript
             exit;
         }
         else
         {
-            echo 'Ошибка: ' . mysqli_error($Connect);
+            $data = ['answer' => 'Ошибка: ' . mysqli_error($Connect)];
+            $jsonData = json_encode($data); // Преобразуем массив в формат JSON
+            echo $jsonData; // Отправляем JSON-данные в JavaScript
+            exit;
         }
 
         mysqli_close($Connect); // Закрываем соединение с базой данных
