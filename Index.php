@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="Style/body.css">
     <link rel="stylesheet" href="Style/generalSettings.css">
     <link rel="stylesheet" href="Style/loginRegistration.css">
-    <link rel="stylesheet" href="Style/mediaQueries.css">
     <link rel="stylesheet" href="Style/menu.css">
+    <link rel="stylesheet" href="Style/mediaQueries.css">
 </head>
 <body>
     <div id="enter-register" style="display: none;">
@@ -157,6 +157,21 @@
     </div>
     <div id="body">
         <div class="header">
+            <div id="burger">
+                <div id="burger-open">
+                    <svg width="39" height="24" viewBox="0 0 39 24">
+                        <path d="M2 2L37 2" stroke="#333333" stroke-width="3" stroke-linecap="round"/>
+                        <path d="M2 12H37" stroke="#333333" stroke-width="3" stroke-linecap="round"/>
+                        <path d="M2 22H37" stroke="#333333" stroke-width="3" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <div id="burger-close" style="display: none;">
+                    <svg width="29" height="29" viewBox="0 0 29 29">
+                        <path d="M2 2.37439L26.7487 27.1231" stroke="#333333" stroke-width="3" stroke-linecap="round"/>
+                        <path d="M2.12573 26.7488L26.8745 2.00004" stroke="#333333" stroke-width="3" stroke-linecap="round"/>
+                    </svg>
+                </div>
+            </div>
             <form class="search__container">
                 <input type="search" name="search" class="search__input" placeholder="Поиск..." autocomplete="off">
                 <svg type="submit" class="search__button" width="23" height="23" viewBox="0 0 23 23">

@@ -2,16 +2,13 @@
     if($_SERVER['REQUEST_METHOD'] == 'POST') // Проверяем является ли метод запроса POST
     {
         require 'linkDB.php'; // Шаблон данных для подключения к БД
-
         // Подключение к базе данных
         $Connect = mysqli_connect($serverName, $userName, $password, $dBName);
-
         // Проверка соединения
         if (!$Connect)
         {
             die("Ошибка подключения: " . mysqli_connect_error());
         }
-
         // Получение данных из формы
         $userName = $_POST['userName']; // Записываем в переменную $userName данные из массива запроса $_POST['userName']
         $userEmail = $_POST['userEmail']; // Записываем в переменную $userEmail данные из массива запроса $_POST['userEmail']
@@ -45,10 +42,8 @@
             echo $jsonData; // Отправляем JSON-данные в JavaScript
             exit;
         }
-
         // Подготовка и выполнение SQL-запроса
         $sql2 = "INSERT INTO User (Name, Email, Password) VALUES ('$userName', '$userEmail', '$userPassword')";
-
         if (mysqli_query($Connect, $sql2)) // Проверяем, успешно ли выполнен SQL запрос
         {
             $data = ['answer' => 'Пользователь успешно зарегистрирован'];
@@ -63,7 +58,6 @@
             echo $jsonData; // Отправляем JSON-данные в JavaScript
             exit;
         }
-
         mysqli_close($Connect); // Закрываем соединение с базой данных
     }
 ?>

@@ -3,19 +3,17 @@
     if($_SERVER['REQUEST_METHOD'] == 'POST') // Проверка, что HTTP-запрос - это POST
     {
         require 'linkDB.php'; // Шаблон данных для подключения к БД
-
         $Connect = mysqli_connect($serverName, $userName, $password, $dBName); // Создание соединения с базой данных MySQL
         if(!$Connect) // Проверка успешности соединения
         {
             die('Ошибка подключения: ' . mysqli_connect_error()); // Если соединиться не удалось, показать ошибку
         }
-
         $userEmail = $_POST['userEmail'];  // Принимаем е-мейл из POST-запроса
         $userEmail = mb_strtolower($userEmail, 'UTF-8');  // Переводим email в нижний регистр
         $userPassword = $_POST['userPassword']; // Принимаем пароль из POST-запроса
+        
         $userEmail  = mysqli_real_escape_string($Connect, $userEmail); // Экранирование специальных символов в строке для использования в SQL-запросе
         $userPassword  = mysqli_real_escape_string($Connect, $userPassword); // То же самое для пароля
-
         $sql = 'SELECT Id, Name, Email, Password FROM User'; // SQL-запрос на выборку имени, е-мейла и пароля из таблицы пользователей
         $result = mysqli_query($Connect, $sql); // Выполнение SQL-запроса
         if ($result) // Проверка на успешность выполнения запроса

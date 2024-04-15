@@ -3,7 +3,6 @@
     if($_SESSION['userEmail'])
     {
         require 'linkDB.php';
-
         // Создаем подключение
         $Connect = mysqli_connect($serverName, $userName, $password, $dBName);
         // Проверяем подключение

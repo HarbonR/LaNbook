@@ -26,11 +26,17 @@ let nameRegister = document.getElementById("name-register");
 let emailRegister = document.getElementById("email-register");
 let passwordRegister = document.getElementById("password-register");
 /* ==================================================================================================== */
-menuEnterRegister.onclick = function() // Функция для появления форм вход \ регистрация
+menuEnterRegister.onclick = function() // Функция для открытия формы входа
 {
-    menu.setAttribute("style","display:none;");
-    body.setAttribute("style","display:none;");
-    enterRegister.removeAttribute("style");
+    closeBurger(); // Закрываем бургер
+    menu.setAttribute("style","display:none;"); // Выключаем меню
+    body.setAttribute("style","display:none;"); // Выключаем всё тело
+    enterRegister.removeAttribute("style"); // Включаем форму входа
+}
+createAccount.onclick = function() // Функция для открытия формы регистрации
+{
+    formEnter.setAttribute("style","display:none;");
+    formRegister.removeAttribute("style");
 }
 enterRegisterExitEnter.onclick = function() // Функция для выхода из формы входа
 {
@@ -42,11 +48,6 @@ enterRegisterExitRegister.onclick = function() // Функция для выхо
 {
     formEnter.removeAttribute("style");
     formRegister.setAttribute("style","display:none;");
-}
-createAccount.onclick = function()
-{
-    formEnter.setAttribute("style","display:none;");
-    formRegister.removeAttribute("style");
 }
 //==================================================
 // Функция для проверки валидации формы регистрации
@@ -165,6 +166,7 @@ buttonFormEnter.onclick = function(event)
                 let data = JSON.parse(xhr.responseText);
                 if(data.answer == "Правильный логин и пароль")
                 {
+                    menu__cards.click();
                     menu.removeAttribute("style");
                     body.removeAttribute("style");
                     enterRegister.setAttribute("style","display:none;");
@@ -199,15 +201,35 @@ buttonFormEnter.onclick = function(event)
     }
 }
 //==================================================
+// Функция для отправки данных о пользователе
+let xhrData = new XMLHttpRequest(); // Создаем новый объект XMLHttpRequest
+xhrData.onreadystatechange = function() // Устанавливаем функцию, которая будет вызываться при изменении состояния объекта `xhr`
+{
+    if (xhrData.readyState === 4 && xhrData.status === 200) // Проверяем, что запрос завершен и успешен
+    {
+        if (xhrData.responseText)
+        {
+            let userData = JSON.parse(xhrData.responseText);
+            exit.removeAttribute("style");
+            user.removeAttribute("style");
+            menuEnterRegister.style.display = "none";
+            menuPersonalArea.removeAttribute("style");
+            user.textContent = userData.userName;
+        }
+    }
+};
+xhrData.open("POST", "../PHP/registrationDate.php"); // Открываем соединение с сервером с помощью метода "POST" и адреса "cards.php"
+xhrData.send(); // Отправляем запрос на сервер
+//==================================================
 // Функция для обработки кнопки выход
 exit.onclick = function()
 {
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', '../PHP/exit.php'); // Установлен параметр async в true
+    xhr.send();
     exit.style.display = "none";
     menuEnterRegister.removeAttribute("style");
     menuPersonalArea.style.display = "none";
     menu__cards.click();
-    let xhr = new XMLHttpRequest();
-    xhr.open('GET', '../PHP/exit.php'); // Установлен параметр async в true
-    xhr.send();
 }
 //==================================================

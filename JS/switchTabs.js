@@ -1,6 +1,9 @@
 /* ==================================================================================================== */
 /* ----------------------------------------------Переменные-------------------------------------------- */
-// let burger = document.getElementById("burger");
+// Бургер
+let burger = document.getElementById("burger");
+let burgerOpen = document.getElementById("burger-open");
+let burgerClose = document.getElementById("burger-close");
 //--------------------------------------------------
 // Вкладки меню
 let menuCards = document.getElementById("menu__cards");
@@ -31,6 +34,7 @@ let tabUserActive = bodyUser.getElementsByClassName("tab_active");
 // Вкладка карточки
 menuCards.onclick = function()
 {
+    closeBurger();
     bodyTraining.setAttribute("style", "display: none;");
     bodyUser.setAttribute("style", "display: none;");
     if(document.getElementById("title-category")) // Удаление названия категории
@@ -53,6 +57,7 @@ menuCards.onclick = function()
 // Вкладка тренировки
 menuTraining.onclick = function()
 {
+    closeBurger();
     bodyUser.setAttribute("style", "display: none;");
     bodyTraining.removeAttribute("style");
     if(document.getElementById("title-category")) // Удаление названия категории
@@ -75,6 +80,7 @@ menuTraining.onclick = function()
 // Вкладка личный кабинет
 menuPersonalArea.onclick = function()
 {
+    closeBurger();
     bodyTraining.setAttribute("style", "display: none;");
     bodyUser.removeAttribute("style");
     if(document.getElementById("title-category")) // Удаление названия категории
@@ -164,11 +170,35 @@ window.addEventListener('load', function()
     menuCards.click();
 });
 //==================================================
+// Функция для открытия бургера
+function openBurger()
+{
+    bodyTraining.style.bottom = "129px";
+    bodyUser.style.bottom = "129px";
+    burgerOpen.setAttribute("style", "display: none;");
+    burgerClose.removeAttribute("style");
+    document.getElementById("exit").style.bottom = "129px";
+    document.getElementById("view-cards").style.bottom = "129px";
+}
+function closeBurger()
+{
+    bodyTraining.style.bottom = "-500px";
+    bodyUser.style.bottom = "-500px";
+    burgerOpen.removeAttribute("style");
+    burgerClose.setAttribute("style", "display: none;");
+    document.getElementById("exit").style.bottom = "-500px";
+    document.getElementById("view-cards").style.bottom = "-500px";
+}
 // Для открытия и закрытия бургера
-// burger.onclick = function()
-// {
-//     if (header.style.top == "111px")
-//         header.style.top = "-1000px";
-//     else
-//         header.style.top = "111px";
-// }
+burger.onclick = function()
+{
+    if (bodyTraining.style.bottom == "129px")
+    {
+        closeBurger();   
+    }
+    else
+    {
+        openBurger();
+    }
+}
+//==================================================
