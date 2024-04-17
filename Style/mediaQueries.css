@@ -192,13 +192,10 @@
         position: absolute;
         justify-content: flex-end;
         margin: -30px;
-        width: 80%;
-        height: 45%;
-        left: 50%;
-        transform: translateX(-50%);
         z-index: 3;
         transition: 0.5s;
         bottom: -500px;
+        left: 75%;
     }
     /* ================================================== */
     /* Вид карточек */
@@ -214,19 +211,14 @@
         display: flex;
         justify-content: center;
         align-items: flex-end;
-        width: 80%;
-        height: 45%;
-        background-color: #F2EFE9;
         border-top-left-radius: 30px;
         border-top-right-radius: 30px;
         left: 50%;
         transform: translateX(-50%);
         bottom: -500px;
         z-index: 2;
-        box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.25);
         transition: 0.5s;
         margin: 0;
-        padding-bottom: 30px;
     }
     /* ================================================== */
     /* Тело */
@@ -235,10 +227,7 @@
         position: absolute;
         justify-content: center;
         align-items: center;
-        width: 80%;
-        height: 45%;
         margin: 0;
-        padding-bottom: 30px;
         flex-direction: column;
         left: 50%;
         transition: 0.5s;

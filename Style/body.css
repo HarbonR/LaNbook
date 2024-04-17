@@ -25,6 +25,23 @@
     margin-right: 40px;
 }
 /* ================================================== */
+/* Задний фон бургера */
+#backgroundBurger
+{
+    position: absolute;
+    width: 80%;
+    height: 50%;
+    bottom: -500px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #F2EFE9;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.25);
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    z-index: 2;
+    transition: 0.5s;
+}
+/* ================================================== */
 /* Поиск */
 .search__container
 {

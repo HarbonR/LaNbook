@@ -172,6 +172,9 @@
                     </svg>
                 </div>
             </div>
+            <div id="backgroundBurger">
+                
+            </div>
             <form class="search__container">
                 <input type="search" name="search" class="search__input" placeholder="Поиск..." autocomplete="off">
                 <svg type="submit" class="search__button" width="23" height="23" viewBox="0 0 23 23">

@@ -173,12 +173,13 @@ window.addEventListener('load', function()
 // Функция для открытия бургера
 function openBurger()
 {
-    bodyTraining.style.bottom = "129px";
-    bodyUser.style.bottom = "129px";
+    bodyTraining.style.bottom = "30%";
+    bodyUser.style.bottom = "30%";
     burgerOpen.setAttribute("style", "display: none;");
     burgerClose.removeAttribute("style");
-    document.getElementById("exit").style.bottom = "129px";
-    document.getElementById("view-cards").style.bottom = "129px";
+    document.getElementById("exit").style.bottom = "60%";
+    document.getElementById("view-cards").style.bottom = "140px";
+    document.getElementById("backgroundBurger").style.bottom = "130px"
 }
 function closeBurger()
 {
@@ -188,11 +189,12 @@ function closeBurger()
     burgerClose.setAttribute("style", "display: none;");
     document.getElementById("exit").style.bottom = "-500px";
     document.getElementById("view-cards").style.bottom = "-500px";
+    document.getElementById("backgroundBurger").style.bottom = "-500px"
 }
 // Для открытия и закрытия бургера
 burger.onclick = function()
 {
-    if (bodyTraining.style.bottom == "129px")
+    if (bodyTraining.style.bottom == "30%")
     {
         closeBurger();   
     }
