@@ -17,7 +17,8 @@
                 ,IdDictionary
                 ,Eng
                 ,Rus
-                ,train
+                ,Train
+                ,Level
             FROM
                 UserDictionary
             JOIN User ON UserDictionary.IdUser = User.Id
@@ -36,7 +37,8 @@
                     'linkToPicture' => $row['Picture'],
                     'wordsInTheTargetLanguage' => $row['Eng'],
                     'wordsInNativeLanguage' => $row['Rus'],
-                    'train' => $row['train']);
+                    'train' => $row['Train'],
+                    'level' => $row['Level']);
             }
         }
         $jsonData = json_encode($data); // Преобразуем массив в формат JSON

@@ -314,10 +314,6 @@ input:checked + .slider:before
     border: 1px solid #735C4F;
     margin: 25px 10px 0 25px;
 }
-.card-level
-{
-    fill: #B58686;
-}
 .card-word
 {
     margin: 10px 0 0 10px;

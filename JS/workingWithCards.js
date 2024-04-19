@@ -65,7 +65,7 @@ function createCategory(idCategory, title, linkToPicture)
 }
 //==================================================
 // Создаем функцию для создания карточки
-function createCard(cardId, linkToPicture, wordsInTheTargetLanguage, wordsInNativeLanguage, added)
+function createCard(cardId, linkToPicture, wordsInTheTargetLanguage, wordsInNativeLanguage, added, level)
 {
     // Создание основного контейнера карточки
     let card = document.createElement('div');
@@ -85,6 +85,12 @@ function createCard(cardId, linkToPicture, wordsInTheTargetLanguage, wordsInNati
     svg.setAttribute("width", "42");
     svg.setAttribute("height", "43");
     svg.setAttribute("viewBox", "0 0 42 43");
+    switch(Number(level))
+    {
+        case 1: svg.style.fill = "#B58686"; break;
+        case 2: svg.style.fill = "#8693B5"; break;
+        case 3: svg.style.fill = "#87B586"; break;
+    }
 
     let path = document.createElementNS("http://www.w3.org/2000/svg", "path");
     path.setAttribute("d", "M1 1H41V41.5L21 30L1 41V1Z");
@@ -179,7 +185,7 @@ function createCard(cardId, linkToPicture, wordsInTheTargetLanguage, wordsInNati
 }
 //==================================================
 // Создаем функцию для создания карточки для пользователя
-function createCardForUser(cardId, linkToPicture, wordsInTheTargetLanguage, wordsInNativeLanguage, train)
+function createCardForUser(cardId, linkToPicture, wordsInTheTargetLanguage, wordsInNativeLanguage, train, level)
 {
     // Создание основного контейнера карточки
     let card = document.createElement('div');
@@ -199,7 +205,12 @@ function createCardForUser(cardId, linkToPicture, wordsInTheTargetLanguage, word
     svg.setAttribute("width", "42");
     svg.setAttribute("height", "43");
     svg.setAttribute("viewBox", "0 0 42 43");
-
+    switch(Number(level))
+    {
+        case 1: svg.style.fill = "#B58686"; break;
+        case 2: svg.style.fill = "#8693B5"; break;
+        case 3: svg.style.fill = "#87B586"; break;
+    }
     let path = document.createElementNS("http://www.w3.org/2000/svg", "path");
     path.setAttribute("d", "M1 1H41V41.5L21 30L1 41V1Z");
     svg.appendChild(path);
@@ -312,7 +323,7 @@ function createCardForUser(cardId, linkToPicture, wordsInTheTargetLanguage, word
 }
 //==================================================
 // Создаем функцию для создания карточки для тренировки
-function createCardForTrain(cardId, linkToPicture, wordsInTheTargetLanguage, wordsInNativeLanguage, train)
+function createCardForTrain(cardId, linkToPicture, wordsInTheTargetLanguage, wordsInNativeLanguage, train, level)
 {
     // Создание основного контейнера карточки
     let card = document.createElement('div');
@@ -332,6 +343,12 @@ function createCardForTrain(cardId, linkToPicture, wordsInTheTargetLanguage, wor
     svg.setAttribute("width", "42");
     svg.setAttribute("height", "43");
     svg.setAttribute("viewBox", "0 0 42 43");
+    switch(Number(level))
+    {
+        case 1: svg.style.fill = "#B58686"; break;
+        case 2: svg.style.fill = "#8693B5"; break;
+        case 3: svg.style.fill = "#87B586"; break;
+    }
 
     let path = document.createElementNS("http://www.w3.org/2000/svg", "path");
     path.setAttribute("d", "M1 1H41V41.5L21 30L1 41V1Z");
@@ -567,7 +584,7 @@ function getCards(path, type, idCategory)
                 for (let i = 0; i < jsonData.length; i++)
                 {
                     let cardData = jsonData[i];
-                    let card = createCard(cardData.cardId, cardData.linkToPicture, cardData.wordsInTheTargetLanguage, cardData.wordsInNativeLanguage, cardData.added);
+                    let card = createCard(cardData.cardId, cardData.linkToPicture, cardData.wordsInTheTargetLanguage, cardData.wordsInNativeLanguage, cardData.added, cardData.level);
                     cardsContainer.appendChild(card);
                 }
             }
@@ -581,7 +598,7 @@ function getCards(path, type, idCategory)
                 for (let i = 0; i < jsonData.length; i++)
                 {
                     let cardData = jsonData[i];
-                    let card = createCardForUser(cardData.cardId, cardData.linkToPicture, cardData.wordsInTheTargetLanguage, cardData.wordsInNativeLanguage, cardData.train);
+                    let card = createCardForUser(cardData.cardId, cardData.linkToPicture, cardData.wordsInTheTargetLanguage, cardData.wordsInNativeLanguage, cardData.train, cardData.level);
                     cardsContainer.appendChild(card);
                 }
             }
@@ -592,7 +609,7 @@ function getCards(path, type, idCategory)
                     let cardData = jsonData[i];
                     if(cardData.train)
                     {
-                        let card = createCardForTrain(cardData.cardId, cardData.linkToPicture, cardData.wordsInTheTargetLanguage, cardData.wordsInNativeLanguage, cardData.train);
+                        let card = createCardForTrain(cardData.cardId, cardData.linkToPicture, cardData.wordsInTheTargetLanguage, cardData.wordsInNativeLanguage, cardData.train, cardData.level);
                         cardsContainer.appendChild(card);
                     }
                 }

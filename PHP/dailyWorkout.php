@@ -17,6 +17,7 @@
                 ,Eng
                 ,Rus
                 ,Counter
+                ,Level
                 ,MaxCounter
             FROM
                 UserDictionary
@@ -36,7 +37,8 @@
                     'wordsInTheTargetLanguage' => $row['Eng'],
                     'wordsInNativeLanguage' => $row['Rus'],
                     'counter' => $row['Counter'],
-                    'maxCounter' => $row['MaxCounter']);
+                    'maxCounter' => $row['MaxCounter'],
+                    'level' => $row['Level']);
             }
         }
         $jsonData = json_encode($data); // Преобразуем массив в формат JSON

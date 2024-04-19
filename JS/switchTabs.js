@@ -124,7 +124,7 @@ function getEndWordsDailyWorkout()
     bodyContainer.appendChild(dailyWorkout);
 }
 // Функция для изменения значения счетчика слова
-function сhangeDailyWorkout(cardId, counter, maxCounter, sign)
+function сhangeDailyWorkout(cardId, counter, maxCounter, sign, level)
 {
     let minute = 0;
     if(sign == "+")
@@ -163,11 +163,17 @@ function сhangeDailyWorkout(cardId, counter, maxCounter, sign)
             case 9: minute = 259200; break; // 6 месяцев
         }
     }
+    if(1 <= counter && counter <= 3)
+        level = 1;
+    else if (4 <= counter && counter <= 6)
+        level = 2;
+    else
+        level = 3;
     let xhr = new XMLHttpRequest(); // Создаем новый объект XMLHTTPrequest
     xhr.open("POST", "../PHP/сhangeDailyWorkout.php", true); 
     // Отправляем запрос на сервер
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Устанавливаем заголовок Content-Type
-    xhr.send("counter=" + encodeURIComponent(counter) + "&cardId=" + encodeURIComponent(cardId) + "&minute=" + encodeURIComponent(minute));
+    xhr.send("counter=" + encodeURIComponent(counter) + "&cardId=" + encodeURIComponent(cardId) + "&minute=" + encodeURIComponent(minute) + "&level=" + encodeURIComponent(level));
 }
 // Функция для создания подвкладки "Интервальное повторение"
 function createDailyWorkout(jsonData)
@@ -219,7 +225,7 @@ function createDailyWorkout(jsonData)
             correctAnswer.style.display = "block";
             correctAnswer.textContent = jsonData[iterator].wordsInTheTargetLanguage;
             buttonFurther.textContent = "Далее";
-            сhangeDailyWorkout(jsonData[iterator].cardId, jsonData[iterator].counter, jsonData[iterator].maxCounter, "+");
+            сhangeDailyWorkout(jsonData[iterator].cardId, jsonData[iterator].counter, jsonData[iterator].maxCounter, "+", jsonData[iterator].level);
         }
         else if(jsonData[iterator].wordsInTheTargetLanguage.toUpperCase() != targetWord.value.toUpperCase() && !variableAnswer)
         {

@@ -14,7 +14,8 @@
         $cardId = $_POST['cardId'];
         $counter = $_POST['counter'];
         $minute = $_POST['minute'];
-        $sql = "UPDATE UserDictionary SET Counter = $counter, DateTime = DATE_ADD(CURRENT_TIMESTAMP, INTERVAL $minute MINUTE) WHERE idUser = $userId AND IdDictionary = $cardId"; // SQL запрос
+        $level = $_POST['level'];
+        $sql = "UPDATE UserDictionary SET Counter = $counter, Level = $level, DateTime = DATE_ADD(CURRENT_TIMESTAMP, INTERVAL $minute MINUTE) WHERE idUser = $userId AND IdDictionary = $cardId"; // SQL запрос
         $result = mysqli_query($Connect, $sql); // выполнение запроса
         mysqli_close($Connect); // Закрываем соединение с базой данных
     // }
