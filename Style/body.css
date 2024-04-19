@@ -410,6 +410,50 @@ input:checked + .slider:before
     background-color: #E8DDD2;
 }
 /* ================================================== */
+/* Вкладка тренировка: Интервальное повторение */
+#dailyWorkout
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+#counter
+{
+    color: #000;
+}
+#nativeWord
+{
+    color: #000;
+}
+#targetWord
+{
+    width: 350px;
+    height: 50px;
+    background-color: #E8DDD2;
+    border: none;
+}
+#incorrectAnswer
+{
+    display: none;
+    color: #8A666A;
+}
+#correctAnswer
+{
+    display: none;
+    color: #718A66;
+}
+#buttonFurther
+{
+    width: 250px;
+    height: 50px;
+    background-color: #CDB7A0;
+    color: #000;
+    border: none;
+}
+/* ================================================== */
 /* Вкладка тренировка: настройки */
 #settings__container
 {
