@@ -433,7 +433,7 @@ function createCardForTrain(cardId, linkToPicture, wordsInTheTargetLanguage, wor
 }
 //==================================================
 // Функция создания для создания карточек настроек
-function createSettingCards(settingLabel, id)
+function createSettingCards(settingLabel)
 {
     // Создаем основной элемент div с классом "settings__card"
     let settingsCard = document.createElement("div");
@@ -450,9 +450,20 @@ function createSettingCards(settingLabel, id)
     // Создаем элемент input с атрибутом type равным "checkbox"
     let checkbox = document.createElement("input");
     checkbox.setAttribute("type", "checkbox");
-    checkbox.id = "checkbox id: " + id;
-    checkbox.name = "checkbox name: " + id;
+    checkbox.id = "checkbox id: " + settingLabel;
+    checkbox.name = "checkbox name: " + settingLabel;
     checkbox.autocomplete = "Off";
+    if(sessionStorage.getItem("active-picture: " + settingLabel) == "true")
+        checkbox.checked = true;
+    else
+        checkbox.checked = false;
+    checkbox.onclick = function()
+    {
+        if(checkbox.checked)
+            sessionStorage.setItem("active-picture: " + settingLabel, "true");
+        else
+            sessionStorage.setItem("active-picture: " + settingLabel, "false");
+    }
 
     // Создаем элемент span с классом "slider"
     let slider = document.createElement("span");
@@ -478,16 +489,25 @@ function createSettingCards(settingLabel, id)
     // Создаем элемент div с классом "active-setting__button"
     let activeSettingButton = document.createElement("div");
     activeSettingButton.classList.add("active-setting__button");
+    activeSettingButton.setAttribute("value", sessionStorage.getItem("active-setting: " + settingLabel));
     activeSettingButton.textContent = "+";
+    if(activeSettingButton.getAttribute("value") == "true")
+    {
+        activeSettingButton.classList.add("active-setting__button__entered");
+    }
     activeSettingButton.onclick = function()
     {
-        if(activeSettingButton.classList.contains("active-setting__button__entered"))
+        if(activeSettingButton.getAttribute("value") == "true")
         {
             activeSettingButton.classList.remove("active-setting__button__entered");
+            activeSettingButton.setAttribute("value", "false");
+            sessionStorage.setItem("active-setting: " + settingLabel, "false");
         }
         else
         {
             activeSettingButton.classList.add("active-setting__button__entered");
+            activeSettingButton.setAttribute("value", "true");
+            sessionStorage.setItem("active-setting: " + settingLabel, "true");
         }
     }
 
@@ -634,7 +654,7 @@ function getSettingCards()
     settingsContainer.innerHTML = ""; // Очищаем контейнер перед добавлением новых карточек
     for(let i = 0; i < arraySettingLabel.length; i++)
     {
-        let settingCard = createSettingCards(arraySettingLabel[i], i + 1);
+        let settingCard = createSettingCards(arraySettingLabel[i]);
         settingsContainer.appendChild(settingCard);
     }
 }

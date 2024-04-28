@@ -185,6 +185,10 @@
     {
         display: block;
     }
+    #backgroundBurger
+    {
+        display: block;
+    }
     /* -------------------------------------------------- */
     /* Выход */
     #exit
