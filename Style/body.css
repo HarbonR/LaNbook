@@ -202,7 +202,7 @@ input:checked + .slider:before
 .button-all
 {
     position: fixed;
-    margin-top: -100px;
+    margin-top: -101px;
     display: flex;
     justify-content: center;
     align-items: center;

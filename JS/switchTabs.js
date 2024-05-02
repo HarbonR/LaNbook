@@ -35,7 +35,8 @@ let tabUserActive = bodyUser.getElementsByClassName("tab_active");
 // Вкладка карточки
 menuCards.onclick = function()
 {
-    closeBurger();
+    if(burgerOpen.style.display == "none")
+        closeBurger();
     bodyTraining.setAttribute("style", "display: none;");
     bodyUser.setAttribute("style", "display: none;");
     if(document.getElementById("title-category")) // Удаление названия категории
@@ -58,7 +59,8 @@ menuCards.onclick = function()
 // Вкладка тренировки
 menuTraining.onclick = function()
 {
-    closeBurger();
+    if(burgerOpen.style.display == "none")
+        closeBurger();
     bodyUser.setAttribute("style", "display: none;");
     bodyTraining.removeAttribute("style");
     if(document.getElementById("title-category")) // Удаление названия категории
@@ -81,7 +83,8 @@ menuTraining.onclick = function()
 // Вкладка личный кабинет
 menuPersonalArea.onclick = function()
 {
-    closeBurger();
+    if(burgerOpen.style.display == "none")
+        closeBurger();
     bodyTraining.setAttribute("style", "display: none;");
     bodyUser.removeAttribute("style");
     if(document.getElementById("title-category")) // Удаление названия категории
@@ -105,6 +108,8 @@ menuPersonalArea.onclick = function()
 // Вкладка тренировки
 wordsToPractice.onclick = function()
 {
+    if(burgerOpen.style.display == "none")
+        closeBurger();
     for (let i = 0; i < tabTrainingActive.length; i++)
     {
         tabTrainingActive[i].classList.remove("tab_active");
@@ -291,6 +296,8 @@ function getDailyWorkout()
 }
 dailyWorkout.onclick = function()
 {
+    if(burgerOpen.style.display == "none")
+        closeBurger();
     for (let i = 0; i < tabTrainingActive.length; i++)
     {
         tabTrainingActive[i].classList.remove("tab_active");
@@ -583,15 +590,37 @@ function getPracticeWords()
 }
 practiceWords.onclick = function()
 {
+    if(burgerOpen.style.display == "none")
+        closeBurger();
     for (let i = 0; i < tabTrainingActive.length; i++)
     {
         tabTrainingActive[i].classList.remove("tab_active");
     }
     practiceWords.classList.add("tab_active");
-    getPracticeWords();
+    // Определяем количество упражнений которые выбрал пользователь
+    let numberSettings = 0;
+    arraySettingLabel.forEach(element => {
+        if(sessionStorage.getItem("active-setting: " + element) == "true")
+            numberSettings++;
+    });
+    if(numberSettings != 0)
+        getPracticeWords();
+    else
+    {
+        let bodyContainer = document.getElementById("body__container");
+        bodyContainer.innerHTML = ""; // Отчищаем рабочую область перед добавление групп категорий
+        let practiceWords = document.createElement("div");
+        practiceWords.id = "practiceWords";
+        let endWords = document.createElement("div");
+        endWords.textContent = "Выберите упражнения для тренировки слов во вкладке настройки";
+        practiceWords.appendChild(endWords);
+        bodyContainer.appendChild(practiceWords);
+    }
 }
 settings.onclick = function()
 {
+    if(burgerOpen.style.display == "none")
+        closeBurger();
     for (let i = 0; i < tabTrainingActive.length; i++)
     {
         tabTrainingActive[i].classList.remove("tab_active");
@@ -603,6 +632,8 @@ settings.onclick = function()
 // Вкладка личный кабинет
 dictionary.onclick = function()
 {
+    if(burgerOpen.style.display == "none")
+        closeBurger();
     for (let i = 0; i < tabUserActive.length; i++)
     {
         tabUserActive[i].classList.remove("tab_active");
@@ -612,6 +643,8 @@ dictionary.onclick = function()
 }
 achievements.onclick = function()
 {
+    if(burgerOpen.style.display == "none")
+        closeBurger();
     for (let i = 0; i < tabUserActive.length; i++)
     {
         tabUserActive[i].classList.remove("tab_active");
@@ -620,6 +653,8 @@ achievements.onclick = function()
 }
 statistics.onclick = function()
 {
+    if(burgerOpen.style.display == "none")
+        closeBurger();
     for (let i = 0; i < tabUserActive.length; i++)
     {
         tabUserActive[i].classList.remove("tab_active");
@@ -659,7 +694,7 @@ burger.onclick = function()
 {
     if (bodyTraining.style.bottom == "30%")
     {
-        closeBurger();   
+        closeBurger();
     }
     else
     {
