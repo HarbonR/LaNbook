@@ -451,6 +451,78 @@ input:checked + .slider:before
     border: none;
 }
 /* ================================================== */
+/* Вкладка тренировка: Тренировать слова */
+#practiceWords
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+.exercisePicture
+{
+    display: none;
+    margin: 10px 0 10px 0;
+    width: 100px;
+    border-radius: 20px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.25);
+}
+#matchingWords
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+#containerForTargetWord
+{
+    display: flex;
+    flex-direction: row;
+}
+.containerForTargetLetters
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+    height: 60px;
+    margin: 10px 10px 10px 10px;
+    border: 1px solid black;
+    border-radius: 20px;
+    font-size: 25pt;
+    color: #000;
+}
+#writeTheWord
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+#buttonCheck
+{
+    width: 250px;
+    height: 50px;
+    background-color: #CDB7A0;
+    color: #000;
+    border: none;
+}
+#buttonNext
+{
+    display: none;
+    width: 250px;
+    height: 50px;
+    background-color: #CDB7A0;
+    color: #000;
+    border: none;
+}
+/* ================================================== */
 /* Вкладка тренировка: настройки */
 #settings__container
 {

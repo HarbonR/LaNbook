@@ -15,6 +15,7 @@ let bodyTraining = document.getElementById("body__training");
 let wordsToPractice = document.getElementById("words-to-practice");
 let dailyWorkout = document.getElementById("daily-workout");
 let practiceWords = document.getElementById("practice-words");
+//let exerciseDictionary;
 let settings = document.getElementById("settings");
 //--------------------------------------------------
 // Вкладка личный кабинет
@@ -297,6 +298,289 @@ dailyWorkout.onclick = function()
     dailyWorkout.classList.add("tab_active");
     getDailyWorkout();
 }
+// Создаём словарь упражнений и добавляем в него функцию для создания тренировки "Напиши слово"
+let exerciseDictionary = {  "Напиши слово" : function createWriteTheWord(jsonData, wordIterator, showPicture)
+{
+    let writeTheWord = document.createElement("div");
+    writeTheWord.id = "writeTheWord"
+    let picture = document.createElement('img');
+    picture.className = "exercisePicture";
+    picture.src = jsonData[wordIterator].linkToPicture;
+    picture.alt = '';
+    if(String(showPicture) == "true")
+        picture.style.display = "block";
+    let nativeWord = document.createElement("div"); // Слово на родном языке
+    nativeWord.id = "nativeWord";
+    nativeWord.textContent = jsonData[wordIterator].wordsInNativeLanguage;
+    let targetWord = document.createElement("input"); // Слово на изучаемом языке
+    targetWord.id = "targetWord";
+    targetWord.name = "targetWord";
+    targetWord.autocomplete = "Off";
+    targetWord.textContent = "";
+    let incorrectAnswer = document.createElement("div");
+    incorrectAnswer.id = "incorrectAnswer";
+    let correctAnswer = document.createElement("div");
+    correctAnswer.id = "correctAnswer";
+    let buttonCheck = document.createElement("button");
+    buttonCheck.id = "buttonCheck";
+    buttonCheck.textContent = "Проверить";
+    buttonCheck.onclick = function()
+    {
+        if(jsonData[wordIterator].wordsInTheTargetLanguage.toUpperCase() == targetWord.value.toUpperCase())
+        {
+            targetWord.style.border = "1px solid #718A66";
+            correctAnswer.textContent = jsonData[wordIterator].wordsInTheTargetLanguage;
+            correctAnswer.style.display = "block";
+            buttonCheck.style.display = "none";
+            document.getElementById("buttonNext").style.display = "block";
+        }
+        else
+        {
+            targetWord.style.border = "1px solid #8A666A";
+            incorrectAnswer.textContent = targetWord.value;
+            incorrectAnswer.style.display = "block";
+            correctAnswer.textContent = jsonData[wordIterator].wordsInTheTargetLanguage;
+            correctAnswer.style.display = "block";
+            buttonCheck.style.display = "none";
+            document.getElementById("buttonNext").style.display = "block";
+        }
+    }
+    writeTheWord.appendChild(picture);
+    writeTheWord.appendChild(nativeWord);
+    writeTheWord.appendChild(targetWord);
+    writeTheWord.appendChild(incorrectAnswer);
+    writeTheWord.appendChild(correctAnswer);
+    writeTheWord.appendChild(buttonCheck);
+    return writeTheWord;
+}};
+// Добавляем в словарь функцию для создания тренировки "Сопоставление слов"
+exerciseDictionary["Сопоставление слов"] = function createMatchingWords(jsonData, wordIterator, showPicture)
+{
+    let matchingWords = document.createElement("div");
+    matchingWords.id = "matchingWords";
+    let picture = document.createElement('img');
+    picture.className = "exercisePicture";
+    picture.src = jsonData[wordIterator].linkToPicture;
+    picture.alt = '';
+    if(String(showPicture) == "true")
+        picture.style.display = "block";
+    matchingWords.appendChild(picture);
+    let nativeWord = document.createElement("div"); // Слово на родном языке
+    nativeWord.id = "nativeWord";
+    nativeWord.textContent = jsonData[wordIterator].wordsInNativeLanguage;
+    matchingWords.appendChild(nativeWord);
+    let containerForTargetWord = document.createElement("div");
+    containerForTargetWord.id = "containerForTargetWord";
+    lengthWord = jsonData[wordIterator].wordsInTheTargetLanguage.length;
+    let arrayContainerForTargetLetters = containerForTargetWord.getElementsByClassName("containerForTargetLetters"); // Создаём массив контейнеров для букв изучаемого слова
+    let indexArrayContainerForTargetLetters = 0; // Создаём индекс для массива контейнеров для букв изучаемого слова
+    for(let i = 0; i < lengthWord; i++)
+    {
+        let containerForLetter = document.createElement("div");
+        containerForLetter.className = "containerForTargetLetters";
+        containerForLetter.onclick = function()
+        {
+            if(containerForLetter.textContent != "")
+            {
+                indexArrayContainerForTargetWordWithLetters = 0;
+                if(arrayContainerForTargetWordWithLetters[indexArrayContainerForTargetWordWithLetters].textContent != "")
+                {
+                    while(arrayContainerForTargetWordWithLetters[indexArrayContainerForTargetWordWithLetters].textContent != "")
+                    {
+                        if(indexArrayContainerForTargetWordWithLetters == lengthWord)
+                            indexArrayContainerForTargetWordWithLetters = 0;
+                        indexArrayContainerForTargetWordWithLetters++;
+                    }
+                }
+                arrayContainerForTargetWordWithLetters[indexArrayContainerForTargetWordWithLetters].textContent = containerForLetter.textContent;
+                containerForLetter.textContent = "";
+                indexArrayContainerForTargetWordWithLetters++;
+            }
+        }
+        containerForTargetWord.appendChild(containerForLetter);
+    }
+    matchingWords.appendChild(containerForTargetWord);
+    let containerForTargetWordWithLetters = document.createElement("div");
+    containerForTargetWordWithLetters.id = "containerForTargetWord";
+    let shuffledWord = jsonData[wordIterator].wordsInTheTargetLanguage.split('').sort(() => Math.random() - 0.5).join(''); // Разбиваем слово на массив букв, сортируем его случайным образом и объединяет буквы обратно в слово
+    let arrayContainerForTargetWordWithLetters = containerForTargetWordWithLetters.getElementsByClassName("containerForTargetLetters"); // Создаём массив контейнеров для букв изучаемого слова
+    let indexArrayContainerForTargetWordWithLetters = 0; // Создаём индекс для массива контейнеров для букв изучаемого слова
+    for(let i = 0; i < lengthWord; i++)
+    {
+        let containerForLetter = document.createElement("div");
+        containerForLetter.className = "containerForTargetLetters";
+        containerForLetter.textContent = shuffledWord[i];
+        containerForLetter.onclick = function()
+        {
+            if(containerForLetter.textContent != "")
+            {
+                indexArrayContainerForTargetLetters = 0;
+                if(arrayContainerForTargetLetters[indexArrayContainerForTargetLetters].textContent != "")
+                {
+                    while(arrayContainerForTargetLetters[indexArrayContainerForTargetLetters].textContent != "")
+                    {
+                        if(indexArrayContainerForTargetLetters == lengthWord)
+                            indexArrayContainerForTargetLetters = 0;
+                        indexArrayContainerForTargetLetters++;
+                    }
+                }
+                arrayContainerForTargetLetters[indexArrayContainerForTargetLetters].textContent = containerForLetter.textContent;
+                containerForLetter.textContent = "";
+                indexArrayContainerForTargetLetters++;
+            }
+        }
+        containerForTargetWordWithLetters.appendChild(containerForLetter);
+    }
+    matchingWords.appendChild(containerForTargetWordWithLetters);
+    let incorrectAnswer = document.createElement("div");
+    incorrectAnswer.id = "incorrectAnswer";
+    let correctAnswer = document.createElement("div");
+    correctAnswer.id = "correctAnswer";
+    matchingWords.appendChild(incorrectAnswer);
+    matchingWords.appendChild(correctAnswer);
+    let buttonCheck = document.createElement("button");
+    buttonCheck.id = "buttonCheck";
+    buttonCheck.textContent = "Проверить";
+    buttonCheck.onclick = function()
+    {
+        let answer = true;
+        for(let i = 0; i < lengthWord; i++)
+        {
+            if(jsonData[wordIterator].wordsInTheTargetLanguage[i] != arrayContainerForTargetLetters[i].textContent)
+            {
+                answer = false;
+                break;
+            }
+        }
+        if(answer)
+        {
+            correctAnswer.textContent = "Правильный ответ";
+            correctAnswer.style.display = "block";
+            for(let i = 0; i < arrayContainerForTargetLetters.length; i++)
+            {
+                arrayContainerForTargetLetters[i].style.borderColor = "#718A66";
+            }
+            buttonCheck.style.display = "none";
+            document.getElementById("buttonNext").style.display = "block";
+        }
+        else
+        {
+            incorrectAnswer.textContent = "Не правильный ответ";
+            incorrectAnswer.style.display = "block";
+            for(let i = 0; i < arrayContainerForTargetLetters.length; i++)
+            {
+                arrayContainerForTargetLetters[i].style.borderColor = "#8A666A";
+            }
+            correctAnswer.textContent = jsonData[wordIterator].wordsInTheTargetLanguage;
+            correctAnswer.style.display = "block";
+            buttonCheck.style.display = "none";
+            document.getElementById("buttonNext").style.display = "block";
+        }
+    }
+    matchingWords.appendChild(buttonCheck);
+    return matchingWords;
+}
+// Функция для создания подвкладки тренировать слова
+function createPracticeWords(jsonData)
+{
+    let bodyContainer = document.getElementById("body__container");
+    let practiceWords = document.createElement("div");
+    practiceWords.id = "practiceWords";
+    bodyContainer.appendChild(practiceWords);
+    let counter = document.createElement("div");
+    counter.id = "counter"
+    let numberSettings = 0;
+    arraySettingLabel.forEach(element => {
+        if(sessionStorage.getItem("active-setting: " + element) == "true")
+            numberSettings++;
+    });
+    let counterIterator = 0; // Итератор счетчика
+    let wordIterator = 0; // Итератор слова
+    let exerciseIterator = 0; // Итератор упражнения
+    counter.textContent = counterIterator + "/" + (jsonData.length * numberSettings);
+    practiceWords.appendChild(counter);
+    let exerciseContainer = document.createElement("div");
+    practiceWords.appendChild(exerciseContainer);
+    for (let i = 0; i < arraySettingLabel.length; i++)
+    {
+        if(String(sessionStorage.getItem("active-setting: " + arraySettingLabel[i])) == "true")
+        {
+            exerciseIterator = i;
+            exerciseContainer.appendChild(exerciseDictionary[arraySettingLabel[i]](jsonData, wordIterator, sessionStorage.getItem("active-picture: " + arraySettingLabel[i])));
+            break;
+        }
+    }
+    let buttonNext = document.createElement("button");
+    buttonNext.textContent = "Далее";
+    buttonNext.id = "buttonNext";
+    buttonNext.onclick = function()
+    {
+        let next = true;
+        counterIterator++; // Увеличиваем значение итератора счетчика
+        counter.textContent = counterIterator + "/" + (jsonData.length * numberSettings); // Обновляем значение счетчика
+        exerciseContainer.innerHTML = ""; // Отчищаем контейнер для упражнений
+        while (next)
+        {
+            for(let i = ++exerciseIterator; i < arraySettingLabel.length; i++, exerciseIterator++)
+            {
+                if(String(sessionStorage.getItem("active-setting: " + arraySettingLabel[i])) == "true")
+                {
+                    buttonNext.style.display = "none";
+                    if(wordIterator != jsonData.length)
+                        exerciseContainer.appendChild(exerciseDictionary[arraySettingLabel[i]](jsonData, wordIterator, sessionStorage.getItem("active-picture: " + arraySettingLabel[i])));
+                    next = false;
+
+                    break;
+                }
+            }
+            if(exerciseIterator == arraySettingLabel.length)
+            {
+                let xhr = new XMLHttpRequest(); // Создаем новый объект XMLHTTPrequest
+                xhr.open("POST", "../PHP/deleteTrainingCard.php", true); 
+                // Отправляем запрос на сервер
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Устанавливаем заголовок Content-Type
+                xhr.send("cardId=" + encodeURIComponent(jsonData[wordIterator].cardId));
+                exerciseIterator = -1;
+                wordIterator++;
+            }
+        }
+        if(wordIterator == jsonData.length)
+        {
+            practiceWords.innerHTML = ""; // Отчищаем рабочую область
+            let endWords = document.createElement("div");
+            endWords.textContent = "Слов для повторения больше нет";
+            practiceWords.appendChild(endWords);
+        }
+    }
+    practiceWords.appendChild(buttonNext);
+}
+// Функция для получения данных карточек для тренировки
+function getPracticeWords()
+{
+    let bodyContainer = document.getElementById("body__container");
+    bodyContainer.innerHTML = ""; // Отчищаем рабочую область перед добавление групп категорий
+    let xhrPracticeWords = new XMLHttpRequest(); // Создаем новый объект XMLHttpRequest
+    xhrPracticeWords.onreadystatechange = function() // Устанавливаем функцию, которая будет вызываться при изменении состояния объекта xhr
+    {
+        if (xhrPracticeWords.readyState === 4 && xhrPracticeWords.status === 200) // Проверяем, что запрос завершен и успешен
+        {
+            let jsonData = JSON.parse(xhrPracticeWords.responseText); // Разбираем JSON-данные
+            if(jsonData.length != 0)
+                createPracticeWords(jsonData);
+            else
+            {
+                let practiceWords = document.createElement("div");
+                practiceWords.id = "practiceWords";
+                let endWords = document.createElement("div");
+                endWords.textContent = "Добавьте слова для тренировки";
+                practiceWords.appendChild(endWords);
+                bodyContainer.appendChild(practiceWords);
+            }
+        }
+    }
+    xhrPracticeWords.open("POST", "../PHP/trainCards.php"); // Открываем соединение с сервером с помощью метода "POST" и адреса
+    xhrPracticeWords.send(); // Отправляем запрос на сервер
+}
 practiceWords.onclick = function()
 {
     for (let i = 0; i < tabTrainingActive.length; i++)
@@ -304,6 +588,7 @@ practiceWords.onclick = function()
         tabTrainingActive[i].classList.remove("tab_active");
     }
     practiceWords.classList.add("tab_active");
+    getPracticeWords();
 }
 settings.onclick = function()
 {
