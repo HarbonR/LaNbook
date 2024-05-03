@@ -294,6 +294,7 @@ function getDailyWorkout()
     xhrDailyWorkout.open("POST", "../PHP/dailyWorkout.php"); // Открываем соединение с сервером с помощью метода "POST" и адреса
     xhrDailyWorkout.send(); // Отправляем запрос на сервер
 }
+// 
 dailyWorkout.onclick = function()
 {
     if(burgerOpen.style.display == "none")
@@ -543,10 +544,10 @@ function createPracticeWords(jsonData)
             if(exerciseIterator == arraySettingLabel.length)
             {
                 let xhr = new XMLHttpRequest(); // Создаем новый объект XMLHTTPrequest
-                xhr.open("POST", "../PHP/deleteTrainingCard.php", true); 
+                xhr.open("POST", "../PHP/trainCard.php", true); 
                 // Отправляем запрос на сервер
                 xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Устанавливаем заголовок Content-Type
-                xhr.send("cardId=" + encodeURIComponent(jsonData[wordIterator].cardId));
+                xhr.send("cardId=" + encodeURIComponent(jsonData[wordIterator].cardId) + "&train=" + encodeURIComponent(0));
                 exerciseIterator = -1;
                 wordIterator++;
             }
@@ -588,6 +589,7 @@ function getPracticeWords()
     xhrPracticeWords.open("POST", "../PHP/trainCards.php"); // Открываем соединение с сервером с помощью метода "POST" и адреса
     xhrPracticeWords.send(); // Отправляем запрос на сервер
 }
+//
 practiceWords.onclick = function()
 {
     if(burgerOpen.style.display == "none")
@@ -617,6 +619,7 @@ practiceWords.onclick = function()
         bodyContainer.appendChild(practiceWords);
     }
 }
+//
 settings.onclick = function()
 {
     if(burgerOpen.style.display == "none")
@@ -630,6 +633,7 @@ settings.onclick = function()
 }
 //--------------------------------------------------
 // Вкладка личный кабинет
+// 
 dictionary.onclick = function()
 {
     if(burgerOpen.style.display == "none")
@@ -641,6 +645,7 @@ dictionary.onclick = function()
     dictionary.classList.add("tab_active");
     getCards("../PHP/userCards.php", "User");
 }
+//
 achievements.onclick = function()
 {
     if(burgerOpen.style.display == "none")
@@ -651,6 +656,7 @@ achievements.onclick = function()
     }
     achievements.classList.add("tab_active");
 }
+//
 statistics.onclick = function()
 {
     if(burgerOpen.style.display == "none")
@@ -679,6 +685,7 @@ function openBurger()
     document.getElementById("view-cards").style.bottom = "140px";
     document.getElementById("backgroundBurger").style.bottom = "130px"
 }
+//
 function closeBurger()
 {
     bodyTraining.style.bottom = "-500px";

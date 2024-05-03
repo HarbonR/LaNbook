@@ -253,22 +253,16 @@ function createCardForUser(cardId, linkToPicture, wordsInTheTargetLanguage, word
     }
     buttonTrain.onclick = function()
     {
+        let valueTrain;
         if(buttonTrain.classList.contains("enter-button")) // Если карточка не добавлена, добавить
-        {
-            let xhr = new XMLHttpRequest(); // Создаем новый объект XMLHTTPrequest
-            xhr.open("POST", "../PHP/addTrainingCard.php", true); 
-            // Отправляем запрос на сервер
-            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Устанавливаем заголовок Content-Type
-            xhr.send("cardId=" + encodeURIComponent(cardId));
-        }
+            valueTrain = 1;
         else
-        {
-            let xhr = new XMLHttpRequest(); // Создаем новый объект XMLHTTPrequest
-            xhr.open("POST", "../PHP/deleteTrainingCard.php", true); 
-            // Отправляем запрос на сервер
-            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Устанавливаем заголовок Content-Type
-            xhr.send("cardId=" + encodeURIComponent(cardId));
-        }
+            valueTrain = 0;
+        let xhr = new XMLHttpRequest(); // Создаем новый объект XMLHTTPrequest
+        xhr.open("POST", "../PHP/trainCard.php", true); 
+        // Отправляем запрос на сервер
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Устанавливаем заголовок Content-Type
+        xhr.send("cardId=" + encodeURIComponent(cardId) + "&train=" + encodeURIComponent(valueTrain));
         switchButtonClass(buttonTrain);
     }
 
@@ -393,10 +387,10 @@ function createCardForTrain(cardId, linkToPicture, wordsInTheTargetLanguage, wor
     {
         document.getElementById(cardId).remove();
         let xhr = new XMLHttpRequest(); // Создаем новый объект XMLHTTPrequest
-        xhr.open("POST", "../PHP/deleteTrainingCard.php", true); 
+        xhr.open("POST", "../PHP/trainCard.php", true); 
         // Отправляем запрос на сервер
         xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Устанавливаем заголовок Content-Type
-        xhr.send("cardId=" + encodeURIComponent(cardId));
+        xhr.send("cardId=" + encodeURIComponent(cardId) + "&train=" + encodeURIComponent(0));
     }
 
     // Создание div для кнопки "Звук"
