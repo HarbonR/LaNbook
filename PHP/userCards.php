@@ -11,23 +11,25 @@
             die("Ошибка подключения: " . mysqli_connect_error());
         }
         $userId = $_SESSION['userId'];
+        $idCategory = $_POST['idCategory'];
         $sql = "
             SELECT
-                Picture
-                ,IdDictionary
-                ,Eng
-                ,Rus
-                ,Train
-                ,Level
+                Dictionary.Picture
+                ,UserDictionary.IdDictionary
+                ,Dictionary.Eng
+                ,Dictionary.Rus
+                ,UserDictionary.Train
+                ,UserDictionary.Level
             FROM
                 UserDictionary
-            JOIN User ON UserDictionary.IdUser = User.Id
             JOIN Dictionary ON UserDictionary.IdDictionary = Dictionary.Id
+            JOIN DictionaryCategory ON DictionaryCategory.IdDictionary = UserDictionary.IdDictionary
+            JOIN Category ON DictionaryCategory.IdCategory = Category.Id
             WHERE
-                User.Id = '$userId'"; // SQL запрос
+                UserDictionary.IdUser = '$userId' AND Category.Id = '$idCategory'"; // SQL запрос
         $result = mysqli_query($Connect, $sql); // выполнение запроса
         $data = array(); // Создаем пустой массив для хранения данных
-        if (mysqli_num_rows($result) > 0) 
+        if (mysqli_num_rows($result) > 0)
         {
             while($row = mysqli_fetch_assoc($result)) // выводим данные из каждой строки
             {

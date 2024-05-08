@@ -55,7 +55,49 @@ function createCategory(idCategory, title, linkToPicture)
     categoryButton.onclick = function(event)
     {
         event.stopPropagation(); // Функция останавливает выполнение функции по нажатию на категорию
-        console.log("Кнопка добавить");
+    }
+
+    // Добавление элементов в DOM
+    category.appendChild(categoryPicture);
+    category.appendChild(categoryTitle);
+    category.appendChild(categoryButton);
+
+    return category;
+}
+// Создаём функцию для создания пользовательских категорий
+function createUserCategory(idCategory, title, linkToPicture)
+{
+    let category = document.createElement('div');
+    category.classList.add('category');
+    category.id = "idCategory: " + idCategory;
+    category.onclick = function()
+    {
+        document.getElementById("body__container").innerHTML = "";   
+        let titleCategory = document.createElement("p");
+        titleCategory.id = "title-category";
+        titleCategory.textContent = title;
+        viewCards.prepend(titleCategory);
+        getCards("../PHP/userCards.php", "User", idCategory);
+    }
+
+    let categoryPicture = document.createElement('div');
+    categoryPicture.classList.add('category-picture');
+
+    let pictureImg = document.createElement('img');
+    pictureImg.src = linkToPicture;
+    pictureImg.classList.add('category-picture');
+    categoryPicture.appendChild(pictureImg);
+
+    let categoryTitle = document.createElement('div');
+    categoryTitle.classList.add('category-title');
+    categoryTitle.textContent = title;
+
+    let categoryButton = document.createElement('div');
+    categoryButton.classList.add('category-button');
+    categoryButton.textContent = 'Тренировать';
+    categoryButton.onclick = function(event)
+    {
+        event.stopPropagation(); // Функция останавливает выполнение функции по нажатию на категорию
     }
 
     // Добавление элементов в DOM
@@ -568,6 +610,32 @@ function getCategories()
         }
     };
     xhrCategories.open("POST", "../PHP/categories.php"); // Открываем соединение с сервером с помощью метода "POST" и адреса ""
+    xhrCategories.send(); // Отправляем запрос на сервер
+}
+// Функция для отображения пользовательских категорий
+function getUserCategories()
+{
+    let bodyContainer = document.getElementById("body__container");
+    bodyContainer.innerHTML = ""; // Отчищаем рабочую область перед добавление групп категорий
+    let bodyCategories = document.createElement('div'); // Создаём контейнер для категорий
+    bodyCategories.classList.add('group-category');
+    bodyContainer.appendChild(bodyCategories);
+
+    // Получение данных о категориях
+    let xhrCategories = new XMLHttpRequest(); // Создаем новый объект XMLHttpRequest
+    xhrCategories.onreadystatechange = function() // Устанавливаем функцию, которая будет вызываться при изменении состояния объекта `xhr`
+    {
+        if (xhrCategories.readyState === 4 && xhrCategories.status === 200) // Проверяем, что запрос завершен и успешен
+        {
+            let jsonData = JSON.parse(xhrCategories.responseText); // Разбираем JSON-данные
+            for(let i = 0; i < jsonData.length; i++)
+            {
+                category = createUserCategory(jsonData[i].idCategory, jsonData[i].title, jsonData[i].linkToPicture);
+                bodyCategories.appendChild(category);
+            }
+        }
+    };
+    xhrCategories.open("POST", "../PHP/userCategories.php"); // Открываем соединение с сервером с помощью метода "POST" и адреса ""
     xhrCategories.send(); // Отправляем запрос на сервер
 }
 //==================================================
