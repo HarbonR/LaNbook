@@ -643,7 +643,6 @@ dictionary.onclick = function()
         tabUserActive[i].classList.remove("tab_active");
     }
     dictionary.classList.add("tab_active");
-    //getCards("../PHP/userCards.php", "User");
     getUserCategories();
 }
 //

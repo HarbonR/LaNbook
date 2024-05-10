@@ -64,8 +64,129 @@ function createCategory(idCategory, title, linkToPicture)
 
     return category;
 }
+// Создаём функцию для создания формы для создания пользователем пользовательских категорий
+function createFormUserCustomCategories()
+{
+    let backgroundModalWindow = document.createElement("div");
+    backgroundModalWindow.className = "backgroundModalWindow";
+
+    let form = document.createElement("form");
+    form.className = "formUserCustomCategories";
+
+    var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.id = "exitFormUserCustomCategories";
+    svg.setAttribute("width", "36");
+    svg.setAttribute("height", "36");
+    svg.setAttribute("viewBox", "0 0 36 36");
+    svg.onclick = function()
+    {
+        backgroundModalWindow.remove();
+    }
+
+    var path1 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    path1.setAttribute("d", "M3 3.44705L32.8484 33");
+    path1.setAttribute("stroke", "#333333");
+    path1.setAttribute("stroke-width", "5");
+    path1.setAttribute("stroke-linecap", "round");
+
+    var path2 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    path2.setAttribute("d", "M3.15161 32.5529L33 3.00001");
+    path2.setAttribute("stroke", "#333333");
+    path2.setAttribute("stroke-width", "5");
+    path2.setAttribute("stroke-linecap", "round");
+
+    svg.appendChild(path1);
+    svg.appendChild(path2);
+
+    let label = document.createElement("label");
+    label.className = "labelFormUserCustomCategories";
+    label.textContent = "Картинка";
+
+    let inputPicture = document.createElement("input");
+    inputPicture.className = "inputPictureFormUserCustomCategories";
+    inputPicture.setAttribute("type", "file");
+    //inputPicture.value = "";
+
+    let isInputPicture; // Переменная хранить добавил ли пользователь файл
+
+    // Функция заменяет задний фон элемента label на выбранную картинку
+    inputPicture.addEventListener("change", function()
+    {
+        // Проверяем добавил ли пользователь файл
+        if (this.files.length > 0)
+            isInputPicture = true;
+        else
+            isInputPicture = false;
+
+        let file = inputPicture.files[0];
+        let reader = new FileReader();
+        reader.onload = function(e)
+        {
+          label.style.backgroundImage = `url(${e.target.result})`;
+        };
+        reader.readAsDataURL(file);
+    });
+
+    let inputTitle = document.createElement("input");
+    inputTitle.className = "inputTitleFormUserCustomCategories";
+    inputTitle.setAttribute("type", "text");
+    inputTitle.placeholder = "Название";
+
+    let button = document.createElement("button");
+    button.className = "buttonFormUserCustomCategories";
+    button.textContent = "Добавить";
+    button.onclick = function(event)
+    {
+        event.preventDefault(); // Отмена действий по отправки формы
+        // Проверка на валидацию
+        // if(isInputPicture)
+        //     console.log("Картинка добавлена");
+        // else
+        //     console.log("Картинка не добавлена");
+        // if(inputTitle.value)
+        //     console.log("Название добавлено");
+        // else
+        //     console.log("Название не добавлено");
+        if(isInputPicture && inputTitle.value)
+        {
+            let file = inputPicture.files[0]; // Получение выбранного файла
+            let formData = new FormData(); // Создание объекта FormData для отправки файла
+            formData.append('file', file); // Добавление файла в объект FormData
+            formData.append('title', inputTitle.value); // Добавление файла в объект FormData
+            let xhr = new XMLHttpRequest(); // Создание объекта XMLHttpRequest
+            xhr.open('POST', '../PHP/addUserCategory.php', true); // Настройка запроса
+            xhr.send(formData); // Отправка запроса
+        }
+    }
+
+    form.appendChild(svg);
+    form.appendChild(label);
+    form.appendChild(inputPicture);
+    form.appendChild(inputTitle);
+    form.appendChild(button);
+
+    backgroundModalWindow.appendChild(form);
+
+    document.body.prepend(backgroundModalWindow);
+}
+// Создаём функцию для создания пользователем пользовательских категорий
+function createUserCustomCategories()
+{
+    let customCategory = document.createElement('div');
+    customCategory.classList.add('customCategory');
+    customCategory.onclick = function()
+    {
+        createFormUserCustomCategories();
+    }
+    let buttonCustomCategory = document.createElement('div');
+    buttonCustomCategory.classList.add('buttonCustomCategory');
+    buttonCustomCategory.textContent = "Добавить";
+
+    customCategory.appendChild(buttonCustomCategory);
+    return customCategory;
+}
 // Создаём функцию для создания пользовательских категорий
-function createUserCategory(idCategory, title, linkToPicture)
+function createUserCategory(idCategory, title, linkToPicture, author)
 {
     let category = document.createElement('div');
     category.classList.add('category');
@@ -91,21 +212,67 @@ function createUserCategory(idCategory, title, linkToPicture)
     let categoryTitle = document.createElement('div');
     categoryTitle.classList.add('category-title');
     categoryTitle.textContent = title;
+    
+    let containerForButton = document.createElement('div');
+    containerForButton.classList.add('containerForButton');
 
-    let categoryButton = document.createElement('div');
-    categoryButton.classList.add('category-button');
-    categoryButton.textContent = 'Тренировать';
-    categoryButton.onclick = function(event)
+    let buttonTrain = document.createElement('div');
+    buttonTrain.classList.add('buttonTrain');
+    buttonTrain.textContent = 'Тренировать';
+    buttonTrain.onclick = function(event)
     {
         event.stopPropagation(); // Функция останавливает выполнение функции по нажатию на категорию
+    }
+
+    let buttonDelete = document.createElement('div');
+    buttonDelete.classList.add('buttonDelete');
+    buttonDelete.textContent = 'Удалить';
+    buttonDelete.onclick = function(event)
+    {
+        event.stopPropagation(); // Функция останавливает выполнение функции по нажатию на категорию
+        category.remove(); // Удаляем категорию
+        if(author != null) // Если эта категория создана пользователем, удалить картинку с сервера и информацию из базы данных о данной категории
+        {
+            let xhr = new XMLHttpRequest(); // Создаем новый объект XMLHTTPrequest
+            xhr.open("POST", "../PHP/deleteUserCategory.php", true); 
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Устанавливаем заголовок Content-Type
+            xhr.send("idCategory=" + encodeURIComponent(idCategory) + "&linkToPicture=" + encodeURIComponent(linkToPicture));
+        }
+        // Удаляем все карточки из таблицы пользовательские карточки этой категории
+        let xhr = new XMLHttpRequest(); // Создаем новый объект XMLHTTPrequest
+        xhr.open("POST", "../PHP/deleteAllCards.php", true); 
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Устанавливаем заголовок Content-Type
+        xhr.send("idCategory=" + encodeURIComponent(idCategory));
     }
 
     // Добавление элементов в DOM
     category.appendChild(categoryPicture);
     category.appendChild(categoryTitle);
-    category.appendChild(categoryButton);
+    containerForButton.appendChild(buttonTrain);
+    containerForButton.appendChild(buttonDelete);
+    category.appendChild(containerForButton);
 
     return category;
+}
+//==================================================
+// Создаём функцию для создания формы для создания пользователем пользовательских карточек
+function createFormUserCustomCard()
+{
+
+}
+//==================================================
+// Создаём функцию для создания пользователем пользовательских карточек
+function createUserCustomCard()
+{
+    let customCard = document.createElement('div');
+    customCard.classList.add('customCard');
+
+    let buttonCustomCard = document.createElement('div');
+    buttonCustomCard.classList.add('buttonCustomCard');
+    buttonCustomCard.textContent = "Добавить";
+
+    customCard.appendChild(buttonCustomCard);
+    return customCard;
 }
 //==================================================
 // Создаем функцию для создания карточки
@@ -618,7 +785,7 @@ function getUserCategories()
     let bodyContainer = document.getElementById("body__container");
     bodyContainer.innerHTML = ""; // Отчищаем рабочую область перед добавление групп категорий
     let bodyCategories = document.createElement('div'); // Создаём контейнер для категорий
-    bodyCategories.classList.add('group-category');
+    bodyCategories.classList.add('category__container');
     bodyContainer.appendChild(bodyCategories);
 
     // Получение данных о категориях
@@ -628,9 +795,10 @@ function getUserCategories()
         if (xhrCategories.readyState === 4 && xhrCategories.status === 200) // Проверяем, что запрос завершен и успешен
         {
             let jsonData = JSON.parse(xhrCategories.responseText); // Разбираем JSON-данные
+            bodyCategories.appendChild(createUserCustomCategories());
             for(let i = 0; i < jsonData.length; i++)
             {
-                category = createUserCategory(jsonData[i].idCategory, jsonData[i].title, jsonData[i].linkToPicture);
+                category = createUserCategory(jsonData[i].idCategory, jsonData[i].title, jsonData[i].linkToPicture, jsonData[i].author);
                 bodyCategories.appendChild(category);
             }
         }
@@ -679,6 +847,7 @@ function getCards(path, type, idCategory)
                 addAll.textContent = "Тренировать все";
                 bodyContainer.prepend(addAll);
                 bodyContainer.style.paddingTop = "100px";
+                cardsContainer.appendChild(createUserCustomCard());
                 for (let i = 0; i < jsonData.length; i++)
                 {
                     let cardData = jsonData[i];

@@ -284,6 +284,145 @@ input:checked + .slider:before
     color: #F9F6F2;
 }
 /* ================================================== */
+/* Пользовательская категория */
+.containerForButton
+{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+.buttonTrain
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFFFFF;
+    background-color: rgba(148, 160, 130, 0.5);
+    font-size: 16px;
+    height: 30px;
+    width: 60%;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+.buttonDelete
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFFFFF;
+    background-color: #A08294;
+    font-size: 16px;
+    height: 30px;
+    width: 40%;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+/* ================================================== */
+/* Добавление пользовательской категории */
+.customCategory
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 300px;
+    height: 250px;
+    background-color: #F9F6F2;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    margin: 20px;
+    cursor: pointer;
+}
+.buttonCustomCategory
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 250px;
+    height: 215px;
+    background-color: rgba(232, 221, 210, 0.5);
+    border-radius: 15px;
+    border: 1px solid #735C4F;
+    color: #735C4F;
+    font-size: 28pt;
+}
+/* ================================================== */
+/* Форма для добавления пользовательской категории */
+.backgroundModalWindow
+{
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+.formUserCustomCategories
+{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 500px;
+    height: 400px;
+    background-color: #F2EFE9;
+    z-index: 101;
+    border-radius: 20px;
+}
+.labelFormUserCustomCategories
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 200px;
+    height: 200px;
+    background-color: rgba(217, 217, 217, 0.3);
+    border-radius: 10px;
+    font-size: 20pt;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.inputPictureFormUserCustomCategories
+{
+    position: absolute;
+    top: 65px;
+    width: 200px;
+    height: 200px;
+    margin: 0;
+    padding: 0;
+    border: none;
+    opacity: 0;
+    z-index: 99;
+}
+.inputTitleFormUserCustomCategories
+{
+    width: 80%;
+    background-color: rgba(232, 221, 210, 0.5);
+    font-size: 20pt;
+    text-align: center;
+}
+.buttonFormUserCustomCategories
+{
+    position: absolute;
+    bottom: 0;
+    margin: 0;
+    background-color: #94A082;
+    color: #FFFFFF;
+    border-radius: 0;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+#exitFormUserCustomCategories
+{
+    cursor: pointer;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    margin: 10px 10px 0 0;
+}
+/* ================================================== */
 /* Карточка */
 .body__cards-container
 {
@@ -405,6 +544,35 @@ input:checked + .slider:before
 .entered-button:active
 {
     background-color: #E8DDD2;
+}
+/* ================================================== */
+/* Добавление пользовательской карточки */
+.customCard
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 230px;
+    height: 330px;
+    background-color: #F9F6F2;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    margin: 20px;
+    cursor: pointer;
+}
+.buttonCustomCard
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 190px;
+    height: 290px;
+    background-color: rgba(232, 221, 210, 0.5);
+    border-radius: 15px;
+    border: 1px solid #735C4F;
+    color: #735C4F;
+    font-size: 28pt;
 }
 /* ================================================== */
 /* Вкладка тренировка: Интервальное повторение */

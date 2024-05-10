@@ -14,16 +14,23 @@
             Category.Id
             ,Category.Title
             ,Category.Picture
+            ,Category.Author
+        FROM
+            Category
+        WHERE
+            Category.Author = '$userId'
+        UNION
+        SELECT
+            Category.Id
+            ,Category.Title
+            ,Category.Picture
+            ,Category.Author
         FROM
             UserDictionary
             INNER JOIN DictionaryCategory ON DictionaryCategory.IdDictionary = UserDictionary.IdDictionary
             INNER JOIN Category ON DictionaryCategory.IdCategory = Category.Id
         WHERE
-            UserDictionary.IdUser = '$userId'
-        GROUP BY
-            Category.Id,
-            Category.Title,
-            Category.Picture"; // SQL запрос
+            UserDictionary.IdUser = '$userId'"; // SQL запрос
     $result = mysqli_query($Connect, $sql); // выполнение запроса
     $data = array(); // Создаем пустой массив для хранения данных
     if (mysqli_num_rows($result) > 0)
@@ -33,7 +40,8 @@
             $data[] = array(
                 'idCategory' => $row['Id'],
                 'title' => $row['Title'],
-                'linkToPicture' => $row['Picture']
+                'linkToPicture' => $row['Picture'],
+                'author' => $row['Author']
             );
         }
     }

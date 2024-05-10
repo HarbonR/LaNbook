@@ -23,7 +23,7 @@
         }
     }
     // Запрос ко второй таблице
-    $sql2 = "SELECT Id, IdGroupCategory, Title, Picture FROM Category"; 
+    $sql2 = "SELECT Id, IdGroupCategory, Title, Picture FROM Category WHERE IdGroupCategory IS NOT NULL"; 
     $result2 = mysqli_query($Connect, $sql2); 
     $data2 = array(); 
     if (mysqli_num_rows($result2) > 0) 
