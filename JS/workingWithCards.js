@@ -105,19 +105,10 @@ function createFormUserCustomCategories()
     let inputPicture = document.createElement("input");
     inputPicture.className = "inputPictureFormUserCustomCategories";
     inputPicture.setAttribute("type", "file");
-    //inputPicture.value = "";
-
-    let isInputPicture; // Переменная хранить добавил ли пользователь файл
 
     // Функция заменяет задний фон элемента label на выбранную картинку
     inputPicture.addEventListener("change", function()
     {
-        // Проверяем добавил ли пользователь файл
-        if (this.files.length > 0)
-            isInputPicture = true;
-        else
-            isInputPicture = false;
-
         let file = inputPicture.files[0];
         let reader = new FileReader();
         reader.onload = function(e)
@@ -139,23 +130,28 @@ function createFormUserCustomCategories()
     {
         event.preventDefault(); // Отмена действий по отправки формы
         // Проверка на валидацию
-        // if(isInputPicture)
-        //     console.log("Картинка добавлена");
-        // else
-        //     console.log("Картинка не добавлена");
-        // if(inputTitle.value)
-        //     console.log("Название добавлено");
-        // else
-        //     console.log("Название не добавлено");
-        if(isInputPicture && inputTitle.value)
+        if(inputTitle.value)
         {
             let file = inputPicture.files[0]; // Получение выбранного файла
             let formData = new FormData(); // Создание объекта FormData для отправки файла
             formData.append('file', file); // Добавление файла в объект FormData
             formData.append('title', inputTitle.value); // Добавление файла в объект FormData
             let xhr = new XMLHttpRequest(); // Создание объекта XMLHttpRequest
+            xhr.onreadystatechange = function() // Устанавливаем функцию, которая будет вызываться при изменении состояния объекта xhr
+            {
+                if (xhr.readyState === 4 && xhr.status === 200) // Проверяем, что запрос завершен и успешен
+                {
+                    backgroundModalWindow.remove();
+                    dictionary.click();
+                }
+            }
             xhr.open('POST', '../PHP/addUserCategory.php', true); // Настройка запроса
             xhr.send(formData); // Отправка запроса
+        }
+        else
+        {
+            inputTitle.style.borderColor = "#8A666A";
+            inputTitle.insertAdjacentHTML("afterend", "<p class='error-message' style='margin: 0; color: #333333;'>Поле не заполнено</p>");
         }
     }
 
@@ -197,15 +193,17 @@ function createUserCategory(idCategory, title, linkToPicture, author)
         let titleCategory = document.createElement("p");
         titleCategory.id = "title-category";
         titleCategory.textContent = title;
+        titleCategory.value = idCategory;
         viewCards.prepend(titleCategory);
-        getCards("../PHP/userCards.php", "User", idCategory);
+        getCards("../PHP/userCards.php", "User", idCategory, author);
     }
 
     let categoryPicture = document.createElement('div');
     categoryPicture.classList.add('category-picture');
 
     let pictureImg = document.createElement('img');
-    pictureImg.src = linkToPicture;
+    if(linkToPicture != null)
+        pictureImg.src = linkToPicture;
     pictureImg.classList.add('category-picture');
     categoryPicture.appendChild(pictureImg);
 
@@ -258,7 +256,191 @@ function createUserCategory(idCategory, title, linkToPicture, author)
 // Создаём функцию для создания формы для создания пользователем пользовательских карточек
 function createFormUserCustomCard()
 {
+    let backgroundModalWindow = document.createElement("div");
+    backgroundModalWindow.className = "backgroundModalWindow";
 
+    let form = document.createElement("form");
+    form.className = "formUserCustomCard";
+
+    var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.id = "exitFormUserCustomCategories";
+    svg.setAttribute("width", "36");
+    svg.setAttribute("height", "36");
+    svg.setAttribute("viewBox", "0 0 36 36");
+    svg.onclick = function()
+    {
+        backgroundModalWindow.remove();
+    }
+
+    var path1 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    path1.setAttribute("d", "M3 3.44705L32.8484 33");
+    path1.setAttribute("stroke", "#333333");
+    path1.setAttribute("stroke-width", "5");
+    path1.setAttribute("stroke-linecap", "round");
+
+    var path2 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    path2.setAttribute("d", "M3.15161 32.5529L33 3.00001");
+    path2.setAttribute("stroke", "#333333");
+    path2.setAttribute("stroke-width", "5");
+    path2.setAttribute("stroke-linecap", "round");
+
+    svg.appendChild(path1);
+    svg.appendChild(path2);
+
+    let label = document.createElement("label");
+    label.className = "labelFormUserCustomCard";
+    label.textContent = "Картинка";
+
+    let inputPicture = document.createElement("input");
+    inputPicture.className = "inputPictureFormUserCustomCard";
+    inputPicture.setAttribute("type", "file");
+
+    // Функция заменяет задний фон элемента label на выбранную картинку
+    inputPicture.addEventListener("change", function()
+    {
+        let file = inputPicture.files[0];
+        let reader = new FileReader();
+        reader.onload = function(e)
+        {
+          label.style.backgroundImage = `url(${e.target.result})`;
+        };
+        reader.readAsDataURL(file);
+    });
+
+    let wordTargetLanguage = document.createElement("input");
+    wordTargetLanguage.className = "inputTitleFormUserCustomCategories";
+    wordTargetLanguage.setAttribute("type", "text");
+    wordTargetLanguage.placeholder = "Слово на изучаемом языке";
+
+    let transcription = document.createElement("input");
+    transcription.className = "inputTitleFormUserCustomCategories";
+    transcription.setAttribute("type", "text");
+    transcription.placeholder = "[Транскрипция]";
+
+    let wordNativeLanguage = document.createElement("input");
+    wordNativeLanguage.className = "inputTitleFormUserCustomCategories";
+    wordNativeLanguage.setAttribute("type", "text");
+    wordNativeLanguage.placeholder = "Слово на родном языке";
+
+    let containerForLevel = document.createElement("div");
+    containerForLevel.className = "containerForLevelFormUserCustomCard";
+    
+    let titleLevel = document.createElement("input");
+    titleLevel.className = "titleLevelFormUserCustomCard";
+    titleLevel.placeholder = "1 Уровень";
+    titleLevel.disabled = true;
+    let level = 1;
+    
+    let levelOne = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    levelOne.setAttribute("width", "42");
+    levelOne.setAttribute("height", "43");
+    levelOne.setAttribute("viewBox", "0 0 42 43");
+    levelOne.style.fill = "#B58686";
+    levelOne.onclick = function()
+    {
+        titleLevel.placeholder = "1 Уровень";
+        level = 1;
+    }
+
+    let pathLevelOne = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    pathLevelOne.setAttribute("d", "M1 1H41V41.5L21 30L1 41V1Z");
+    levelOne.appendChild(pathLevelOne);
+
+    let levelTwo = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    levelTwo.setAttribute("width", "42");
+    levelTwo.setAttribute("height", "43");
+    levelTwo.setAttribute("viewBox", "0 0 42 43");
+    levelTwo.style.fill = "#8693B5";
+    levelTwo.onclick = function()
+    {
+        titleLevel.placeholder = "2 Уровень";
+        level = 2;
+    }
+
+    let pathLevelTwo = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    pathLevelTwo.setAttribute("d", "M1 1H41V41.5L21 30L1 41V1Z");
+    levelTwo.appendChild(pathLevelTwo);
+
+    let levelThree = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    levelThree.setAttribute("width", "42");
+    levelThree.setAttribute("height", "43");
+    levelThree.setAttribute("viewBox", "0 0 42 43");
+    levelThree.style.fill = "#87B586";
+    levelThree.onclick = function()
+    {
+        titleLevel.placeholder = "3 Уровень";
+        level = 3;
+    }
+
+    let pathLevelThree = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    pathLevelThree.setAttribute("d", "M1 1H41V41.5L21 30L1 41V1Z");
+    levelThree.appendChild(pathLevelThree);
+
+    containerForLevel.appendChild(titleLevel);
+    containerForLevel.appendChild(levelOne);
+    containerForLevel.appendChild(levelTwo);
+    containerForLevel.appendChild(levelThree);
+
+    let context = document.createElement("textarea");
+    context.className = "contextFormUserCustomCard";
+    context.setAttribute("type", "text");
+    context.placeholder = "Контекст  (предложение с этим словом на изучаемом языке)";
+
+    let button = document.createElement("button");
+    button.className = "buttonFormUserCustomCategories";
+    button.textContent = "Добавить";
+    button.onclick = function(event)
+    {
+        event.preventDefault(); // Отмена действий по отправки формы
+        // Проверка на валидацию
+        if(wordTargetLanguage.value && wordNativeLanguage.value)
+        {
+            let file = inputPicture.files[0]; // Получение выбранного файла
+            let formData = new FormData(); // Создание объекта FormData для отправки файла
+            formData.append('file', file); // Добавление файла в объект FormData
+            formData.append('wordTargetLanguage', wordTargetLanguage.value); // Добавление файла в объект FormData
+            formData.append('transcription', transcription.value); // Добавление файла в объект FormData
+            formData.append('wordNativeLanguage', wordNativeLanguage.value); // Добавление файла в объект FormData
+            formData.append('level', level); // Добавление файла в объект FormData
+            formData.append('context', context.value); // Добавление файла в объект FormData
+            let idCategory = document.getElementById("title-category");
+            formData.append('idCategory', idCategory.value); // Добавление файла в объект FormData
+
+            let xhr = new XMLHttpRequest(); // Создание объекта XMLHttpRequest
+            xhr.onreadystatechange = function() // Устанавливаем функцию, которая будет вызываться при изменении состояния объекта xhr
+            {
+                if (xhr.readyState === 4 && xhr.status === 200) // Проверяем, что запрос завершен и успешен
+                {
+                    backgroundModalWindow.remove();
+                    dictionary.click();
+                }
+            }
+            xhr.open('POST', '../PHP/addUserCard.php', true); // Настройка запроса
+            xhr.send(formData); // Отправка запроса
+        }
+        else
+        {
+            wordTargetLanguage.style.borderColor = "#8A666A";
+            wordTargetLanguage.insertAdjacentHTML("afterend", "<p class='error-message' style='margin: 0; color: #333333;'>Поле не заполнено</p>");
+
+            wordNativeLanguage.style.borderColor = "#8A666A";
+            wordNativeLanguage.insertAdjacentHTML("afterend", "<p class='error-message' style='margin: 0; color: #333333;'>Поле не заполнено</p>");
+        }
+    }
+
+    form.appendChild(svg);
+    form.appendChild(label);
+    form.appendChild(inputPicture);
+    form.appendChild(wordTargetLanguage);
+    form.appendChild(transcription);
+    form.appendChild(wordNativeLanguage);
+    form.appendChild(containerForLevel);
+    form.appendChild(context);
+    form.appendChild(button);
+
+    backgroundModalWindow.appendChild(form);
+
+    document.body.prepend(backgroundModalWindow);
 }
 //==================================================
 // Создаём функцию для создания пользователем пользовательских карточек
@@ -266,7 +448,11 @@ function createUserCustomCard()
 {
     let customCard = document.createElement('div');
     customCard.classList.add('customCard');
-
+    customCard.onclick = function()
+    {
+        createFormUserCustomCard();
+    }
+    
     let buttonCustomCard = document.createElement('div');
     buttonCustomCard.classList.add('buttonCustomCard');
     buttonCustomCard.textContent = "Добавить";
@@ -808,7 +994,7 @@ function getUserCategories()
 }
 //==================================================
 // Функция для отображения карточек
-function getCards(path, type, idCategory)
+function getCards(path, type, idCategory, author)
 {
     // Получение данных о карточках
     document.getElementById("body__container").innerHTML = ""; // Отчищаем рабочую область перед добавление групп категорий
@@ -847,7 +1033,8 @@ function getCards(path, type, idCategory)
                 addAll.textContent = "Тренировать все";
                 bodyContainer.prepend(addAll);
                 bodyContainer.style.paddingTop = "100px";
-                cardsContainer.appendChild(createUserCustomCard());
+                if(author != null) // Если категория создана пользователем добавить возможность добавить пользовательскую карточку в эту категорию
+                    cardsContainer.appendChild(createUserCustomCard());
                 for (let i = 0; i < jsonData.length; i++)
                 {
                     let cardData = jsonData[i];

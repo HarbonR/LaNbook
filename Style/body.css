@@ -575,6 +575,68 @@ input:checked + .slider:before
     font-size: 28pt;
 }
 /* ================================================== */
+/* Форма для добавления пользовательской карточки */
+.formUserCustomCard
+{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 500px;
+    height: 730px;
+    background-color: #F2EFE9;
+    z-index: 101;
+    border-radius: 20px;
+}
+.labelFormUserCustomCard
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 200px;
+    height: 200px;
+    background-color: rgba(217, 217, 217, 0.3);
+    border-radius: 10px;
+    font-size: 20pt;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.inputPictureFormUserCustomCard
+{
+    position: absolute;
+    top: 70px;
+    width: 200px;
+    height: 200px;
+    margin: 0;
+    padding: 0;
+    border: none;
+    opacity: 0;
+    z-index: 99;
+}
+.containerForLevelFormUserCustomCard
+{
+    display: flex;
+    justify-content: space-around;
+    width: 80%;
+}
+.titleLevelFormUserCustomCard
+{
+    width: 40%;
+    background-color: rgba(232, 221, 210, 0.5);
+    font-size: 20pt;
+    text-align: center;
+}
+.contextFormUserCustomCard
+{
+    width: 80%;
+    height: 100px;
+    background-color: rgba(232, 221, 210, 0.5);
+    font-size: 20pt;
+    text-align: center;
+    border: 1px solid #999999;
+    border-radius: 10px;
+}
+/* ================================================== */
 /* Вкладка тренировка: Интервальное повторение */
 #dailyWorkout
 {

@@ -4,12 +4,14 @@
     {
         $idCategory = $_POST['idCategory'];
         $linkToPicture = $_POST['linkToPicture'];
-        $filename = dirname(__DIR__).$linkToPicture;
-        if (file_exists($filename))
-            unlink($filename);
-        else
-            echo 'Error';
-
+        if($linkToPicture != null)
+        {
+            $filename = dirname(__DIR__).$linkToPicture; // Получение предыдущей текущей директории и ссылки на картинку
+            if (file_exists($filename))
+                unlink($filename);
+            else
+                echo 'Error delete to picture';
+        }
         require 'linkDB.php';
         // Создаем подключение
         $Connect = mysqli_connect($serverName, $userName, $password, $dBName);

@@ -15,7 +15,6 @@ let bodyTraining = document.getElementById("body__training");
 let wordsToPractice = document.getElementById("words-to-practice");
 let dailyWorkout = document.getElementById("daily-workout");
 let practiceWords = document.getElementById("practice-words");
-//let exerciseDictionary;
 let settings = document.getElementById("settings");
 //--------------------------------------------------
 // Вкладка личный кабинет
@@ -636,6 +635,11 @@ settings.onclick = function()
 // 
 dictionary.onclick = function()
 {
+    document.getElementById("body__container").style.paddingTop = "0"; // Удаляет отступ создаваемый кнопкой тренировать всё
+    if(document.getElementById("title-category")) // Удаление названия категории
+    {
+        document.getElementById("title-category").remove();
+    }
     if(burgerOpen.style.display == "none")
         closeBurger();
     for (let i = 0; i < tabUserActive.length; i++)
