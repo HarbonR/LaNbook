@@ -49,6 +49,10 @@
             $data = ['answer' => 'Пользователь успешно зарегистрирован'];
             $jsonData = json_encode($data); // Преобразуем массив в формат JSON
             echo $jsonData; // Отправляем JSON-данные в JavaScript
+            // Добавляем папку для хранения картинок категорий и карточек пользователя
+            $last_id = mysqli_insert_id($Connect); // Получаем последний вставленный ID
+            $path = dirname(__DIR__).'\\Picture\\'.$last_id; // Создаём путь к папке пользователя
+            mkdir($path);
             exit;
         }
         else

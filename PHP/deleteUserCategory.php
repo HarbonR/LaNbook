@@ -2,16 +2,19 @@
     session_start();
     if($_SESSION['userEmail'])
     {
-        $idCategory = $_POST['idCategory'];
-        $linkToPicture = $_POST['linkToPicture'];
-        if($linkToPicture != null)
+        $userId = $_SESSION['userId'];
+        $idCategory = $_POST['idCategory']; // Получаем Id категории
+        $directory = dirname(__DIR__).'\\Picture\\'.$userId.'\\'.$idCategory;
+        // Удаление файлов в папке
+        $files = glob($directory . '/*'); // Получаем список файлов в папке
+        foreach ($files as $file) 
         {
-            $filename = dirname(__DIR__).$linkToPicture; // Получение предыдущей текущей директории и ссылки на картинку
-            if (file_exists($filename))
-                unlink($filename);
-            else
-                echo 'Error delete to picture';
+            if (is_file($file))
+            {
+                unlink($file); // Удаляем файл
+            }
         }
+        rmdir($directory); // Удаление пустой папки (данная функция может удалить только пустую папку)
         require 'linkDB.php';
         // Создаем подключение
         $Connect = mysqli_connect($serverName, $userName, $password, $dBName);
@@ -20,8 +23,6 @@
         {
             die("Ошибка подключения: " . mysqli_connect_error());
         }
-        $userId = $_SESSION['userId'];
-        $cardId = $_POST['cardId'];
         $sql = "DELETE FROM Category WHERE Id = $idCategory"; // SQL запрос
         $result = mysqli_query($Connect, $sql); // выполнение запроса
         mysqli_close($Connect); // Закрываем соединение с базой данных

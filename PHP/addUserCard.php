@@ -1,7 +1,8 @@
 <?php
-    // В MySQL, mysqli_query по умолчанию не поддерживает выполнение нескольких запросов за один раз, если только не используется специальная функция mysqli_multi_query.
+    session_start();
     if ($_SERVER['REQUEST_METHOD'] === 'POST')
     {
+        $userId = $_SESSION['userId'];
         $file = $_FILES['file']; // Получение загруженного файла
         $wordTargetLanguage = $_POST['wordTargetLanguage'];
         $transcription = $_POST['transcription'];
@@ -16,11 +17,10 @@
         }
         $context = $_POST['context'];
         $idCategory = $_POST['idCategory'];
-        $path = dirname(__DIR__).'\\Picture\\UserWords\\'.$file['name'];
+        $path = dirname(__DIR__).'\\Picture\\'.$userId.'\\'.$idCategory.'\\Words'.'\\'.$file['name'];
         // Сохранение файла на сервере
         if(move_uploaded_file($file['tmp_name'], $path))
-        {
-            session_start();
+        { 
             require 'linkDB.php';
             // Создаем подключение
             $Connect = mysqli_connect($serverName, $userName, $password, $dBName);
@@ -29,8 +29,7 @@
             {
                 die("Ошибка подключения: " . mysqli_connect_error());
             }
-            $userId = $_SESSION['userId'];
-            $path = '\\Picture\\UserWords\\'.$file['name'];
+            $path = '\\Picture\\'.$userId.'\\'.$idCategory.'\\Words'.'\\'.$file['name'];
             $path = addslashes($path);
             // Выполнение первого SQL-запроса
             $sql1 = "INSERT INTO Dictionary (Picture, Eng, Transcription, Rus, Context) VALUES ('$path', '$wordTargetLanguage', '$transcription', '$wordNativeLanguage', '$context')";
@@ -60,7 +59,6 @@
         }
         else
         {
-            session_start();
             require 'linkDB.php';
             // Создаем подключение
             $Connect = mysqli_connect($serverName, $userName, $password, $dBName);
@@ -69,7 +67,6 @@
             {
                 die("Ошибка подключения: " . mysqli_connect_error());
             }
-            $userId = $_SESSION['userId'];
             // Выполнение первого SQL-запроса
             $sql1 = "INSERT INTO Dictionary (Eng, Transcription, Rus, Context) VALUES ('$wordTargetLanguage', '$transcription', '$wordNativeLanguage', '$context')";
             if (!mysqli_query($Connect, $sql1))

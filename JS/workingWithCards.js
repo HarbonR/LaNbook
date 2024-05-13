@@ -229,18 +229,29 @@ function createUserCategory(idCategory, title, linkToPicture, author)
     {
         event.stopPropagation(); // Функция останавливает выполнение функции по нажатию на категорию
         category.remove(); // Удаляем категорию
-        if(author != null) // Если эта категория создана пользователем, удалить картинку с сервера и информацию из базы данных о данной категории
+        // Если эта категория создана пользователем, сначала удаляем все картинки из папки Words созданные пользователем, 
+        // затем данные из базы данных о данных карточках, после удаляем картинку и папку с сервера и информацию из базы данных о данной категории
+        if(author != null) 
+        {
+            // Удаляем картинки, папку и данные из базы данных о карточках которые находятся в данной категории
+            let xhrCard = new XMLHttpRequest(); // Создаем новый объект XMLHTTPrequest
+            xhrCard.open("POST", "../PHP/deleteAllUserCards.php", true); 
+            xhrCard.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Устанавливаем заголовок Content-Type
+            xhrCard.send("idCategory=" + encodeURIComponent(idCategory));
+
+            // Удаляем картинку категории и папку с этой категорией
+            let xhrCategory = new XMLHttpRequest(); // Создаем новый объект XMLHTTPrequest
+            xhrCategory.open("POST", "../PHP/deleteUserCategory.php", true); 
+            xhrCategory.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Устанавливаем заголовок Content-Type
+            xhrCategory.send("idCategory=" + encodeURIComponent(idCategory) + "&linkToPicture=" + encodeURIComponent(linkToPicture));
+        }
+        else if(author == null) // Иначе удаляем все карточки из таблицы пользовательские карточки этой категории
         {
             let xhr = new XMLHttpRequest(); // Создаем новый объект XMLHTTPrequest
-            xhr.open("POST", "../PHP/deleteUserCategory.php", true); 
+            xhr.open("POST", "../PHP/deleteAllCards.php", true); 
             xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Устанавливаем заголовок Content-Type
-            xhr.send("idCategory=" + encodeURIComponent(idCategory) + "&linkToPicture=" + encodeURIComponent(linkToPicture));
+            xhr.send("idCategory=" + encodeURIComponent(idCategory));
         }
-        // Удаляем все карточки из таблицы пользовательские карточки этой категории
-        let xhr = new XMLHttpRequest(); // Создаем новый объект XMLHTTPrequest
-        xhr.open("POST", "../PHP/deleteAllCards.php", true); 
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Устанавливаем заголовок Content-Type
-        xhr.send("idCategory=" + encodeURIComponent(idCategory));
     }
 
     // Добавление элементов в DOM
