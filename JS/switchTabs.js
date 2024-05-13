@@ -312,7 +312,8 @@ let exerciseDictionary = {  "Напиши слово" : function createWriteTheW
     writeTheWord.id = "writeTheWord"
     let picture = document.createElement('img');
     picture.className = "exercisePicture";
-    picture.src = jsonData[wordIterator].linkToPicture;
+    if(jsonData[wordIterator].linkToPicture != null)
+        picture.src = jsonData[wordIterator].linkToPicture;
     picture.alt = '';
     if(String(showPicture) == "true")
         picture.style.display = "block";
@@ -367,7 +368,8 @@ exerciseDictionary["Сопоставление слов"] = function createMatch
     matchingWords.id = "matchingWords";
     let picture = document.createElement('img');
     picture.className = "exercisePicture";
-    picture.src = jsonData[wordIterator].linkToPicture;
+    if(jsonData[wordIterator].linkToPicture != null)
+        picture.src = jsonData[wordIterator].linkToPicture;
     picture.alt = '';
     if(String(showPicture) == "true")
         picture.style.display = "block";

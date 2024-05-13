@@ -582,7 +582,7 @@ function createCard(cardId, linkToPicture, wordsInTheTargetLanguage, wordsInNati
 }
 //==================================================
 // Создаем функцию для создания карточки для пользователя
-function createCardForUser(cardId, linkToPicture, wordsInTheTargetLanguage, wordsInNativeLanguage, train, level)
+function createCardForUser(cardId, linkToPicture, wordsInTheTargetLanguage, wordsInNativeLanguage, train, level, author)
 {
     // Создание основного контейнера карточки
     let card = document.createElement('div');
@@ -593,7 +593,8 @@ function createCardForUser(cardId, linkToPicture, wordsInTheTargetLanguage, word
     cardPicture.className = 'card-picture';
 
     let picture = document.createElement('img');
-    picture.src = linkToPicture;
+    if(linkToPicture != null)
+        picture.src = linkToPicture;
     picture.alt = '';
     cardPicture.appendChild(picture);
 
@@ -700,11 +701,22 @@ function createCardForUser(cardId, linkToPicture, wordsInTheTargetLanguage, word
     buttonDelete.onclick = function()
     {
         document.getElementById(cardId).remove();
-        let xhr = new XMLHttpRequest(); // Создаем новый объект XMLHTTPrequest
-        xhr.open("POST", "../PHP/deleteCard.php", true); 
-        // Отправляем запрос на сервер
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Устанавливаем заголовок Content-Type
-        xhr.send("cardId=" + encodeURIComponent(cardId));
+        if(author == null) // Если карточка не пользовательская тогда выполнить запрос на удаления слова только из таблицы UserDictionary
+        {
+            let xhr = new XMLHttpRequest(); // Создаем новый объект XMLHTTPrequest
+            xhr.open("POST", "../PHP/deleteCard.php", true); 
+            // Отправляем запрос на сервер
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Устанавливаем заголовок Content-Type
+            xhr.send("cardId=" + encodeURIComponent(cardId));
+        }
+        else if(author != null) // Если карточка пользовательская тогда выполнить запрос на удаления слова из таблиц UserDictionary, DictionaryCategory, Dictionary
+        {
+            let xhr = new XMLHttpRequest(); // Создаем новый объект XMLHTTPrequest
+            xhr.open("POST", "../PHP/deleteUserCard.php", true); 
+            // Отправляем запрос на сервер
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Устанавливаем заголовок Content-Type
+            xhr.send("cardId=" + encodeURIComponent(cardId) + "&linkToPicture=" + encodeURIComponent(linkToPicture));
+        }
     }
     cardButtons.appendChild(buttonDelete);
 
@@ -725,7 +737,8 @@ function createCardForTrain(cardId, linkToPicture, wordsInTheTargetLanguage, wor
     cardPicture.className = 'card-picture';
 
     let picture = document.createElement('img');
-    picture.src = linkToPicture;
+    if(linkToPicture != null)
+        picture.src = linkToPicture;
     picture.alt = '';
     cardPicture.appendChild(picture);
 
@@ -1038,7 +1051,7 @@ function getCards(path, type, idCategory, author)
                 for (let i = 0; i < jsonData.length; i++)
                 {
                     let cardData = jsonData[i];
-                    let card = createCardForUser(cardData.cardId, cardData.linkToPicture, cardData.wordsInTheTargetLanguage, cardData.wordsInNativeLanguage, cardData.train, cardData.level);
+                    let card = createCardForUser(cardData.cardId, cardData.linkToPicture, cardData.wordsInTheTargetLanguage, cardData.wordsInNativeLanguage, cardData.train, cardData.level, author);
                     cardsContainer.appendChild(card);
                 }
             }

@@ -7,6 +7,13 @@
         $transcription = $_POST['transcription'];
         $wordNativeLanguage = $_POST['wordNativeLanguage'];
         $level = $_POST['level'];
+        $counter = 1;
+        switch ($level)
+        {
+            case 1 : $counter = 1; break;
+            case 2 : $counter = 4; break;
+            case 3 : $counter = 7; break;
+        }
         $context = $_POST['context'];
         $idCategory = $_POST['idCategory'];
         $path = dirname(__DIR__).'\\Picture\\UserWords\\'.$file['name'];
@@ -42,7 +49,7 @@
                     echo "Error: " . mysqli_error($Connect);
                 }
                 // Выполнение третьего SQL-запроса
-                $sql3 = "INSERT INTO UserDictionary(IdUser, IdDictionary, Level) VALUES ('$userId', '$last_id', '$level')";
+                $sql3 = "INSERT INTO UserDictionary(IdUser, IdDictionary, Counter, Level) VALUES ('$userId', '$last_id', '$counter', '$level')";
                 if (!mysqli_query($Connect, $sql3))
                 {
                     echo "Error: " . mysqli_error($Connect);
@@ -80,7 +87,7 @@
                     echo "Error: " . mysqli_error($Connect);
                 }
                 // Выполнение третьего SQL-запроса
-                $sql3 = "INSERT INTO UserDictionary(IdUser, IdDictionary, Level) VALUES ('$userId', '$last_id', '$level')";
+                $sql3 = "INSERT INTO UserDictionary(IdUser, IdDictionary, Counter, Level) VALUES ('$userId', '$last_id', '$counter', '$level')";
                 if (!mysqli_query($Connect, $sql3))
                 {
                     echo "Error: " . mysqli_error($Connect);
