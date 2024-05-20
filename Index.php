@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LaNbook</title>
+    <link rel="icon" href="favicon.svg" type="image/x-icon">
     <link rel="stylesheet" href="Style/body.css">
     <link rel="stylesheet" href="Style/generalSettings.css">
     <link rel="stylesheet" href="Style/loginRegistration.css">

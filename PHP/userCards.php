@@ -17,7 +17,9 @@
                 Dictionary.Picture
                 ,UserDictionary.IdDictionary
                 ,Dictionary.Eng
+                ,Dictionary.Transcription
                 ,Dictionary.Rus
+                ,Dictionary.Context
                 ,UserDictionary.Train
                 ,UserDictionary.Level
             FROM
@@ -39,7 +41,10 @@
                     'wordsInTheTargetLanguage' => $row['Eng'],
                     'wordsInNativeLanguage' => $row['Rus'],
                     'train' => $row['Train'],
-                    'level' => $row['Level']);
+                    'level' => $row['Level'],
+                    'transcription' => $row['Transcription'],
+                    'context' => $row['Context']
+                );
             }
         }
         $jsonData = json_encode($data); // Преобразуем массив в формат JSON

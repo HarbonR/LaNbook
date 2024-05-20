@@ -15,7 +15,9 @@
             Dictionary.Id
             ,Dictionary.Picture
             ,Dictionary.Eng
+            ,Dictionary.Transcription
             ,Dictionary.Rus
+            ,Dictionary.Context
             ,UserDictionary.Level
             ,CASE WHEN UserDictionary.IdUser IS NOT NULL THEN 1 ELSE 0 END AS added
         FROM
@@ -36,7 +38,10 @@
                 'wordsInTheTargetLanguage' => $row['Eng'],
                 'wordsInNativeLanguage' => $row['Rus'],
                 'added' => $row['added'],
-                'level' => $row['Level']);
+                'level' => $row['Level'],
+                'transcription' => $row['Transcription'],
+                'context' => $row['Context']
+            );
         }
     }
     $jsonData = json_encode($data); // Преобразуем массив в формат JSON

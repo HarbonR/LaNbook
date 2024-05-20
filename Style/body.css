@@ -423,6 +423,62 @@ input:checked + .slider:before
     margin: 10px 10px 0 0;
 }
 /* ================================================== */
+/* Открытая карточка */
+.openCard
+{
+    position: relative;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+    width: 500px;
+    height: auto;
+    background-color: #F2EFE9;
+    z-index: 101;
+    border-radius: 20px;
+}
+.pictureForOpenCard
+{
+    display: flex;
+    margin-left: 30px;
+}
+.pictureForOpenCard > img
+{
+    width: 200px;
+    height: 200px;
+    border-radius: 20px;
+    border: 1px solid #735C4F;
+    margin: 25px 10px 0 25px;
+}
+.cardButtonAddForOpenCard
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 30px;
+    width: 95px;
+    height: 50px;
+    background-color: #E8DDD2;
+    border-radius: 15px;
+    font-size: 48px;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+}
+.transcription
+{
+    margin-top: 10px;
+    font-size: 32px;
+    color: #2D2D2D;
+    text-align: center;
+}
+.context
+{
+    margin: 10px 0;
+    font-size: 32px;
+    color: #2D2D2D;
+    text-align: center;
+}
+/* ================================================== */
 /* Карточка */
 .body__cards-container
 {

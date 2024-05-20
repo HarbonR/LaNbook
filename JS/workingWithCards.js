@@ -472,13 +472,228 @@ function createUserCustomCard()
     return customCard;
 }
 //==================================================
+// Создаем функцию для создания открытой карточки
+function createOpenCard(cardId, linkToPicture, wordsInTheTargetLanguage, wordsInNativeLanguage, added, level, transcriptionContent, contextContent, type)
+{
+    let backgroundModalWindow = document.createElement("div");
+    backgroundModalWindow.className = "backgroundModalWindow";
+
+    let openCard = document.createElement("div");
+    openCard.className = "openCard";
+
+    var svgExit = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svgExit.id = "exitFormUserCustomCategories";
+    svgExit.setAttribute("width", "36");
+    svgExit.setAttribute("height", "36");
+    svgExit.setAttribute("viewBox", "0 0 36 36");
+    svgExit.onclick = function()
+    {
+        backgroundModalWindow.remove();
+    }
+
+    var path1Exit = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    path1Exit.setAttribute("d", "M3 3.44705L32.8484 33");
+    path1Exit.setAttribute("stroke", "#333333");
+    path1Exit.setAttribute("stroke-width", "5");
+    path1Exit.setAttribute("stroke-linecap", "round");
+
+    var path2Exit = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    path2Exit.setAttribute("d", "M3.15161 32.5529L33 3.00001");
+    path2Exit.setAttribute("stroke", "#333333");
+    path2Exit.setAttribute("stroke-width", "5");
+    path2Exit.setAttribute("stroke-linecap", "round");
+
+    svgExit.appendChild(path1Exit);
+    svgExit.appendChild(path2Exit);
+
+    openCard.appendChild(svgExit);
+
+    let cardPicture = document.createElement('div');
+    cardPicture.className = 'pictureForOpenCard';
+
+    let picture = document.createElement('img');
+    if(linkToPicture != null)
+        picture.src = linkToPicture;
+    picture.alt = '';
+    cardPicture.appendChild(picture);
+
+    let svgLevel = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svgLevel.setAttribute("class", "card-level");
+    svgLevel.setAttribute("width", "42");
+    svgLevel.setAttribute("height", "43");
+    svgLevel.setAttribute("viewBox", "0 0 42 43");
+    switch(Number(level))
+    {
+        case 1: svgLevel.style.fill = "#B58686"; break;
+        case 2: svgLevel.style.fill = "#8693B5"; break;
+        case 3: svgLevel.style.fill = "#87B586"; break;
+    }
+
+    let path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    path.setAttribute("d", "M1 1H41V41.5L21 30L1 41V1Z");
+    svgLevel.appendChild(path);
+    cardPicture.appendChild(svgLevel);
+    openCard.appendChild(cardPicture);
+
+    // Создание div для слова
+    let cardWord = document.createElement('div');
+    cardWord.className = 'card-word';
+    cardWord.textContent = wordsInTheTargetLanguage;
+    openCard.appendChild(cardWord);
+
+    // Создание div для перевода
+    let cardTranslate = document.createElement('div');
+    cardTranslate.className = 'card-translate';
+    cardTranslate.textContent = wordsInNativeLanguage;
+    openCard.appendChild(cardTranslate);
+
+    // Создание div для кнопок
+    let cardButtons = document.createElement('div');
+    cardButtons.className = 'card-buttons';
+
+    // Если открытая карточка для тренировки или личного кабинета то добавить кнопку для тренировки
+    if(type == "User" || type == "Train")
+    {
+        // Создание div для кнопки "Тренировать"
+        let buttonTrain = document.createElement('div');
+        buttonTrain.className = "cardButtonAddForOpenCard";
+        buttonTrain.textContent = 'T';
+        cardButtons.appendChild(buttonTrain);
+        if (added == 1)
+        {
+            buttonTrain.classList.add("entered-button");
+            buttonTrain.classList.remove("enter-button");
+        }
+        else
+        {
+            buttonTrain.classList.add("enter-button");
+            buttonTrain.classList.remove("entered-button");
+        }
+        buttonTrain.onclick = function(event)
+        {
+            event.stopPropagation(); // Функция останавливает выполнение функции по нажатию на категорию
+            if(type == "Train") // Если тип карточки для тренировки
+            {
+                document.getElementById(cardId).remove(); // Удалить карточку
+                backgroundModalWindow.remove();
+            }
+            if(buttonTrain.classList.contains("enter-button")) // Если карточка не добавлена, добавить
+                added = 1;
+            else
+                added = 0;
+            let xhr = new XMLHttpRequest(); // Создаем новый объект XMLHTTPrequest
+            xhr.open("POST", "../PHP/trainCard.php", true); 
+            // Отправляем запрос на сервер
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Устанавливаем заголовок Content-Type
+            xhr.send("cardId=" + encodeURIComponent(cardId) + "&train=" + encodeURIComponent(added));
+            switchButtonClass(buttonTrain);
+            switchButtonClass(document.getElementById(cardId).getElementsByClassName("card-button-train")[0]);
+        }
+    }
+    else
+    {
+        // Создание div для кнопки "Добавить"
+        let cardButtonAdd = document.createElement('div');
+        cardButtonAdd.className = 'cardButtonAddForOpenCard';
+        cardButtonAdd.innerText = '+';
+        cardButtons.appendChild(cardButtonAdd);
+        if (added == 1)
+        {
+            cardButtonAdd.classList.add("entered-button");
+            cardButtonAdd.classList.remove("enter-button");
+        }
+        else
+        {
+            cardButtonAdd.classList.add("enter-button");
+            cardButtonAdd.classList.remove("entered-button");
+        }
+        cardButtonAdd.onclick = function(event)
+        {
+            event.stopPropagation(); // Функция останавливает выполнение функции по нажатию на категорию
+            if(cardButtonAdd.classList.contains("enter-button")) // Если карточка не добавлена, добавить
+            {
+                let xhr = new XMLHttpRequest(); // Создаем новый объект XMLHTTPrequest
+                xhr.open("POST", "../PHP/addCard.php", true);
+                // Отправляем запрос на сервер
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Устанавливаем заголовок Content-Type
+                xhr.send("cardId=" + encodeURIComponent(cardId));
+            }
+            else // Иначе удалить
+            {
+                let xhr = new XMLHttpRequest(); // Создаем новый объект XMLHTTPrequest
+                xhr.open("POST", "../PHP/deleteCard.php", true); 
+                // Отправляем запрос на сервер
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Устанавливаем заголовок Content-Type
+                xhr.send("cardId=" + encodeURIComponent(cardId));
+            }
+            switchButtonClass(cardButtonAdd);
+            switchButtonClass(document.getElementById(cardId).getElementsByClassName("card-button-add")[0]);
+        }
+    }
+    
+    // Создание div для кнопки "Звук"
+    let cardButtonSound = document.createElement('div');
+    cardButtonSound.className = 'card-button-sound';
+
+    let soundSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    soundSvg.setAttribute("width", "29");
+    soundSvg.setAttribute("height", "25");
+    soundSvg.setAttribute("viewBox", "0 0 29 25");
+
+    let soundPath1 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    soundPath1.setAttribute("d", "M21.8125 3.45654C25.0701 9.15209 25.0841 15.0339 21.8125 20.7395");
+    soundPath1.setAttribute("fill", "rgba(0,0,0,0)");
+    soundPath1.setAttribute("stroke", "black");
+
+    let soundPath2 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    soundPath2.setAttribute("d", "M26.709 2.30432C28.3378 7.32484 28.3448 16.8623 26.709 21.8917");
+    soundPath2.setAttribute("fill", "rgba(0,0,0,0)");
+    soundPath2.setAttribute("stroke", "black");
+
+    let soundPath3 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    soundPath3.setAttribute("d", "M1 16.0796V8.11651C1 7.56422 1.44772 7.11651 2 7.11651H7.98428C8.21762 7.11651 8.44363 7.0349 8.62315 6.88582L15.2761 1.36098C15.9277 0.819834 16.9149 1.28326 16.9149 2.1303V22.0658C16.9149 22.9129 15.9277 23.3763 15.2761 22.8351L8.62315 17.3103C8.44363 17.1612 8.21762 17.0796 7.98428 17.0796H2C1.44772 17.0796 1 16.6319 1 16.0796Z");
+    soundPath3.setAttribute("fill", "rgba(0,0,0,0)");
+    soundPath3.setAttribute("stroke", "black");
+
+    soundSvg.appendChild(soundPath1);
+    soundSvg.appendChild(soundPath2);
+    soundSvg.appendChild(soundPath3);
+
+    cardButtonSound.appendChild(soundSvg);
+    cardButtons.appendChild(cardButtonSound);
+
+    openCard.appendChild(cardButtons);
+
+    // Транскрипция
+    let transcription = document.createElement("div");
+    transcription.className = 'transcription';
+    if(transcriptionContent != null)
+        transcription.textContent = transcriptionContent;
+
+    // Контекст
+    let context = document.createElement("div");
+    context.className = 'context';
+    if(contextContent != null)
+        context.textContent = contextContent;
+
+    openCard.appendChild(transcription);
+    openCard.appendChild(context);
+
+    backgroundModalWindow.appendChild(openCard);
+
+    document.body.prepend(backgroundModalWindow);
+}
 // Создаем функцию для создания карточки
-function createCard(cardId, linkToPicture, wordsInTheTargetLanguage, wordsInNativeLanguage, added, level)
+function createCard(cardId, linkToPicture, wordsInTheTargetLanguage, wordsInNativeLanguage, added, level, transcriptionContent, contextContent)
 {
     // Создание основного контейнера карточки
     let card = document.createElement('div');
     card.className = 'card';
     card.id = cardId;
+    card.onclick = function()
+    {
+        createOpenCard(cardId, linkToPicture, wordsInTheTargetLanguage, wordsInNativeLanguage, added, level, transcriptionContent, contextContent, "Card");
+    }
 
     let cardPicture = document.createElement('div');
     cardPicture.className = 'card-picture';
@@ -527,18 +742,19 @@ function createCard(cardId, linkToPicture, wordsInTheTargetLanguage, wordsInNati
     cardButtonAdd.className = 'card-button-add';
     cardButtonAdd.innerText = '+';
     cardButtons.appendChild(cardButtonAdd);
-    if (added == 1)
+    if (added == 1) // Если карточка выбрана
     {
         cardButtonAdd.classList.add("entered-button");
         cardButtonAdd.classList.remove("enter-button");
     }
-    else
+    else // Если карточка не выбрана
     {
         cardButtonAdd.classList.add("enter-button");
         cardButtonAdd.classList.remove("entered-button");
     }
-    cardButtonAdd.onclick = function()
+    cardButtonAdd.onclick = function(event)
     {
+        event.stopPropagation(); // Функция останавливает выполнение функции по нажатию на категорию
         if(cardButtonAdd.classList.contains("enter-button")) // Если карточка не добавлена, добавить
         {
             let xhr = new XMLHttpRequest(); // Создаем новый объект XMLHTTPrequest
@@ -546,6 +762,7 @@ function createCard(cardId, linkToPicture, wordsInTheTargetLanguage, wordsInNati
             // Отправляем запрос на сервер
             xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Устанавливаем заголовок Content-Type
             xhr.send("cardId=" + encodeURIComponent(cardId));
+            added = 1;
         }
         else // Иначе удалить
         {
@@ -554,6 +771,7 @@ function createCard(cardId, linkToPicture, wordsInTheTargetLanguage, wordsInNati
             // Отправляем запрос на сервер
             xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Устанавливаем заголовок Content-Type
             xhr.send("cardId=" + encodeURIComponent(cardId));
+            added = 0;
         }
         switchButtonClass(cardButtonAdd);
     }
@@ -593,12 +811,16 @@ function createCard(cardId, linkToPicture, wordsInTheTargetLanguage, wordsInNati
 }
 //==================================================
 // Создаем функцию для создания карточки для пользователя
-function createCardForUser(cardId, linkToPicture, wordsInTheTargetLanguage, wordsInNativeLanguage, train, level, author)
+function createCardForUser(cardId, linkToPicture, wordsInTheTargetLanguage, wordsInNativeLanguage, train, level, author, transcriptionContent, contextContent)
 {
     // Создание основного контейнера карточки
     let card = document.createElement('div');
     card.className = 'card';
     card.id = cardId;
+    card.onclick = function()
+    {
+        createOpenCard(cardId, linkToPicture, wordsInTheTargetLanguage, wordsInNativeLanguage, train, level, transcriptionContent, contextContent, "User");
+    }
 
     let cardPicture = document.createElement('div');
     cardPicture.className = 'card-picture';
@@ -658,18 +880,18 @@ function createCardForUser(cardId, linkToPicture, wordsInTheTargetLanguage, word
         buttonTrain.classList.add("enter-button");
         buttonTrain.classList.remove("entered-button");
     }
-    buttonTrain.onclick = function()
+    buttonTrain.onclick = function(event)
     {
-        let valueTrain;
+        event.stopPropagation(); // Функция останавливает выполнение функции по нажатию на категорию
         if(buttonTrain.classList.contains("enter-button")) // Если карточка не добавлена, добавить
-            valueTrain = 1;
+            train = 1;
         else
-            valueTrain = 0;
+            train = 0;
         let xhr = new XMLHttpRequest(); // Создаем новый объект XMLHTTPrequest
         xhr.open("POST", "../PHP/trainCard.php", true); 
         // Отправляем запрос на сервер
         xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Устанавливаем заголовок Content-Type
-        xhr.send("cardId=" + encodeURIComponent(cardId) + "&train=" + encodeURIComponent(valueTrain));
+        xhr.send("cardId=" + encodeURIComponent(cardId) + "&train=" + encodeURIComponent(train));
         switchButtonClass(buttonTrain);
     }
 
@@ -737,12 +959,16 @@ function createCardForUser(cardId, linkToPicture, wordsInTheTargetLanguage, word
 }
 //==================================================
 // Создаем функцию для создания карточки для тренировки
-function createCardForTrain(cardId, linkToPicture, wordsInTheTargetLanguage, wordsInNativeLanguage, train, level)
+function createCardForTrain(cardId, linkToPicture, wordsInTheTargetLanguage, wordsInNativeLanguage, train, level, transcriptionContent, contextContent)
 {
     // Создание основного контейнера карточки
     let card = document.createElement('div');
     card.className = 'card';
     card.id = cardId;
+    card.onclick = function()
+    {
+        createOpenCard(cardId, linkToPicture, wordsInTheTargetLanguage, wordsInNativeLanguage, train, level, transcriptionContent, contextContent, "Train");
+    }
 
     let cardPicture = document.createElement('div');
     cardPicture.className = 'card-picture';
@@ -802,8 +1028,9 @@ function createCardForTrain(cardId, linkToPicture, wordsInTheTargetLanguage, wor
         buttonTrain.classList.add("enter-button");
         buttonTrain.classList.remove("entered-button");
     }
-    buttonTrain.onclick = function()
+    buttonTrain.onclick = function(event)
     {
+        event.stopPropagation(); // Функция останавливает выполнение функции по нажатию на категорию
         document.getElementById(cardId).remove();
         let xhr = new XMLHttpRequest(); // Создаем новый объект XMLHTTPrequest
         xhr.open("POST", "../PHP/trainCard.php", true); 
@@ -1046,7 +1273,7 @@ function getCards(path, type, idCategory, author)
                 for (let i = 0; i < jsonData.length; i++)
                 {
                     let cardData = jsonData[i];
-                    let card = createCard(cardData.cardId, cardData.linkToPicture, cardData.wordsInTheTargetLanguage, cardData.wordsInNativeLanguage, cardData.added, cardData.level);
+                    let card = createCard(cardData.cardId, cardData.linkToPicture, cardData.wordsInTheTargetLanguage, cardData.wordsInNativeLanguage, cardData.added, cardData.level, cardData.transcription, cardData.context);
                     cardsContainer.appendChild(card);
                 }
             }
@@ -1062,7 +1289,7 @@ function getCards(path, type, idCategory, author)
                 for (let i = 0; i < jsonData.length; i++)
                 {
                     let cardData = jsonData[i];
-                    let card = createCardForUser(cardData.cardId, cardData.linkToPicture, cardData.wordsInTheTargetLanguage, cardData.wordsInNativeLanguage, cardData.train, cardData.level, author);
+                    let card = createCardForUser(cardData.cardId, cardData.linkToPicture, cardData.wordsInTheTargetLanguage, cardData.wordsInNativeLanguage, cardData.train, cardData.level, author, cardData.transcription, cardData.context);
                     cardsContainer.appendChild(card);
                 }
             }
@@ -1073,7 +1300,7 @@ function getCards(path, type, idCategory, author)
                     let cardData = jsonData[i];
                     if(cardData.train)
                     {
-                        let card = createCardForTrain(cardData.cardId, cardData.linkToPicture, cardData.wordsInTheTargetLanguage, cardData.wordsInNativeLanguage, cardData.train, cardData.level);
+                        let card = createCardForTrain(cardData.cardId, cardData.linkToPicture, cardData.wordsInTheTargetLanguage, cardData.wordsInNativeLanguage, cardData.train, cardData.level, cardData.transcription, cardData.context);
                         cardsContainer.appendChild(card);
                     }
                 }
