@@ -587,7 +587,11 @@ function createOpenCard(cardId, linkToPicture, wordsInTheTargetLanguage, wordsIn
             xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Устанавливаем заголовок Content-Type
             xhr.send("cardId=" + encodeURIComponent(cardId) + "&train=" + encodeURIComponent(added));
             switchButtonClass(buttonTrain);
-            switchButtonClass(document.getElementById(cardId).getElementsByClassName("card-button-train")[0]);
+            if(type == "User")
+            {
+                switchButtonClass(document.getElementById(cardId).getElementsByClassName("card-button-train")[0]);
+                document.getElementById(cardId).getElementsByClassName("card-button-train")[0].value = added;
+            }
         }
     }
     else
@@ -612,6 +616,7 @@ function createOpenCard(cardId, linkToPicture, wordsInTheTargetLanguage, wordsIn
             event.stopPropagation(); // Функция останавливает выполнение функции по нажатию на категорию
             if(cardButtonAdd.classList.contains("enter-button")) // Если карточка не добавлена, добавить
             {
+                added = 1;
                 let xhr = new XMLHttpRequest(); // Создаем новый объект XMLHTTPrequest
                 xhr.open("POST", "../PHP/addCard.php", true);
                 // Отправляем запрос на сервер
@@ -620,6 +625,7 @@ function createOpenCard(cardId, linkToPicture, wordsInTheTargetLanguage, wordsIn
             }
             else // Иначе удалить
             {
+                added = 0;
                 let xhr = new XMLHttpRequest(); // Создаем новый объект XMLHTTPrequest
                 xhr.open("POST", "../PHP/deleteCard.php", true); 
                 // Отправляем запрос на сервер
@@ -628,6 +634,7 @@ function createOpenCard(cardId, linkToPicture, wordsInTheTargetLanguage, wordsIn
             }
             switchButtonClass(cardButtonAdd);
             switchButtonClass(document.getElementById(cardId).getElementsByClassName("card-button-add")[0]);
+            document.getElementById(cardId).getElementsByClassName("card-button-add")[0].value = added;
         }
     }
     
@@ -692,7 +699,7 @@ function createCard(cardId, linkToPicture, wordsInTheTargetLanguage, wordsInNati
     card.id = cardId;
     card.onclick = function()
     {
-        createOpenCard(cardId, linkToPicture, wordsInTheTargetLanguage, wordsInNativeLanguage, added, level, transcriptionContent, contextContent, "Card");
+        createOpenCard(cardId, linkToPicture, wordsInTheTargetLanguage, wordsInNativeLanguage, cardButtonAdd.value, level, transcriptionContent, contextContent, "Card");
     }
 
     let cardPicture = document.createElement('div');
@@ -741,6 +748,7 @@ function createCard(cardId, linkToPicture, wordsInTheTargetLanguage, wordsInNati
     let cardButtonAdd = document.createElement('div');
     cardButtonAdd.className = 'card-button-add';
     cardButtonAdd.innerText = '+';
+    cardButtonAdd.value = added;
     cardButtons.appendChild(cardButtonAdd);
     if (added == 1) // Если карточка выбрана
     {
@@ -762,7 +770,7 @@ function createCard(cardId, linkToPicture, wordsInTheTargetLanguage, wordsInNati
             // Отправляем запрос на сервер
             xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Устанавливаем заголовок Content-Type
             xhr.send("cardId=" + encodeURIComponent(cardId));
-            added = 1;
+            cardButtonAdd.value = 1;
         }
         else // Иначе удалить
         {
@@ -771,7 +779,7 @@ function createCard(cardId, linkToPicture, wordsInTheTargetLanguage, wordsInNati
             // Отправляем запрос на сервер
             xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Устанавливаем заголовок Content-Type
             xhr.send("cardId=" + encodeURIComponent(cardId));
-            added = 0;
+            cardButtonAdd.value = 0;
         }
         switchButtonClass(cardButtonAdd);
     }
@@ -805,154 +813,6 @@ function createCard(cardId, linkToPicture, wordsInTheTargetLanguage, wordsInNati
     soundSvg.appendChild(soundPath3);
     cardButtonSound.appendChild(soundSvg);
     cardButtons.appendChild(cardButtonSound);
-    card.appendChild(cardButtons);
-
-    return card;
-}
-//==================================================
-// Создаем функцию для создания карточки для пользователя
-function createCardForUser(cardId, linkToPicture, wordsInTheTargetLanguage, wordsInNativeLanguage, train, level, author, transcriptionContent, contextContent)
-{
-    // Создание основного контейнера карточки
-    let card = document.createElement('div');
-    card.className = 'card';
-    card.id = cardId;
-    card.onclick = function()
-    {
-        createOpenCard(cardId, linkToPicture, wordsInTheTargetLanguage, wordsInNativeLanguage, train, level, transcriptionContent, contextContent, "User");
-    }
-
-    let cardPicture = document.createElement('div');
-    cardPicture.className = 'card-picture';
-
-    let picture = document.createElement('img');
-    if(linkToPicture != null)
-        picture.src = linkToPicture;
-    picture.alt = '';
-    cardPicture.appendChild(picture);
-
-    let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    svg.setAttribute("class", "card-level");
-    svg.setAttribute("width", "42");
-    svg.setAttribute("height", "43");
-    svg.setAttribute("viewBox", "0 0 42 43");
-    switch(Number(level))
-    {
-        case 1: svg.style.fill = "#B58686"; break;
-        case 2: svg.style.fill = "#8693B5"; break;
-        case 3: svg.style.fill = "#87B586"; break;
-    }
-    let path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    path.setAttribute("d", "M1 1H41V41.5L21 30L1 41V1Z");
-    svg.appendChild(path);
-    cardPicture.appendChild(svg);
-    card.appendChild(cardPicture);
-
-    // Создание div для слова
-    let cardWord = document.createElement('div');
-    cardWord.className = 'card-word';
-    cardWord.textContent = wordsInTheTargetLanguage;
-    card.appendChild(cardWord);
-
-    // Создание div для перевода
-    let cardTranslate = document.createElement('div');
-    cardTranslate.className = 'card-translate';
-    cardTranslate.textContent = wordsInNativeLanguage;
-    card.appendChild(cardTranslate);
-
-    // Создание div для кнопок
-    let cardButtons = document.createElement('div');
-    cardButtons.className = 'card-buttons';
-
-    // Создание div для кнопки "Тренировать"
-    let buttonTrain = document.createElement('div');
-    buttonTrain.className = "card-button-train";
-    buttonTrain.textContent = 'T';
-    buttonTrain.style.width = "60px";
-    cardButtons.appendChild(buttonTrain);
-    if (train == 1)
-    {
-        buttonTrain.classList.add("entered-button");
-        buttonTrain.classList.remove("enter-button");
-    }
-    else
-    {
-        buttonTrain.classList.add("enter-button");
-        buttonTrain.classList.remove("entered-button");
-    }
-    buttonTrain.onclick = function(event)
-    {
-        event.stopPropagation(); // Функция останавливает выполнение функции по нажатию на категорию
-        if(buttonTrain.classList.contains("enter-button")) // Если карточка не добавлена, добавить
-            train = 1;
-        else
-            train = 0;
-        let xhr = new XMLHttpRequest(); // Создаем новый объект XMLHTTPrequest
-        xhr.open("POST", "../PHP/trainCard.php", true); 
-        // Отправляем запрос на сервер
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Устанавливаем заголовок Content-Type
-        xhr.send("cardId=" + encodeURIComponent(cardId) + "&train=" + encodeURIComponent(train));
-        switchButtonClass(buttonTrain);
-    }
-
-    // Создание div для кнопки "Звук"
-    let cardButtonSound = document.createElement('div');
-    cardButtonSound.className = 'card-button-sound';
-    cardButtonSound.style.width = "60px";
-
-    let soundSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    soundSvg.setAttribute("width", "29");
-    soundSvg.setAttribute("height", "25");
-    soundSvg.setAttribute("viewBox", "0 0 29 25");
-
-    let soundPath1 = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    soundPath1.setAttribute("d", "M21.8125 3.45654C25.0701 9.15209 25.0841 15.0339 21.8125 20.7395");
-    soundPath1.setAttribute("fill", "rgba(0,0,0,0)");
-    soundPath1.setAttribute("stroke", "black");
-
-    let soundPath2 = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    soundPath2.setAttribute("d", "M26.709 2.30432C28.3378 7.32484 28.3448 16.8623 26.709 21.8917");
-    soundPath2.setAttribute("fill", "rgba(0,0,0,0)");
-    soundPath2.setAttribute("stroke", "black");
-
-    let soundPath3 = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    soundPath3.setAttribute("d", "M1 16.0796V8.11651C1 7.56422 1.44772 7.11651 2 7.11651H7.98428C8.21762 7.11651 8.44363 7.0349 8.62315 6.88582L15.2761 1.36098C15.9277 0.819834 16.9149 1.28326 16.9149 2.1303V22.0658C16.9149 22.9129 15.9277 23.3763 15.2761 22.8351L8.62315 17.3103C8.44363 17.1612 8.21762 17.0796 7.98428 17.0796H2C1.44772 17.0796 1 16.6319 1 16.0796Z");
-    soundPath3.setAttribute("fill", "rgba(0,0,0,0)");
-    soundPath3.setAttribute("stroke", "black");
-
-    soundSvg.appendChild(soundPath1);
-    soundSvg.appendChild(soundPath2);
-    soundSvg.appendChild(soundPath3);
-    cardButtonSound.appendChild(soundSvg);
-    cardButtons.appendChild(cardButtonSound);
-
-    // Создание div для кнопки "Удалить"
-    let buttonDelete = document.createElement('div');
-    buttonDelete.className = "card-button-delete";
-    buttonDelete.textContent = 'X';
-    buttonDelete.style.width = "60px";
-    buttonDelete.onclick = function()
-    {
-        document.getElementById(cardId).remove();
-        if(author == null) // Если карточка не пользовательская тогда выполнить запрос на удаления слова только из таблицы UserDictionary
-        {
-            let xhr = new XMLHttpRequest(); // Создаем новый объект XMLHTTPrequest
-            xhr.open("POST", "../PHP/deleteCard.php", true); 
-            // Отправляем запрос на сервер
-            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Устанавливаем заголовок Content-Type
-            xhr.send("cardId=" + encodeURIComponent(cardId));
-        }
-        else if(author != null) // Если карточка пользовательская тогда выполнить запрос на удаления слова из таблиц UserDictionary, DictionaryCategory, Dictionary
-        {
-            let xhr = new XMLHttpRequest(); // Создаем новый объект XMLHTTPrequest
-            xhr.open("POST", "../PHP/deleteUserCard.php", true); 
-            // Отправляем запрос на сервер
-            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Устанавливаем заголовок Content-Type
-            xhr.send("cardId=" + encodeURIComponent(cardId) + "&linkToPicture=" + encodeURIComponent(linkToPicture));
-        }
-    }
-    cardButtons.appendChild(buttonDelete);
-
     card.appendChild(cardButtons);
 
     return card;
@@ -1068,6 +928,161 @@ function createCardForTrain(cardId, linkToPicture, wordsInTheTargetLanguage, wor
     soundSvg.appendChild(soundPath3);
     cardButtonSound.appendChild(soundSvg);
     cardButtons.appendChild(cardButtonSound);
+
+    card.appendChild(cardButtons);
+
+    return card;
+}
+//==================================================
+// Создаем функцию для создания карточки для пользователя
+function createCardForUser(cardId, linkToPicture, wordsInTheTargetLanguage, wordsInNativeLanguage, train, level, author, transcriptionContent, contextContent)
+{
+    // Создание основного контейнера карточки
+    let card = document.createElement('div');
+    card.className = 'card';
+    card.id = cardId;
+    card.onclick = function()
+    {
+        createOpenCard(cardId, linkToPicture, wordsInTheTargetLanguage, wordsInNativeLanguage, buttonTrain.value, level, transcriptionContent, contextContent, "User");
+    }
+
+    let cardPicture = document.createElement('div');
+    cardPicture.className = 'card-picture';
+
+    let picture = document.createElement('img');
+    if(linkToPicture != null)
+        picture.src = linkToPicture;
+    picture.alt = '';
+    cardPicture.appendChild(picture);
+
+    let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("class", "card-level");
+    svg.setAttribute("width", "42");
+    svg.setAttribute("height", "43");
+    svg.setAttribute("viewBox", "0 0 42 43");
+    switch(Number(level))
+    {
+        case 1: svg.style.fill = "#B58686"; break;
+        case 2: svg.style.fill = "#8693B5"; break;
+        case 3: svg.style.fill = "#87B586"; break;
+    }
+    let path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    path.setAttribute("d", "M1 1H41V41.5L21 30L1 41V1Z");
+    svg.appendChild(path);
+    cardPicture.appendChild(svg);
+    card.appendChild(cardPicture);
+
+    // Создание div для слова
+    let cardWord = document.createElement('div');
+    cardWord.className = 'card-word';
+    cardWord.textContent = wordsInTheTargetLanguage;
+    card.appendChild(cardWord);
+
+    // Создание div для перевода
+    let cardTranslate = document.createElement('div');
+    cardTranslate.className = 'card-translate';
+    cardTranslate.textContent = wordsInNativeLanguage;
+    card.appendChild(cardTranslate);
+
+    // Создание div для кнопок
+    let cardButtons = document.createElement('div');
+    cardButtons.className = 'card-buttons';
+
+    // Создание div для кнопки "Тренировать"
+    let buttonTrain = document.createElement('div');
+    buttonTrain.className = "card-button-train";
+    buttonTrain.textContent = 'T';
+    buttonTrain.style.width = "60px";
+    buttonTrain.value = train;
+    cardButtons.appendChild(buttonTrain);
+    if (train == 1)
+    {
+        buttonTrain.classList.add("entered-button");
+        buttonTrain.classList.remove("enter-button");
+    }
+    else
+    {
+        buttonTrain.classList.add("enter-button");
+        buttonTrain.classList.remove("entered-button");
+    }
+    buttonTrain.onclick = function(event)
+    {
+        event.stopPropagation(); // Функция останавливает выполнение функции по нажатию на категорию
+        if(buttonTrain.classList.contains("enter-button")) // Если карточка не добавлена, добавить
+        {
+            train = 1;
+            buttonTrain.value = 1;
+        }
+        else
+        {
+            train = 0;
+            buttonTrain.value = 0;
+        }
+        let xhr = new XMLHttpRequest(); // Создаем новый объект XMLHTTPrequest
+        xhr.open("POST", "../PHP/trainCard.php", true); 
+        // Отправляем запрос на сервер
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Устанавливаем заголовок Content-Type
+        xhr.send("cardId=" + encodeURIComponent(cardId) + "&train=" + encodeURIComponent(train));
+        switchButtonClass(buttonTrain);
+    }
+
+    // Создание div для кнопки "Звук"
+    let cardButtonSound = document.createElement('div');
+    cardButtonSound.className = 'card-button-sound';
+    cardButtonSound.style.width = "60px";
+
+    let soundSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    soundSvg.setAttribute("width", "29");
+    soundSvg.setAttribute("height", "25");
+    soundSvg.setAttribute("viewBox", "0 0 29 25");
+
+    let soundPath1 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    soundPath1.setAttribute("d", "M21.8125 3.45654C25.0701 9.15209 25.0841 15.0339 21.8125 20.7395");
+    soundPath1.setAttribute("fill", "rgba(0,0,0,0)");
+    soundPath1.setAttribute("stroke", "black");
+
+    let soundPath2 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    soundPath2.setAttribute("d", "M26.709 2.30432C28.3378 7.32484 28.3448 16.8623 26.709 21.8917");
+    soundPath2.setAttribute("fill", "rgba(0,0,0,0)");
+    soundPath2.setAttribute("stroke", "black");
+
+    let soundPath3 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    soundPath3.setAttribute("d", "M1 16.0796V8.11651C1 7.56422 1.44772 7.11651 2 7.11651H7.98428C8.21762 7.11651 8.44363 7.0349 8.62315 6.88582L15.2761 1.36098C15.9277 0.819834 16.9149 1.28326 16.9149 2.1303V22.0658C16.9149 22.9129 15.9277 23.3763 15.2761 22.8351L8.62315 17.3103C8.44363 17.1612 8.21762 17.0796 7.98428 17.0796H2C1.44772 17.0796 1 16.6319 1 16.0796Z");
+    soundPath3.setAttribute("fill", "rgba(0,0,0,0)");
+    soundPath3.setAttribute("stroke", "black");
+
+    soundSvg.appendChild(soundPath1);
+    soundSvg.appendChild(soundPath2);
+    soundSvg.appendChild(soundPath3);
+    cardButtonSound.appendChild(soundSvg);
+    cardButtons.appendChild(cardButtonSound);
+
+    // Создание div для кнопки "Удалить"
+    let buttonDelete = document.createElement('div');
+    buttonDelete.className = "card-button-delete";
+    buttonDelete.textContent = 'X';
+    buttonDelete.style.width = "60px";
+    buttonDelete.onclick = function()
+    {
+        document.getElementById(cardId).remove();
+        if(author == null) // Если карточка не пользовательская тогда выполнить запрос на удаления слова только из таблицы UserDictionary
+        {
+            let xhr = new XMLHttpRequest(); // Создаем новый объект XMLHTTPrequest
+            xhr.open("POST", "../PHP/deleteCard.php", true); 
+            // Отправляем запрос на сервер
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Устанавливаем заголовок Content-Type
+            xhr.send("cardId=" + encodeURIComponent(cardId));
+        }
+        else if(author != null) // Если карточка пользовательская тогда выполнить запрос на удаления слова из таблиц UserDictionary, DictionaryCategory, Dictionary
+        {
+            let xhr = new XMLHttpRequest(); // Создаем новый объект XMLHTTPrequest
+            xhr.open("POST", "../PHP/deleteUserCard.php", true); 
+            // Отправляем запрос на сервер
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Устанавливаем заголовок Content-Type
+            xhr.send("cardId=" + encodeURIComponent(cardId) + "&linkToPicture=" + encodeURIComponent(linkToPicture));
+        }
+    }
+    cardButtons.appendChild(buttonDelete);
 
     card.appendChild(cardButtons);
 
