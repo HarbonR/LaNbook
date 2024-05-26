@@ -1293,7 +1293,7 @@ function getCards(path, type, idCategory, author)
                     cardsContainer.appendChild(card);
                 }
             }
-            else if(type == "User")
+            else if(type == "User") // Для пользовательских карточек
             {
                 let addAll = document.createElement("div");
                 addAll.className = "button-all";
@@ -1309,16 +1309,22 @@ function getCards(path, type, idCategory, author)
                     cardsContainer.appendChild(card);
                 }
             }
-            else if(type == "Train")
+            else if(type == "Train") // Для карточек во вкладке тренировка
             {
-                for (let i = 0; i < jsonData.length; i++)
+                if(jsonData.length == 0) // Если карточек для тренировки нет тогда вывести надпись
+                {
+                    let practiceWords = document.createElement("div");
+                    practiceWords.id = "practiceWords";
+                    let addWordsForTrain = document.createElement("div");
+                    addWordsForTrain.textContent = 'Добавьте слова для тренировки во вкладке "Личный кабинет"';
+                    practiceWords.appendChild(addWordsForTrain);
+                    bodyContainer.appendChild(practiceWords);
+                }
+                for (let i = 0; i < jsonData.length; i++) // Иначе вывести карточки для тренировки
                 {
                     let cardData = jsonData[i];
-                    if(cardData.train)
-                    {
-                        let card = createCardForTrain(cardData.cardId, cardData.linkToPicture, cardData.wordsInTheTargetLanguage, cardData.wordsInNativeLanguage, cardData.train, cardData.level, cardData.transcription, cardData.context);
-                        cardsContainer.appendChild(card);
-                    }
+                    let card = createCardForTrain(cardData.cardId, cardData.linkToPicture, cardData.wordsInTheTargetLanguage, cardData.wordsInNativeLanguage, cardData.train, cardData.level, cardData.transcription, cardData.context);
+                    cardsContainer.appendChild(card);
                 }
             }
         }

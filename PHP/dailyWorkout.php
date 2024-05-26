@@ -13,12 +13,13 @@
         $userId = $_SESSION['userId'];
         $sql = "
             SELECT
-                IdDictionary
-                ,Eng
-                ,Rus
-                ,Counter
-                ,Level
-                ,MaxCounter
+                UserDictionary.IdDictionary
+                ,Dictionary.Eng
+                ,Dictionary.Rus
+                ,Dictionary.Context
+                ,UserDictionary.Counter
+                ,UserDictionary.Level
+                ,UserDictionary.MaxCounter
             FROM
                 UserDictionary
             JOIN User ON UserDictionary.IdUser = User.Id
@@ -36,6 +37,7 @@
                     'cardId' => $row['IdDictionary'],
                     'wordsInTheTargetLanguage' => $row['Eng'],
                     'wordsInNativeLanguage' => $row['Rus'],
+                    'context' => $row['Context'],
                     'counter' => $row['Counter'],
                     'maxCounter' => $row['MaxCounter'],
                     'level' => $row['Level']);

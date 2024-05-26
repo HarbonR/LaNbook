@@ -14,13 +14,13 @@
         $sql = "
             SELECT
                 Picture
-                ,IdDictionary
-                ,Eng
+                ,UserDictionary.IdDictionary
+                ,Dictionary.Eng
                 ,Dictionary.Transcription
-                ,Rus
+                ,Dictionary.Rus
                 ,Dictionary.Context
-                ,Train
-                ,Level
+                ,UserDictionary.Train
+                ,UserDictionary.Level
             FROM
                 UserDictionary
             JOIN User ON UserDictionary.IdUser = User.Id

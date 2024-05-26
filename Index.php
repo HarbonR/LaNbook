@@ -77,6 +77,10 @@
                     Пароль:
                 </label>
                 <input type="password" name="userPassword" id="password-register" autocomplete="off">
+                <label for="repeat-password-register">
+                    Повторите пароль:
+                </label>
+                <input type="password" name="userRepeatPassword" id="repeat-password-register" autocomplete="off">
                 <button id="button-form-register">
                     Регистрация
                 </button>

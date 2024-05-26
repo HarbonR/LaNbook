@@ -751,7 +751,7 @@ input:checked + .slider:before
 {
     display: none;
     margin: 10px 0 10px 0;
-    width: 100px;
+    width: 150px;
     border-radius: 20px;
     box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.25);
 }

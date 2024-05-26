@@ -183,25 +183,30 @@ function сhangeDailyWorkout(cardId, counter, maxCounter, sign, level)
 // Функция для создания подвкладки "Интервальное повторение"
 function createDailyWorkout(jsonData)
 {
-    let dailyWorkout = document.createElement("div");
+    let dailyWorkout = document.createElement("div"); // Контейнер для интервального повторения
     dailyWorkout.id = "dailyWorkout"
-    let counter = document.createElement("div");
+    let counter = document.createElement("div"); // Счетчик который считает пройденные слова
     counter.id = "counter"
     let iterator = 0;
     counter.textContent = iterator + "/" + jsonData.length;
-    let nativeWord = document.createElement("div");
+    let nativeWord = document.createElement("div"); // Слово на родном языке
+    nativeWord.classList = "card-word";
     nativeWord.id = "nativeWord";
     nativeWord.textContent = jsonData[0].wordsInNativeLanguage;
-    let targetWord = document.createElement("input");
+    let context = document.createElement("div");
+    context.className = "context";
+    if (jsonData[0].context != "")
+        context.textContent = jsonData[0].context;
+    let targetWord = document.createElement("input"); // Слово на изучаемом языке
     targetWord.id = "targetWord";
     targetWord.name = "targetWord";
     targetWord.autocomplete = "Off";
     targetWord.textContent = "";
-    let incorrectAnswer = document.createElement("div");
+    let incorrectAnswer = document.createElement("div"); // Неправильный ответ
     incorrectAnswer.id = "incorrectAnswer";
-    let correctAnswer = document.createElement("div");
+    let correctAnswer = document.createElement("div"); // Правильный ответ
     correctAnswer.id = "correctAnswer";
-    let buttonFurther = document.createElement("button");
+    let buttonFurther = document.createElement("button"); // Кнопка для продолжения тренировки
     buttonFurther.textContent = "Проверить";
     let variableAnswer = false;
     buttonFurther.onclick = function()
@@ -219,7 +224,10 @@ function createDailyWorkout(jsonData)
             variableAnswer = false;
             targetWord.style.border = "none";
             if(iterator != jsonData.length)
+            {
                 nativeWord.textContent = jsonData[iterator].wordsInNativeLanguage;
+                context.textContent = jsonData[iterator].context;
+            }
             else
                 getEndWordsDailyWorkout();
         }
@@ -256,7 +264,10 @@ function createDailyWorkout(jsonData)
             correctAnswer.style.display = "none";
             targetWord.style.border = "none";
             if(iterator != jsonData.length)
+            {
                 nativeWord.textContent = jsonData[iterator].wordsInNativeLanguage;
+                context.textContent = jsonData[iterator].context;
+            }
             else
                 getEndWordsDailyWorkout();
         }
@@ -264,6 +275,7 @@ function createDailyWorkout(jsonData)
     buttonFurther.id = "buttonFurther";
     dailyWorkout.appendChild(counter);
     dailyWorkout.appendChild(nativeWord);
+    dailyWorkout.appendChild(context);
     dailyWorkout.appendChild(targetWord);
     dailyWorkout.appendChild(incorrectAnswer);
     dailyWorkout.appendChild(correctAnswer);
@@ -319,7 +331,11 @@ let exerciseDictionary = {  "Напиши слово" : function createWriteTheW
         picture.style.display = "block";
     let nativeWord = document.createElement("div"); // Слово на родном языке
     nativeWord.id = "nativeWord";
+    nativeWord.classList = "card-word";
     nativeWord.textContent = jsonData[wordIterator].wordsInNativeLanguage;
+    let context = document.createElement("div"); // Контекст
+    context.className = "context";
+    context.textContent = jsonData[wordIterator].context;
     let targetWord = document.createElement("input"); // Слово на изучаемом языке
     targetWord.id = "targetWord";
     targetWord.name = "targetWord";
@@ -355,6 +371,7 @@ let exerciseDictionary = {  "Напиши слово" : function createWriteTheW
     }
     writeTheWord.appendChild(picture);
     writeTheWord.appendChild(nativeWord);
+    writeTheWord.appendChild(context);
     writeTheWord.appendChild(targetWord);
     writeTheWord.appendChild(incorrectAnswer);
     writeTheWord.appendChild(correctAnswer);
@@ -376,8 +393,13 @@ exerciseDictionary["Сопоставление слов"] = function createMatch
     matchingWords.appendChild(picture);
     let nativeWord = document.createElement("div"); // Слово на родном языке
     nativeWord.id = "nativeWord";
+    nativeWord.classList = "card-word";
     nativeWord.textContent = jsonData[wordIterator].wordsInNativeLanguage;
     matchingWords.appendChild(nativeWord);
+    let context = document.createElement("div"); // Контекст
+    context.className = "context";
+    context.textContent = jsonData[wordIterator].context;
+    matchingWords.appendChild(context);
     let containerForTargetWord = document.createElement("div");
     containerForTargetWord.id = "containerForTargetWord";
     lengthWord = jsonData[wordIterator].wordsInTheTargetLanguage.length;
@@ -411,7 +433,11 @@ exerciseDictionary["Сопоставление слов"] = function createMatch
     matchingWords.appendChild(containerForTargetWord);
     let containerForTargetWordWithLetters = document.createElement("div");
     containerForTargetWordWithLetters.id = "containerForTargetWord";
-    let shuffledWord = jsonData[wordIterator].wordsInTheTargetLanguage.split('').sort(() => Math.random() - 0.5).join(''); // Разбиваем слово на массив букв, сортируем его случайным образом и объединяет буквы обратно в слово
+    let shuffledWord = jsonData[wordIterator].wordsInTheTargetLanguage
+    while(shuffledWord == jsonData[wordIterator].wordsInTheTargetLanguage) // Цикл пока перемешанное слово равно изначальному слову
+    {
+        shuffledWord = jsonData[wordIterator].wordsInTheTargetLanguage.split('').sort(() => Math.random() - 0.5).join(''); // Разбиваем слово на массив букв, сортируем его случайным образом и объединяет буквы обратно в слово
+    }
     let arrayContainerForTargetWordWithLetters = containerForTargetWordWithLetters.getElementsByClassName("containerForTargetLetters"); // Создаём массив контейнеров для букв изучаемого слова
     let indexArrayContainerForTargetWordWithLetters = 0; // Создаём индекс для массива контейнеров для букв изучаемого слова
     for(let i = 0; i < lengthWord; i++)

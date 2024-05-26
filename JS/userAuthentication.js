@@ -1,30 +1,31 @@
 /* ==================================================================================================== */
 /* ----------------------------------------------Переменные-------------------------------------------- */
-let enterRegister = document.getElementById("enter-register");
+let enterRegister = document.getElementById("enter-register"); //
 //--------------------------------------------------
-let formRegister = document.getElementById('form-register');
-let buttonFormRegister = document.getElementById("button-form-register");
+let formRegister = document.getElementById('form-register'); //
+let buttonFormRegister = document.getElementById("button-form-register"); //
 //--------------------------------------------------
-let formEnter = document.getElementById("form-enter");
-let buttonFormEnter = document.getElementById("button-form-enter");
-let createAccount = document.getElementById("create-account");
+let formEnter = document.getElementById("form-enter"); //
+let buttonFormEnter = document.getElementById("button-form-enter"); //
+let createAccount = document.getElementById("create-account"); //
 //--------------------------------------------------
-let menu = document.getElementById("menu");
-let menuEnterRegister = document.getElementById('menu__enter-register');
+let menu = document.getElementById("menu"); //
+let menuEnterRegister = document.getElementById('menu__enter-register'); //
 //--------------------------------------------------
-let body = document.getElementById("body");
-let enterRegisterExitEnter = document.getElementById("enter-register_exit-enter");
-let enterRegisterExitRegister = document.getElementById("enter-register_exit-register");
+let body = document.getElementById("body"); //
+let enterRegisterExitEnter = document.getElementById("enter-register_exit-enter"); //
+let enterRegisterExitRegister = document.getElementById("enter-register_exit-register"); // 
 //--------------------------------------------------
-let user = document.getElementById("user");
-let exit = document.getElementById("exit");
+let user = document.getElementById("user"); //
+let exit = document.getElementById("exit"); // 
 //--------------------------------------------------
-let emailInput = document.getElementById("email-input");
-let passwordInput = document.getElementById("password-input");
+let emailInput = document.getElementById("email-input"); //
+let passwordInput = document.getElementById("password-input"); // 
 //--------------------------------------------------
-let nameRegister = document.getElementById("name-register");
-let emailRegister = document.getElementById("email-register");
-let passwordRegister = document.getElementById("password-register");
+let nameRegister = document.getElementById("name-register"); // Имя пользователя при регистрации
+let emailRegister = document.getElementById("email-register"); // Емайл при регистрации
+let passwordRegister = document.getElementById("password-register"); // Пароль при регистрации
+let repeatPasswordRegister = document.getElementById("repeat-password-register"); // Повторный пароль при регистрации
 /* ==================================================================================================== */
 menuEnterRegister.onclick = function() // Функция для открытия формы входа
 {
@@ -83,6 +84,15 @@ function validateFormForRegister()
         passwordRegister.insertAdjacentHTML("afterend", "<p class='error-message' style='margin: 0; color: #333333;'>Поле не заполнено</p>");
         isValid = false;
     }
+
+    if (passwordRegister.value != repeatPasswordRegister.value) // Проверка на совпадение паролей
+    {
+        passwordRegister.style.borderColor = "#8A666A";
+        repeatPasswordRegister.style.borderColor = "#8A666A";
+        repeatPasswordRegister.insertAdjacentHTML("afterend", "<p class='error-message' style='margin: 0; color: #333333;'>Пароли не совпадают</p>");
+        isValid = false;
+    }
+
     return isValid;
 }
 //--------------------------------------------------
