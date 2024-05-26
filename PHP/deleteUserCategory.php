@@ -4,7 +4,7 @@
     {
         $userId = $_SESSION['userId'];
         $idCategory = $_POST['idCategory']; // Получаем Id категории
-        $directory = dirname(__DIR__).'\\Picture\\'.$userId.'\\'.$idCategory;
+        $directory = dirname(__DIR__).'/Picture/'.$userId.'/'.$idCategory;
         // Удаление файлов в папке
         $files = glob($directory . '/*'); // Получаем список файлов в папке
         foreach ($files as $file) 

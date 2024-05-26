@@ -1064,6 +1064,7 @@ function createCardForUser(cardId, linkToPicture, wordsInTheTargetLanguage, word
     buttonDelete.style.width = "60px";
     buttonDelete.onclick = function()
     {
+        event.stopPropagation(); // Функция останавливает выполнение функции по нажатию на категорию
         document.getElementById(cardId).remove();
         if(author == null) // Если карточка не пользовательская тогда выполнить запрос на удаления слова только из таблицы UserDictionary
         {

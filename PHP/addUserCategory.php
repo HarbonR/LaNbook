@@ -15,17 +15,17 @@
         mysqli_query($Connect, $sql1); // выполнение запроса
         // Создаём в папке пользователя папку с категорией
         $last_id = mysqli_insert_id($Connect); // Получаем последний вставленный ID (Id новой добавленной категории)
-        $pathDirCategory = dirname(__DIR__).'\\Picture\\'.$userId.'\\'.$last_id; // Создаём путь к папке пользователя
+        $pathDirCategory = dirname(__DIR__).'/Picture/'.$userId.'/'.$last_id; // Создаём путь к папке пользователя
         mkdir($pathDirCategory); // Создаём папку
         // Создаём в папке с категорией папку со словами
-        $pathDirWords = dirname(__DIR__).'\\Picture\\'.$userId.'\\'.$last_id.'\\Words'; // Создаём путь к папке пользователя
+        $pathDirWords = dirname(__DIR__).'/Picture/'.$userId.'/'.$last_id.'/Words'; // Создаём путь к папке пользователя
         mkdir($pathDirWords); // Создаём папку
-        $path = dirname(__DIR__).'\\Picture\\'.$userId.'\\'.$last_id.'\\'.$file['name']; // Создаём путь до картинки категории
+        $extension = pathinfo($file['name'], PATHINFO_EXTENSION); // Получаем расширение загружаемого файла
+        $path = dirname(__DIR__).'/Picture/'.$userId.'/'.$last_id.'/'.$title.'.'.$extension; // Создаём путь до картинки категории
         // Сохранение картинки категории на сервере и в БД
         if(move_uploaded_file($file['tmp_name'], $path))
         {
-            $picture = '\\Picture\\'.$userId.'\\'.$last_id.'\\'.$file['name'];
-            $picture = addslashes($picture);
+            $picture = '/Picture/'.$userId.'/'.$last_id.'/'.$title.'.'.$extension;
             $sql2 = "UPDATE Category SET Picture = '$picture' WHERE Id = '$last_id'"; // SQL запрос
             mysqli_query($Connect, $sql2); // выполнение запроса
         }

@@ -17,7 +17,8 @@
         }
         $context = $_POST['context'];
         $idCategory = $_POST['idCategory'];
-        $path = dirname(__DIR__).'\\Picture\\'.$userId.'\\'.$idCategory.'\\Words'.'\\'.$file['name'];
+        $extension = pathinfo($file['name'], PATHINFO_EXTENSION); // Получаем расширение загружаемого файла
+        $path = dirname(__DIR__).'/Picture/'.$userId.'/'.$idCategory.'/Words'.'/'.$wordTargetLanguage.'.'.$extension; // Получаем путь до картинки карточки
         // Сохранение файла на сервере
         if(move_uploaded_file($file['tmp_name'], $path))
         { 
@@ -29,8 +30,7 @@
             {
                 die("Ошибка подключения: " . mysqli_connect_error());
             }
-            $path = '\\Picture\\'.$userId.'\\'.$idCategory.'\\Words'.'\\'.$file['name'];
-            $path = addslashes($path);
+            $path = '/Picture/'.$userId.'/'.$idCategory.'/Words'.'/'.$wordTargetLanguage.'.'.$extension; // Получаем путь до картинки карточки для БД
             // Выполнение первого SQL-запроса
             $sql1 = "INSERT INTO Dictionary (Picture, Eng, Transcription, Rus, Context) VALUES ('$path', '$wordTargetLanguage', '$transcription', '$wordNativeLanguage', '$context')";
             if (!mysqli_query($Connect, $sql1))
