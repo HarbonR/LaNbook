@@ -15,6 +15,12 @@
         height: 50px;
     }
     /* ================================================== */
+    /* Тело */
+    #body__container
+    {
+        margin: 20px 25px 0px 25px;
+    }
+    /* ================================================== */
     /* Вход / Регистрация */
     .enter-register__logo
     {
@@ -108,7 +114,7 @@
         justify-content: space-around;
         align-items: flex-end;
         height: 130px;
-        width: 95%;
+        width: 100%;
         border-bottom-right-radius: 0;
         border-top-left-radius: 30px;
         z-index: 4;
@@ -271,6 +277,22 @@
     {
         width: 300px;
         height: 50px;
+    }
+    /* ================================================== */
+    /* Меню */
+    #menu
+    {
+        height: 105px;
+        width: 100%;
+        border-radius: 10px;
+        margin-bottom: 40px
+    }
+    /* ================================================== */
+    /* Тело */
+    #body__container
+    {
+        border-radius: 10px;
+        margin: 20px 5px 0px 5px;
     }
     /* ================================================== */
     /* Задний фон */

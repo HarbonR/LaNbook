@@ -706,7 +706,8 @@ function createCard(cardId, linkToPicture, wordsInTheTargetLanguage, wordsInNati
     cardPicture.className = 'card-picture';
 
     let picture = document.createElement('img');
-    picture.src = linkToPicture;
+    if(linkToPicture != null)
+        picture.src = linkToPicture;
     picture.alt = '';
     cardPicture.appendChild(picture);
 

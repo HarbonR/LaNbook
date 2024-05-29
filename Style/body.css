@@ -490,6 +490,7 @@ input:checked + .slider:before
 {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     width: 230px;
     height: 330px;
     background-color: #CDB7A0;
@@ -512,21 +513,21 @@ input:checked + .slider:before
 }
 .card-word
 {
-    margin: 10px 0 0 10px;
-    font-size: 40px;
+    margin-left: 20px;
+    font-size: 20pt;
     font-weight: 600;
     color: #2D2D2D;
 }
 .card-translate
 {
-    margin-left: 10px;
-    font-size: 32px;
+    margin-left: 20px;
+    font-size: 15pt;
     color: #2D2D2D;
 }
 .card-buttons
 {
-    margin-top: 10px;
     display: flex;
+    margin-bottom: 20px;
     justify-content: space-around;
 }
 .card-button-add
