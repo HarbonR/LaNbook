@@ -113,7 +113,7 @@
         flex-direction: row;
         justify-content: space-around;
         align-items: flex-end;
-        height: 130px;
+        height: 110px;
         width: 100%;
         border-bottom-right-radius: 0;
         border-top-left-radius: 30px;
@@ -186,7 +186,7 @@
     }
     #body
     {
-        height: 85%;
+        height: 87%;
     }
     /* ================================================== */
     /* Голова */
@@ -202,19 +202,19 @@
     }
     #backgroundBurger
     {
-        display: block;
+        bottom: 110px;
     }
     /* -------------------------------------------------- */
     /* Выход */
     #exit
     {
+        display: none;
         position: absolute;
         justify-content: flex-end;
         margin: -30px;
-        z-index: 3;
-        transition: 0.5s;
-        bottom: -500px;
         left: 75%;
+        bottom: 60%;
+        z-index: 2;
     }
     /* ================================================== */
     /* Вид карточек */
@@ -227,34 +227,33 @@
     #view-cards
     {
         position: absolute;
-        display: flex;
+        display: none;
         justify-content: center;
         align-items: flex-end;
         border-top-left-radius: 30px;
         border-top-right-radius: 30px;
         left: 50%;
         transform: translateX(-50%);
-        bottom: -500px;
         z-index: 2;
-        transition: 0.5s;
         margin: 0;
+        bottom: 130px;
     }
     /* ================================================== */
     /* Тело */
     #body__training, #body__user
     {
+        display: none;
         position: absolute;
         justify-content: center;
         align-items: center;
         margin: 0;
         flex-direction: column;
         left: 50%;
-        transition: 0.5s;
-        bottom: -500px;
         transform: translateX(-50%);
         border-top-left-radius: 30px;
         border-top-right-radius: 30px;
         z-index: 3;
+        bottom: 28%;
     }
     #body__training > div, #body__user > div
     {
@@ -282,10 +281,7 @@
     /* Меню */
     #menu
     {
-        height: 105px;
-        width: 100%;
         border-radius: 10px;
-        margin-bottom: 40px
     }
     /* ================================================== */
     /* Тело */
@@ -325,6 +321,10 @@
     #targetWord
     {
         width: 300px;
+    }
+    .exercisePicture
+    {
+        width: 100px;
     }
     /* ================================================== */
 }

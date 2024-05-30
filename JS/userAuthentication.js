@@ -181,6 +181,7 @@ buttonFormEnter.onclick = function(event)
                     body.removeAttribute("style");
                     enterRegister.setAttribute("style","display:none;");
                     exit.removeAttribute("style");
+                    sessionStorage.setItem("exit", "true"); // Задаем что кнопка выхода стала активной
                     user.textContent = data.userName;
                     menuEnterRegister.style.display = "none";
                     menuPersonalArea.removeAttribute("style");
@@ -221,6 +222,7 @@ xhrData.onreadystatechange = function() // Устанавливаем функц
         {
             let userData = JSON.parse(xhrData.responseText);
             exit.removeAttribute("style");
+            sessionStorage.setItem("exit", "true"); // Задаем что кнопка выхода стала активной
             user.removeAttribute("style");
             menuEnterRegister.style.display = "none";
             menuPersonalArea.removeAttribute("style");
@@ -238,6 +240,7 @@ exit.onclick = function()
     xhr.open('GET', '../PHP/exit.php'); // Установлен параметр async в true
     xhr.send();
     exit.style.display = "none";
+    sessionStorage.removeItem("exit");
     menuEnterRegister.removeAttribute("style");
     menuPersonalArea.style.display = "none";
     menu__cards.click();

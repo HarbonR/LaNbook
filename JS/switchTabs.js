@@ -3,6 +3,7 @@
 // Бургер
 let burger = document.getElementById("burger");
 let burgerOpen = document.getElementById("burger-open");
+burgerOpen.value = false;
 let burgerClose = document.getElementById("burger-close");
 //--------------------------------------------------
 // Вкладки меню
@@ -38,6 +39,8 @@ menuCards.onclick = function()
         closeBurger();
     bodyTraining.setAttribute("style", "display: none;");
     bodyUser.setAttribute("style", "display: none;");
+    bodyTraining.value = false; // Назначаем значение вкладки тренировка "Не активная"
+    bodyUser.value = false; // Назначаем значение вкладки личный кабинет "Не активная"
     if(document.getElementById("title-category")) // Удаление названия категории
     {
         document.getElementById("title-category").remove();
@@ -62,6 +65,8 @@ menuTraining.onclick = function()
         closeBurger();
     bodyUser.setAttribute("style", "display: none;");
     bodyTraining.removeAttribute("style");
+    bodyTraining.value = true; // Вкладка тренировки "Активная"
+    bodyUser.value = false;
     if(document.getElementById("title-category")) // Удаление названия категории
     {
         document.getElementById("title-category").remove();
@@ -86,6 +91,8 @@ menuPersonalArea.onclick = function()
         closeBurger();
     bodyTraining.setAttribute("style", "display: none;");
     bodyUser.removeAttribute("style");
+    bodyTraining.value = false; 
+    bodyUser.value = true; // Вкладка личный кабинет "Активная"
     if(document.getElementById("title-category")) // Удаление названия категории
     {
         document.getElementById("title-category").remove();
@@ -190,7 +197,6 @@ function createDailyWorkout(jsonData)
     let iterator = 0;
     counter.textContent = iterator + "/" + jsonData.length;
     let nativeWord = document.createElement("div"); // Слово на родном языке
-    nativeWord.classList = "card-word";
     nativeWord.id = "nativeWord";
     nativeWord.textContent = jsonData[0].wordsInNativeLanguage;
     let context = document.createElement("div");
@@ -331,7 +337,6 @@ let exerciseDictionary = {  "Напиши слово" : function createWriteTheW
         picture.style.display = "block";
     let nativeWord = document.createElement("div"); // Слово на родном языке
     nativeWord.id = "nativeWord";
-    nativeWord.classList = "card-word";
     nativeWord.textContent = jsonData[wordIterator].wordsInNativeLanguage;
     let context = document.createElement("div"); // Контекст
     context.className = "context";
@@ -393,7 +398,6 @@ exerciseDictionary["Сопоставление слов"] = function createMatch
     matchingWords.appendChild(picture);
     let nativeWord = document.createElement("div"); // Слово на родном языке
     nativeWord.id = "nativeWord";
-    nativeWord.classList = "card-word";
     nativeWord.textContent = jsonData[wordIterator].wordsInNativeLanguage;
     matchingWords.appendChild(nativeWord);
     let context = document.createElement("div"); // Контекст
@@ -709,35 +713,36 @@ window.addEventListener('load', function()
 // Функция для открытия бургера
 function openBurger()
 {
-    bodyTraining.style.bottom = "30%";
-    bodyUser.style.bottom = "30%";
+    document.getElementById("backgroundBurger").style.display = "block"; // Делаем видимым задний фон бургера
+    document.getElementById("view-cards").style.display = "flex";
+    if(sessionStorage.getItem("exit") == "true")
+        document.getElementById("exit").style.display = "flex";
+    if(bodyTraining.value) // Если активна вкладка тренировка
+        document.getElementById("body__training").style.display = "flex"; // Показываем подвкладки для тренировки
+    if(bodyUser.value)
+        document.getElementById("body__user").style.display = "flex";
     burgerOpen.setAttribute("style", "display: none;");
+    burgerOpen.value = true;
     burgerClose.removeAttribute("style");
-    document.getElementById("exit").style.bottom = "60%";
-    document.getElementById("view-cards").style.bottom = "140px";
-    document.getElementById("backgroundBurger").style.bottom = "130px"
 }
-//
+// Функция для закрытия бургера
 function closeBurger()
 {
-    bodyTraining.style.bottom = "-500px";
-    bodyUser.style.bottom = "-500px";
     burgerOpen.removeAttribute("style");
+    burgerOpen.value = false;
     burgerClose.setAttribute("style", "display: none;");
-    document.getElementById("exit").style.bottom = "-500px";
-    document.getElementById("view-cards").style.bottom = "-500px";
-    document.getElementById("backgroundBurger").style.bottom = "-500px"
+    document.getElementById("backgroundBurger").style.display = "none";
+    document.getElementById("view-cards").style.display = "none";
+    document.getElementById("exit").style.display = "none";
+    document.getElementById("body__training").style.display = "none";
+    document.getElementById("body__user").style.display = "none";
 }
 // Для открытия и закрытия бургера
 burger.onclick = function()
 {
-    if (bodyTraining.style.bottom == "30%")
-    {
+    if (burgerOpen.value)
         closeBurger();
-    }
     else
-    {
         openBurger();
-    }
 }
 //==================================================

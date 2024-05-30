@@ -549,7 +549,7 @@ function createOpenCard(cardId, linkToPicture, wordsInTheTargetLanguage, wordsIn
 
     // Создание div для кнопок
     let cardButtons = document.createElement('div');
-    cardButtons.className = 'card-buttons';
+    cardButtons.className = 'cardButtonsForOpenCard';
 
     // Если открытая карточка для тренировки или личного кабинета то добавить кнопку для тренировки
     if(type == "User" || type == "Train")
