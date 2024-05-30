@@ -150,6 +150,11 @@ function createFormUserCustomCategories()
         }
         else
         {
+            let errorMessages = document.querySelectorAll(".error-message");
+            errorMessages.forEach(function (errorMessage)
+            {
+                errorMessage.remove();
+            });
             inputTitle.style.borderColor = "#8A666A";
             inputTitle.insertAdjacentHTML("afterend", "<p class='error-message' style='margin: 0; color: #333333;'>Поле не заполнено</p>");
         }
@@ -220,6 +225,11 @@ function createUserCategory(idCategory, title, linkToPicture, author)
     buttonTrain.onclick = function(event)
     {
         event.stopPropagation(); // Функция останавливает выполнение функции по нажатию на категорию
+        let xhr = new XMLHttpRequest(); // Создаем новый объект XMLHTTPrequest
+        xhr.open("POST", "../PHP/trainAll.php", true); 
+        // Отправляем запрос на сервер
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Устанавливаем заголовок Content-Type
+        xhr.send("idCategory=" + encodeURIComponent(idCategory));
     }
 
     let buttonDelete = document.createElement('div');
@@ -404,6 +414,23 @@ function createFormUserCustomCard()
     {
         event.preventDefault(); // Отмена действий по отправки формы
         // Проверка на валидацию
+        let errorMessages = document.querySelectorAll(".error-message");
+        errorMessages.forEach(function (errorMessage)
+        {
+            errorMessage.remove();
+        });
+        wordTargetLanguage.removeAttribute("style");
+        wordNativeLanguage.removeAttribute("style");
+        if(wordTargetLanguage.value == "")
+        {  
+            wordTargetLanguage.style.borderColor = "#8A666A";
+            wordTargetLanguage.insertAdjacentHTML("afterend", "<p class='error-message' style='margin: 0; color: #333333;'>Поле не заполнено</p>");
+        }
+        if(wordNativeLanguage.value == "")
+        {
+            wordNativeLanguage.style.borderColor = "#8A666A";
+            wordNativeLanguage.insertAdjacentHTML("afterend", "<p class='error-message' style='margin: 0; color: #333333;'>Поле не заполнено</p>");
+        }
         if(wordTargetLanguage.value && wordNativeLanguage.value)
         {
             let file = inputPicture.files[0]; // Получение выбранного файла
@@ -428,14 +455,6 @@ function createFormUserCustomCard()
             }
             xhr.open('POST', '../PHP/addUserCard.php', true); // Настройка запроса
             xhr.send(formData); // Отправка запроса
-        }
-        else
-        {
-            wordTargetLanguage.style.borderColor = "#8A666A";
-            wordTargetLanguage.insertAdjacentHTML("afterend", "<p class='error-message' style='margin: 0; color: #333333;'>Поле не заполнено</p>");
-
-            wordNativeLanguage.style.borderColor = "#8A666A";
-            wordNativeLanguage.insertAdjacentHTML("afterend", "<p class='error-message' style='margin: 0; color: #333333;'>Поле не заполнено</p>");
         }
     }
 
@@ -1063,7 +1082,7 @@ function createCardForUser(cardId, linkToPicture, wordsInTheTargetLanguage, word
     buttonDelete.className = "card-button-delete";
     buttonDelete.textContent = 'X';
     buttonDelete.style.width = "60px";
-    buttonDelete.onclick = function()
+    buttonDelete.onclick = function(event)
     {
         event.stopPropagation(); // Функция останавливает выполнение функции по нажатию на категорию
         document.getElementById(cardId).remove();
@@ -1296,10 +1315,29 @@ function getCards(path, type, idCategory, author)
             }
             else if(type == "User") // Для пользовательских карточек
             {
-                let addAll = document.createElement("div");
-                addAll.className = "button-all";
-                addAll.textContent = "Тренировать все";
-                bodyContainer.prepend(addAll);
+                let trainAll = document.createElement("div");
+                trainAll.className = "button-all";
+                trainAll.textContent = "Тренировать все";
+                trainAll.onclick = function() // Запрос на добавление в тренировку всех слов в категории
+                {
+                    let xhr = new XMLHttpRequest(); // Создаем новый объект XMLHTTPrequest
+                    xhr.onreadystatechange = function() // Устанавливаем функцию, которая будет вызываться при изменении состояния объекта `xhr`
+                    {
+                        if (xhr.readyState === 4 && xhr.status === 200) // Проверяем, что запрос завершен и успешен
+                        {
+                            // Пробегаемся по всему контейнеру и обращение к каждому элементу
+                            cardsContainer.childNodes.forEach(element => {
+                                element.getElementsByClassName("card-button-train")[0].classList.remove("enter-button");
+                                element.getElementsByClassName("card-button-train")[0].classList.add("entered-button");
+                            });
+                        }
+                    }
+                    xhr.open("POST", "../PHP/trainAll.php", true); 
+                    // Отправляем запрос на сервер
+                    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Устанавливаем заголовок Content-Type
+                    xhr.send("idCategory=" + encodeURIComponent(idCategory));
+                }
+                bodyContainer.prepend(trainAll);
                 bodyContainer.style.paddingTop = "100px";
                 if(author != null) // Если категория создана пользователем добавить возможность добавить пользовательскую карточку в эту категорию
                     cardsContainer.appendChild(createUserCustomCard());
