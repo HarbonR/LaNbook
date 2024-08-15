@@ -208,6 +208,7 @@ function createDailyWorkout(jsonData)
     targetWord.name = "targetWord";
     targetWord.autocomplete = "Off";
     targetWord.textContent = "";
+    targetWord.placeholder = "Количество букв в слове: " + jsonData[iterator].wordsInTheTargetLanguage.length; // Добавляем количество букв в слове как подсказку
     let incorrectAnswer = document.createElement("div"); // Неправильный ответ
     incorrectAnswer.id = "incorrectAnswer";
     let correctAnswer = document.createElement("div"); // Правильный ответ
@@ -217,7 +218,8 @@ function createDailyWorkout(jsonData)
     let variableAnswer = false;
     buttonFurther.onclick = function()
     {
-        if(jsonData[iterator].wordsInTheTargetLanguage.toUpperCase() == targetWord.value.toUpperCase() && variableAnswer)
+        // Если пользователь нажал на кнопку во второй раз и ответ был правильным
+        if(jsonData[iterator].wordsInTheTargetLanguage.toUpperCase() == targetWord.value.toUpperCase().trim() && variableAnswer)
         {
             iterator++;
             buttonFurther.textContent = "Проверить";
@@ -233,11 +235,13 @@ function createDailyWorkout(jsonData)
             {
                 nativeWord.textContent = jsonData[iterator].wordsInNativeLanguage;
                 context.textContent = jsonData[iterator].context;
+                targetWord.placeholder = "Количество букв в слове: " + jsonData[iterator].wordsInTheTargetLanguage.length;
             }
             else
                 getEndWordsDailyWorkout();
         }
-        else if(jsonData[iterator].wordsInTheTargetLanguage.toUpperCase() == targetWord.value.toUpperCase())
+        // Если пользователь нажал на кнопку проверить в первый раз и ответ оказался правильным
+        else if(jsonData[iterator].wordsInTheTargetLanguage.toUpperCase() == targetWord.value.toUpperCase().trim())
         {
             variableAnswer = true;
             targetWord.style.border = "1px solid #718A66";
@@ -246,7 +250,8 @@ function createDailyWorkout(jsonData)
             buttonFurther.textContent = "Далее";
             сhangeDailyWorkout(jsonData[iterator].cardId, jsonData[iterator].counter, jsonData[iterator].maxCounter, "+", jsonData[iterator].level);
         }
-        else if(jsonData[iterator].wordsInTheTargetLanguage.toUpperCase() != targetWord.value.toUpperCase() && !variableAnswer)
+        // Если пользователь нажал на кнопку проверить в первый раз и ответ оказался не правильным
+        else if(jsonData[iterator].wordsInTheTargetLanguage.toUpperCase() != targetWord.value.toUpperCase().trim() && !variableAnswer)
         {
             variableAnswer = true
             targetWord.style.border = "1px solid #8A666A";
@@ -256,7 +261,13 @@ function createDailyWorkout(jsonData)
             correctAnswer.textContent = jsonData[iterator].wordsInTheTargetLanguage;
             buttonFurther.textContent = "Далее";
             сhangeDailyWorkout(jsonData[iterator].cardId, jsonData[iterator].counter, jsonData[iterator].maxCounter, "-");
+            // Отправляем запрос на добавление карточки для тренировки
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST", "../PHP/trainCard.php", true); 
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Устанавливаем заголовок Content-Type
+            xhr.send("cardId=" + encodeURIComponent(jsonData[iterator].cardId) + "&train=" + encodeURIComponent(1));
         }
+        // Если пользователь нажал на кнопку во второй раз и ответ был не правильным
         else
         {
             iterator++;
@@ -273,6 +284,7 @@ function createDailyWorkout(jsonData)
             {
                 nativeWord.textContent = jsonData[iterator].wordsInNativeLanguage;
                 context.textContent = jsonData[iterator].context;
+                targetWord.placeholder = "Количество букв в слове: " + jsonData[iterator].wordsInTheTargetLanguage.length;
             }
             else
                 getEndWordsDailyWorkout();
