@@ -367,7 +367,7 @@ let exerciseDictionary = {  "Напиши слово" : function createWriteTheW
     buttonCheck.textContent = "Проверить";
     buttonCheck.onclick = function()
     {
-        if(jsonData[wordIterator].wordsInTheTargetLanguage.toUpperCase() == targetWord.value.toUpperCase())
+        if(jsonData[wordIterator].wordsInTheTargetLanguage.toUpperCase() == targetWord.value.toUpperCase().trim())
         {
             targetWord.style.border = "1px solid #718A66";
             correctAnswer.textContent = jsonData[wordIterator].wordsInTheTargetLanguage;
@@ -396,8 +396,8 @@ let exerciseDictionary = {  "Напиши слово" : function createWriteTheW
     return writeTheWord;
 }};
 // Добавляем в словарь функцию для создания тренировки "Сопоставление слов"
-exerciseDictionary["Сопоставление слов"] = function createMatchingWords(jsonData, wordIterator, showPicture)
-{
+exerciseDictionary["Составление слова"] = function createFormationOfAWord(jsonData, wordIterator, showPicture){
+
     let matchingWords = document.createElement("div");
     matchingWords.id = "matchingWords";
     let picture = document.createElement('img');
@@ -530,6 +530,142 @@ exerciseDictionary["Сопоставление слов"] = function createMatch
     }
     matchingWords.appendChild(buttonCheck);
     return matchingWords;
+}
+exerciseDictionary["Сопоставление слов"] = function createMatchingWords(jsonData, wordIterator){
+    let formationOfAWord = document.createElement("div")
+    formationOfAWord.id = "formationOfAWord";
+
+    if(jsonData.length < 3){
+        formationOfAWord.textContent = "Для того чтобы выполнять упражнение \"Сопоставление слов\" нужно добавить ещё слов для тренировки: " + (3 - jsonData.length);
+    }
+    else{
+        // Создаем массив слов на родном языке
+        let wordsInNativeLanguage = [];
+        for(let i = wordIterator, j = 0; i != jsonData.length && j < 3; i++, j++){
+            wordsInNativeLanguage.push(jsonData[i].wordsInNativeLanguage);
+            if(i == jsonData.length - 1) // Если слова закончились начать брать их сначала
+                i = -1;
+        }
+        // Создаём массив с перемешанными элементами (Слова на родном языке)
+        let shuffledArray = wordsInNativeLanguage.slice();
+        // Пока массив совпадает с оригиналом, продолжаем его перемешивать
+        while (JSON.stringify(shuffledArray) === JSON.stringify(wordsInNativeLanguage)) {
+            for (let i = shuffledArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+            }
+        }
+        // Создаём слова на изучаемом языке, стрелки вниз и слова на родном языке
+        for(let i = wordIterator, j = 0; i != jsonData.length && j < 3; i++, j++){
+            let row = document.createElement("div"); // Ряд
+            row.className = "rowFormationOfAWord";
+            let targetWord = document.createElement("div"); // Слово на изучаемом языке
+            targetWord.className = "targetWordFormationOfAWord";
+            targetWord.textContent = jsonData[i].wordsInTheTargetLanguage
+            let buttonDown = document.createElement("div"); // Кнопка вниз
+            // Создаем новый элемент SVG
+            let svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svg.setAttribute('width', '35');
+            svg.setAttribute('height', '35');
+            svg.setAttribute('viewBox', '0 0 35 35');
+            svg.setAttribute('fill', 'none');
+            // Создаем прямоугольник
+            let rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            rect.setAttribute('width', '35');
+            rect.setAttribute('height', '35');
+            rect.setAttribute('rx', '5');
+            rect.setAttribute('fill', '#C7B198');
+            svg.appendChild(rect);
+            // Создаем путь
+            let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            path.setAttribute('d', 'M17.5 30.5L30.5 8H4.5L17.5 30.5Z');
+            path.setAttribute('fill', '#E8DDD2');
+            svg.appendChild(path);
+            buttonDown.appendChild(svg); // Добавляем SVG элемент
+            buttonDown.onclick = function(){
+                let svgFormationOfAWord = formationOfAWord.getElementsByTagName("svg"); // Массив элементов svg картинок
+                let rowFormationOfAWord = formationOfAWord.getElementsByClassName("rowFormationOfAWord"); // Массив элементов рядов
+                let nativeWordFormationOfAWord = formationOfAWord.getElementsByClassName("nativeWordFormationOfAWord"); // Массив элементов родных слов
+                let indexNativeWord; // Индекс текущего элемента родного слова
+                let nextIndexNativeWord; // Индекс следующего элемента родного слова
+                for (let i = 0; i < svgFormationOfAWord.length; i++) {
+                    if (svgFormationOfAWord[i] == svg) {
+                        indexNativeWord = i;
+                        if(i + 1 == svgFormationOfAWord.length)
+                            nextIndexNativeWord = 0;
+                        else
+                            nextIndexNativeWord = i + 1;
+                        break; // Выход из цикла, если элемент найден
+                    }
+                }
+                let element1 = nativeWordFormationOfAWord[indexNativeWord];
+                let element2 = nativeWordFormationOfAWord[nextIndexNativeWord];
+                // Сохранение начальных позиций элементов
+                let rect1 = element1.getBoundingClientRect();
+                let rect2 = element2.getBoundingClientRect();
+                let deltaX = rect2.left - rect1.left;
+                let deltaY = rect2.top - rect1.top;
+                // Добавление анимации смещения
+                element1.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+                element2.style.transform = `translate(${-deltaX}px, ${-deltaY}px)`;
+                // Дожидаемся завершения анимации
+                setTimeout(() => {
+                    // Убираем стили анимации и меняем элементы местами в DOM
+                    element1.style.transform = '';
+                    element2.style.transform = '';
+                    rowFormationOfAWord[indexNativeWord].appendChild(element2);
+                    rowFormationOfAWord[nextIndexNativeWord].appendChild(element1);
+                }, 400); // Длительность анимации 500ms
+            }
+    
+            let nativeWord = document.createElement("div"); // Слово на родном языке
+            nativeWord.className = "nativeWordFormationOfAWord";
+            nativeWord.textContent = shuffledArray[i];
+    
+            row.appendChild(targetWord);
+            row.appendChild(buttonDown);
+            row.appendChild(nativeWord);
+            formationOfAWord.appendChild(row);
+            if(i == jsonData.length - 1) // Если слова закончились начать брать их сначала
+                i = -1;
+        }
+        let incorrectAnswer = document.createElement("div");
+        incorrectAnswer.id = "incorrectAnswer";
+        incorrectAnswer.textContent = "Не правильный ответ";
+
+        let correctAnswer = document.createElement("div");
+        correctAnswer.id = "correctAnswer";
+        correctAnswer.textContent = "Правильный ответ";
+
+        formationOfAWord.appendChild(incorrectAnswer);
+        formationOfAWord.appendChild(correctAnswer);
+
+        let buttonCheck = document.createElement("button");
+        buttonCheck.id = "buttonCheck";
+        buttonCheck.textContent = "Проверить";
+        buttonCheck.onclick = function(){
+            let nativeWordFormationOfAWord = formationOfAWord.getElementsByClassName("nativeWordFormationOfAWord"); // Массив элементов родных слов
+            let isCorrect = true;
+            for(let i = 0; i < nativeWordFormationOfAWord.length; i++){
+                if(nativeWordFormationOfAWord[i].textContent != wordsInNativeLanguage[i]){
+                    nativeWordFormationOfAWord[i].style.border = "1px solid #8A666A";
+                    isCorrect = false
+                }
+                else
+                    nativeWordFormationOfAWord[i].style.border = "1px solid #718A66";
+            }
+            if(isCorrect)
+                correctAnswer.style.display = "block";
+            else
+                incorrectAnswer.style.display = "block";
+            buttonCheck.style.display = "none";
+            document.getElementById("buttonNext").style.display = "block";
+        }
+    
+        formationOfAWord.appendChild(buttonCheck);
+    }
+
+    return formationOfAWord
 }
 // Функция для создания подвкладки тренировать слова
 function createPracticeWords(jsonData)
