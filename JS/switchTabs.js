@@ -335,6 +335,7 @@ dailyWorkout.onclick = function()
     dailyWorkout.classList.add("tab_active");
     getDailyWorkout();
 }
+//--------------------------------------------------
 // Создаём словарь упражнений и добавляем в него функцию для создания тренировки "Напиши слово"
 let exerciseDictionary = {  "Напиши слово" : function createWriteTheWord(jsonData, wordIterator, showPicture)
 {
@@ -395,7 +396,7 @@ let exerciseDictionary = {  "Напиши слово" : function createWriteTheW
     writeTheWord.appendChild(buttonCheck);
     return writeTheWord;
 }};
-// Добавляем в словарь функцию для создания тренировки "Сопоставление слов"
+// Добавляем в словарь функцию для создания тренировки "Составление слова"
 exerciseDictionary["Составление слова"] = function createFormationOfAWord(jsonData, wordIterator, showPicture){
 
     let matchingWords = document.createElement("div");
@@ -531,6 +532,7 @@ exerciseDictionary["Составление слова"] = function createFormati
     matchingWords.appendChild(buttonCheck);
     return matchingWords;
 }
+// Добавляем в словарь функцию для создания тренировки "Сопоставление слов"
 exerciseDictionary["Сопоставление слов"] = function createMatchingWords(jsonData, wordIterator){
     let formationOfAWord = document.createElement("div")
     formationOfAWord.id = "formationOfAWord";
@@ -620,7 +622,7 @@ exerciseDictionary["Сопоставление слов"] = function createMatch
     
             let nativeWord = document.createElement("div"); // Слово на родном языке
             nativeWord.className = "nativeWordFormationOfAWord";
-            nativeWord.textContent = shuffledArray[i];
+            nativeWord.textContent = shuffledArray[j];
     
             row.appendChild(targetWord);
             row.appendChild(buttonDown);
@@ -667,6 +669,201 @@ exerciseDictionary["Сопоставление слов"] = function createMatch
 
     return formationOfAWord
 }
+// Добавляем в словарь функцию для создания тренировки "Проверка слов на изучаемом языке"
+exerciseDictionary["Проверка слов на изучаемом языке"] = function checkingWordsInTheLanguageBeingStudied(jsonData, wordIterator, showPicture){
+    let checkingWordsInTheLanguageBeingStudied = document.createElement("div");
+    checkingWordsInTheLanguageBeingStudied.id = "checkingWordsInTheLanguageBeingStudied";
+
+    if(jsonData.length < 3){
+        checkingWordsInTheLanguageBeingStudied.textContent = "Для того чтобы выполнять упражнение \"Проверка слов на изучаемом языке\" нужно добавить ещё слов для тренировки: " 
+        + (3 - jsonData.length);
+    }
+    else{
+        let picture = document.createElement('img');
+        picture.className = "exercisePicture";
+        if(jsonData[wordIterator].linkToPicture != null)
+            picture.src = jsonData[wordIterator].linkToPicture;
+        picture.alt = '';
+        if(String(showPicture) == "true")
+            picture.style.display = "block";
+
+        let targetWord = document.createElement("div"); // Слово на изучаемом языке
+        targetWord.id = "nativeWord";
+        targetWord.textContent = jsonData[wordIterator].wordsInTheTargetLanguage;
+
+        checkingWordsInTheLanguageBeingStudied.appendChild(picture);
+        checkingWordsInTheLanguageBeingStudied.appendChild(targetWord);
+
+        // Создаем массив слов на родном языке
+        let wordsInNativeLanguage = [];
+        for(let i = wordIterator, j = 0; i != jsonData.length && j < 3; i++, j++){
+            wordsInNativeLanguage.push(jsonData[i].wordsInNativeLanguage);
+            if(i == jsonData.length - 1) // Если слова закончились начать брать их сначала
+                i = -1;
+        }
+        // Создаём массив с перемешанными элементами (Слова на родном языке)
+        let shuffledArray = wordsInNativeLanguage.slice();
+        // Пока массив совпадает с оригиналом, продолжаем его перемешивать
+        while (JSON.stringify(shuffledArray) === JSON.stringify(wordsInNativeLanguage)) {
+        for (let i = shuffledArray.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+        }
+        }
+        
+        for(let i = 0; i < shuffledArray.length; i++){
+            let nativeWord = document.createElement("div"); // Слово на родном языке
+            nativeWord.className = "nativeWordFormationOfAWord";
+            nativeWord.textContent = shuffledArray[i];
+            nativeWord.onclick = function(){
+                let arrayNativeWord = checkingWordsInTheLanguageBeingStudied.getElementsByClassName("nativeWordFormationOfAWord");
+                // Обнуляем задний фон
+                for(let i = 0; i < arrayNativeWord.length; i++){
+                    arrayNativeWord[i].removeAttribute("style");
+                    arrayNativeWord[i].value = false;
+                }
+                nativeWord.style.backgroundColor = "rgba(51, 51, 51, 0.5)"; // Выделяем выбранный элемент
+                nativeWord.value = true;
+            }
+            checkingWordsInTheLanguageBeingStudied.appendChild(nativeWord);
+        }
+
+        let incorrectAnswer = document.createElement("div");
+        incorrectAnswer.id = "incorrectAnswer";
+        incorrectAnswer.textContent = "Не правильный ответ";
+
+        let correctAnswer = document.createElement("div");
+        correctAnswer.id = "correctAnswer";
+        correctAnswer.textContent = "Правильный ответ: " + jsonData[wordIterator].wordsInNativeLanguage;
+
+        let buttonCheck = document.createElement("button");
+        buttonCheck.id = "buttonCheck";
+        buttonCheck.textContent = "Проверить";
+        buttonCheck.onclick = function(){
+            let arrayNativeWord = checkingWordsInTheLanguageBeingStudied.getElementsByClassName("nativeWordFormationOfAWord");
+            for(let i = 0; i < arrayNativeWord.length; i++){
+                if(arrayNativeWord[i].value == true){
+                    if(arrayNativeWord[i].textContent == jsonData[wordIterator].wordsInNativeLanguage){ // Если ответ правильный
+                        arrayNativeWord[i].removeAttribute("style"); // Удаляем выделение
+                        arrayNativeWord[i].style.border = "1px solid #718A66";
+                    }
+                    else{ // Если ответ не правильный
+                        arrayNativeWord[i].removeAttribute("style"); // Удаляем выделение
+                        arrayNativeWord[i].style.border = "1px solid #8A666A";
+                        incorrectAnswer.style.display = "block";
+                        correctAnswer.style.display = "block";
+                    }
+                }
+            }
+            buttonCheck.style.display = "none";
+            document.getElementById("buttonNext").style.display = "block";
+        }
+
+        checkingWordsInTheLanguageBeingStudied.appendChild(incorrectAnswer);
+        checkingWordsInTheLanguageBeingStudied.appendChild(correctAnswer);
+        checkingWordsInTheLanguageBeingStudied.appendChild(buttonCheck);
+    }
+    
+    return checkingWordsInTheLanguageBeingStudied;
+}
+// Добавляем в словарь функцию для создания тренировки "Проверка слов на родном языке"
+exerciseDictionary["Проверка слов на родном языке"] = function checkWordsInYourNativeLanguage(jsonData, wordIterator, showPicture){
+    let checkWordsInYourNativeLanguage = document.createElement("div");
+    checkWordsInYourNativeLanguage.id = "checkingWordsInTheLanguageBeingStudied";
+
+    if(jsonData.length < 3){
+        checkWordsInYourNativeLanguage.textContent = "Для того чтобы выполнять упражнение \"Проверка слов на родном языке\" нужно добавить ещё слов для тренировки: " 
+        + (3 - jsonData.length);
+    }
+    else{
+        let picture = document.createElement('img');
+        picture.className = "exercisePicture";
+        if(jsonData[wordIterator].linkToPicture != null)
+            picture.src = jsonData[wordIterator].linkToPicture;
+        picture.alt = '';
+        if(String(showPicture) == "true")
+            picture.style.display = "block";
+
+        let nativeWord = document.createElement("div"); // Слово на родном языке
+        nativeWord.id = "nativeWord";
+        nativeWord.textContent = jsonData[wordIterator].wordsInNativeLanguage;
+
+        checkWordsInYourNativeLanguage.appendChild(picture);
+        checkWordsInYourNativeLanguage.appendChild(nativeWord);
+
+        // Создаем массив слов на изучаемом языке
+        let wordsInTheTargetLanguage = [];
+        for(let i = wordIterator, j = 0; i != jsonData.length && j < 3; i++, j++){
+            wordsInTheTargetLanguage.push(jsonData[i].wordsInTheTargetLanguage);
+            if(i == jsonData.length - 1) // Если слова закончились начать брать их сначала
+                i = -1;
+        }
+        // Создаём массив с перемешанными элементами (Слова на родном языке)
+        let shuffledArray = wordsInTheTargetLanguage.slice();
+        // Пока массив совпадает с оригиналом, продолжаем его перемешивать
+        while (JSON.stringify(shuffledArray) === JSON.stringify(wordsInTheTargetLanguage)) {
+        for (let i = shuffledArray.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+        }
+        }
+        
+        for(let i = 0; i < shuffledArray.length; i++){
+            let targetWord = document.createElement("div"); // Слово на изучаемом языке
+            targetWord.className = "nativeWordFormationOfAWord";
+            targetWord.textContent = shuffledArray[i];
+            targetWord.onclick = function(){
+                let arrayTargetWord = checkWordsInYourNativeLanguage.getElementsByClassName("nativeWordFormationOfAWord");
+                // Обнуляем задний фон
+                for(let i = 0; i < arrayTargetWord.length; i++){
+                    arrayTargetWord[i].removeAttribute("style");
+                    arrayTargetWord[i].value = false;
+                }
+                targetWord.style.backgroundColor = "rgba(51, 51, 51, 0.5)"; // Выделяем выбранный элемент
+                targetWord.value = true;
+            }
+            checkWordsInYourNativeLanguage.appendChild(targetWord);
+        }
+
+        let incorrectAnswer = document.createElement("div");
+        incorrectAnswer.id = "incorrectAnswer";
+        incorrectAnswer.textContent = "Не правильный ответ";
+
+        let correctAnswer = document.createElement("div");
+        correctAnswer.id = "correctAnswer";
+        correctAnswer.textContent = "Правильный ответ: " + jsonData[wordIterator].wordsInTheTargetLanguage;
+
+        let buttonCheck = document.createElement("button");
+        buttonCheck.id = "buttonCheck";
+        buttonCheck.textContent = "Проверить";
+        buttonCheck.onclick = function(){
+            let arrayTargetWord = checkWordsInYourNativeLanguage.getElementsByClassName("nativeWordFormationOfAWord");
+            for(let i = 0; i < arrayTargetWord.length; i++){
+                if(arrayTargetWord[i].value == true){
+                    if(arrayTargetWord[i].textContent == jsonData[wordIterator].wordsInTheTargetLanguage){ // Если ответ правильный
+                        arrayTargetWord[i].removeAttribute("style"); // Удаляем выделение
+                        arrayTargetWord[i].style.border = "1px solid #718A66";
+                    }
+                    else{ // Если ответ не правильный
+                        arrayTargetWord[i].removeAttribute("style"); // Удаляем выделение
+                        arrayTargetWord[i].style.border = "1px solid #8A666A";
+                        incorrectAnswer.style.display = "block";
+                        correctAnswer.style.display = "block";
+                    }
+                }
+            }
+            buttonCheck.style.display = "none";
+            document.getElementById("buttonNext").style.display = "block";
+        }
+
+        checkWordsInYourNativeLanguage.appendChild(incorrectAnswer);
+        checkWordsInYourNativeLanguage.appendChild(correctAnswer);
+        checkWordsInYourNativeLanguage.appendChild(buttonCheck);
+    }
+    
+    return checkWordsInYourNativeLanguage;
+}
+//--------------------------------------------------
 // Функция для создания подвкладки тренировать слова
 function createPracticeWords(jsonData)
 {

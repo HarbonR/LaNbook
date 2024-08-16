@@ -865,6 +865,15 @@ input:checked + .slider:before
     font-weight: 400;
     transition: transform 0.5s ease-in-out;
 }
+/*--------------------------------------------------*/
+#checkingWordsInTheLanguageBeingStudied{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
 /* ================================================== */
 /* Вкладка тренировка: настройки */
 #settings__container
