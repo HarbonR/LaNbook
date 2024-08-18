@@ -358,6 +358,7 @@ let exerciseDictionary = {"Напиши слово" : function createWriteTheWor
     targetWord.name = "targetWord";
     targetWord.autocomplete = "Off";
     targetWord.textContent = "";
+    targetWord.placeholder = "Количество букв в слове: " + jsonData[wordIterator].wordsInTheTargetLanguage.length; // Добавляем количество букв в слове как подсказку
     let incorrectAnswer = document.createElement("div");
     incorrectAnswer.id = "incorrectAnswer";
     let correctAnswer = document.createElement("div");

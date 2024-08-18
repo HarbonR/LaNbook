@@ -32,7 +32,7 @@
             }
             $path = '/Picture/'.$userId.'/'.$idCategory.'/Words'.'/'.$wordTargetLanguage.'.'.$extension; // Получаем путь до картинки карточки для БД
             // Выполнение первого SQL-запроса
-            $sql1 = "INSERT INTO Dictionary (Picture, Eng, Transcription, Rus, Context) VALUES ('$path', '$wordTargetLanguage', '$transcription', '$wordNativeLanguage', '$context')";
+            $sql1 = "INSERT INTO Dictionary (Picture, Eng, Transcription, Rus, Context, Author) VALUES ('$path', '$wordTargetLanguage', '$transcription', '$wordNativeLanguage', '$context', '$userId')";
             if (!mysqli_query($Connect, $sql1))
             {
                 echo "Error: " . mysqli_error($Connect);
@@ -68,7 +68,7 @@
                 die("Ошибка подключения: " . mysqli_connect_error());
             }
             // Выполнение первого SQL-запроса
-            $sql1 = "INSERT INTO Dictionary (Eng, Transcription, Rus, Context) VALUES ('$wordTargetLanguage', '$transcription', '$wordNativeLanguage', '$context')";
+            $sql1 = "INSERT INTO Dictionary (Picture, Eng, Transcription, Rus, Context, Author) VALUES ('$path', '$wordTargetLanguage', '$transcription', '$wordNativeLanguage', '$context', '$userId')";
             if (!mysqli_query($Connect, $sql1))
             {
                 echo "Error: " . mysqli_error($Connect);
