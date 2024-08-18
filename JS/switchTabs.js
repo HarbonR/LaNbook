@@ -82,7 +82,7 @@ menuTraining.onclick = function()
     menuTraining.getElementsByTagName("svg")[0].classList.add("svg_active");
     menuTraining.getElementsByClassName("menu__text")[0].classList.add("text_active");
     wordsToPractice.click();
-}
+};
 //--------------------------------------------------
 // Вкладка личный кабинет
 menuPersonalArea.onclick = function()
@@ -108,7 +108,7 @@ menuPersonalArea.onclick = function()
     menuPersonalArea.getElementsByTagName("svg")[0].classList.add("svg_active");
     menuPersonalArea.getElementsByClassName("menu__text")[0].classList.add("text_active");
     dictionary.click();
-}
+};
 /* ==================================================================================================== */
 /* ---------------------------------------------Вкладки тела------------------------------------------- */
 // Вкладка тренировки
@@ -122,7 +122,7 @@ wordsToPractice.onclick = function()
     }
     wordsToPractice.classList.add("tab_active");
     getCards("../PHP/trainCards.php", "Train");
-}
+};
 // Функция для создания окончания слов для интервального повторения
 function getEndWordsDailyWorkout()
 {
@@ -134,7 +134,7 @@ function getEndWordsDailyWorkout()
     endWords.textContent = "Слов для повторения больше нет";
     dailyWorkout.appendChild(endWords);
     bodyContainer.appendChild(dailyWorkout);
-}
+};
 // Функция для изменения значения счетчика слова
 function сhangeDailyWorkout(cardId, counter, maxCounter, sign, level)
 {
@@ -186,7 +186,7 @@ function сhangeDailyWorkout(cardId, counter, maxCounter, sign, level)
     // Отправляем запрос на сервер
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Устанавливаем заголовок Content-Type
     xhr.send("counter=" + encodeURIComponent(counter) + "&cardId=" + encodeURIComponent(cardId) + "&minute=" + encodeURIComponent(minute) + "&level=" + encodeURIComponent(level));
-}
+};
 // Функция для создания подвкладки "Интервальное повторение"
 function createDailyWorkout(jsonData)
 {
@@ -299,7 +299,7 @@ function createDailyWorkout(jsonData)
     dailyWorkout.appendChild(correctAnswer);
     dailyWorkout.appendChild(buttonFurther);
     return dailyWorkout;
-}
+};
 // Функция для получения и отображения подвкладки "Интервальное повторение"
 function getDailyWorkout()
 {
@@ -322,7 +322,7 @@ function getDailyWorkout()
     }
     xhrDailyWorkout.open("POST", "../PHP/dailyWorkout.php"); // Открываем соединение с сервером с помощью метода "POST" и адреса
     xhrDailyWorkout.send(); // Отправляем запрос на сервер
-}
+};
 // 
 dailyWorkout.onclick = function()
 {
@@ -334,11 +334,10 @@ dailyWorkout.onclick = function()
     }
     dailyWorkout.classList.add("tab_active");
     getDailyWorkout();
-}
+};
 //--------------------------------------------------
 // Создаём словарь упражнений и добавляем в него функцию для создания тренировки "Напиши слово"
-let exerciseDictionary = {  "Напиши слово" : function createWriteTheWord(jsonData, wordIterator, showPicture)
-{
+let exerciseDictionary = {"Напиши слово" : function createWriteTheWord(jsonData, wordIterator, showPicture){
     let writeTheWord = document.createElement("div");
     writeTheWord.id = "writeTheWord"
     let picture = document.createElement('img');
@@ -395,7 +394,8 @@ let exerciseDictionary = {  "Напиши слово" : function createWriteTheW
     writeTheWord.appendChild(correctAnswer);
     writeTheWord.appendChild(buttonCheck);
     return writeTheWord;
-}};
+    }
+};
 // Добавляем в словарь функцию для создания тренировки "Составление слова"
 exerciseDictionary["Составление слова"] = function createFormationOfAWord(jsonData, wordIterator, showPicture){
 
@@ -531,7 +531,7 @@ exerciseDictionary["Составление слова"] = function createFormati
     }
     matchingWords.appendChild(buttonCheck);
     return matchingWords;
-}
+};
 // Добавляем в словарь функцию для создания тренировки "Сопоставление слов"
 exerciseDictionary["Сопоставление слов"] = function createMatchingWords(jsonData, wordIterator){
     let formationOfAWord = document.createElement("div")
@@ -668,9 +668,9 @@ exerciseDictionary["Сопоставление слов"] = function createMatch
     }
 
     return formationOfAWord
-}
+};
 // Добавляем в словарь функцию для создания тренировки "Проверка слов на изучаемом языке"
-exerciseDictionary["Проверка слов на изучаемом языке"] = function checkingWordsInTheLanguageBeingStudied(jsonData, wordIterator, showPicture){
+exerciseDictionary["Проверка слов на изучаемом языке"] = function createCheckingWordsInTheLanguageBeingStudied(jsonData, wordIterator, showPicture){
     let checkingWordsInTheLanguageBeingStudied = document.createElement("div");
     checkingWordsInTheLanguageBeingStudied.id = "checkingWordsInTheLanguageBeingStudied";
 
@@ -765,9 +765,9 @@ exerciseDictionary["Проверка слов на изучаемом языке
     }
     
     return checkingWordsInTheLanguageBeingStudied;
-}
+};
 // Добавляем в словарь функцию для создания тренировки "Проверка слов на родном языке"
-exerciseDictionary["Проверка слов на родном языке"] = function checkWordsInYourNativeLanguage(jsonData, wordIterator, showPicture){
+exerciseDictionary["Проверка слов на родном языке"] = function createCheckWordsInYourNativeLanguage(jsonData, wordIterator, showPicture){
     let checkWordsInYourNativeLanguage = document.createElement("div");
     checkWordsInYourNativeLanguage.id = "checkingWordsInTheLanguageBeingStudied";
 
@@ -862,7 +862,218 @@ exerciseDictionary["Проверка слов на родном языке"] = f
     }
     
     return checkWordsInYourNativeLanguage;
-}
+};
+// Добавляем в словарь функцию для создания тренировки "Напиши, что услышал"
+exerciseDictionary["Напиши, что услышал"] = function createWriteWhatYouHeard(jsonData, wordIterator, showPicture){ 
+    let writeTheWord = document.createElement("div");
+    writeTheWord.id = "writeTheWord"
+    let picture = document.createElement('img');
+    let cardButtonSound = document.createElement('div'); // Создание div для кнопки "Звук"
+    picture.className = "exercisePicture";
+    if(jsonData[wordIterator].linkToPicture != null)
+        picture.src = jsonData[wordIterator].linkToPicture;
+    picture.alt = '';
+    if(String(showPicture) == "true")
+        picture.style.display = "block";
+    else
+        cardButtonSound.style.margin = "10px 0 0 0";
+    // Создание div для кнопки "Звук"
+    cardButtonSound.className = 'card-button-sound';
+    cardButtonSound.onclick = function(event){
+        event.stopPropagation(); // Функция останавливает выполнение функции по нажатию на категорию
+        speakWord(jsonData[wordIterator].wordsInTheTargetLanguage);
+    }
+    let soundSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    soundSvg.setAttribute("width", "29");
+    soundSvg.setAttribute("height", "25");
+    soundSvg.setAttribute("viewBox", "0 0 29 25");
+    let soundPath1 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    soundPath1.setAttribute("d", "M21.8125 3.45654C25.0701 9.15209 25.0841 15.0339 21.8125 20.7395");
+    soundPath1.setAttribute("fill", "rgba(0,0,0,0)");
+    soundPath1.setAttribute("stroke", "black");
+    let soundPath2 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    soundPath2.setAttribute("d", "M26.709 2.30432C28.3378 7.32484 28.3448 16.8623 26.709 21.8917");
+    soundPath2.setAttribute("fill", "rgba(0,0,0,0)");
+    soundPath2.setAttribute("stroke", "black");
+    let soundPath3 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    soundPath3.setAttribute("d", "M1 16.0796V8.11651C1 7.56422 1.44772 7.11651 2 7.11651H7.98428C8.21762 7.11651 8.44363 7.0349 8.62315 6.88582L15.2761 1.36098C15.9277 0.819834 16.9149 1.28326 16.9149 2.1303V22.0658C16.9149 22.9129 15.9277 23.3763 15.2761 22.8351L8.62315 17.3103C8.44363 17.1612 8.21762 17.0796 7.98428 17.0796H2C1.44772 17.0796 1 16.6319 1 16.0796Z");
+    soundPath3.setAttribute("fill", "rgba(0,0,0,0)");
+    soundPath3.setAttribute("stroke", "black");
+    soundSvg.appendChild(soundPath1);
+    soundSvg.appendChild(soundPath2);
+    soundSvg.appendChild(soundPath3);
+    cardButtonSound.appendChild(soundSvg);
+    // Создание div для контекста
+    let context = document.createElement("div");
+    context.className = "context";
+    context.textContent = jsonData[wordIterator].context;
+    // Слово на изучаемом языке
+    let targetWord = document.createElement("input"); 
+    targetWord.id = "targetWord";
+    targetWord.name = "targetWord";
+    targetWord.autocomplete = "Off";
+    targetWord.textContent = "";
+    let incorrectAnswer = document.createElement("div");
+    incorrectAnswer.id = "incorrectAnswer";
+    let correctAnswer = document.createElement("div");
+    correctAnswer.id = "correctAnswer";
+    let buttonCheck = document.createElement("button");
+    buttonCheck.id = "buttonCheck";
+    buttonCheck.textContent = "Проверить";
+    buttonCheck.onclick = function()
+    {
+        if(jsonData[wordIterator].wordsInTheTargetLanguage.toUpperCase() == targetWord.value.toUpperCase().trim())
+        {
+            targetWord.style.border = "1px solid #718A66";
+            correctAnswer.textContent = jsonData[wordIterator].wordsInTheTargetLanguage;
+            correctAnswer.style.display = "block";
+            buttonCheck.style.display = "none";
+            document.getElementById("buttonNext").style.display = "block";
+        }
+        else
+        {
+            targetWord.style.border = "1px solid #8A666A";
+            incorrectAnswer.textContent = targetWord.value;
+            incorrectAnswer.style.display = "block";
+            correctAnswer.textContent = jsonData[wordIterator].wordsInTheTargetLanguage;
+            correctAnswer.style.display = "block";
+            buttonCheck.style.display = "none";
+            document.getElementById("buttonNext").style.display = "block";
+        }
+    }
+    writeTheWord.appendChild(picture);
+    writeTheWord.appendChild(cardButtonSound);
+    writeTheWord.appendChild(context);
+    writeTheWord.appendChild(targetWord);
+    writeTheWord.appendChild(incorrectAnswer);
+    writeTheWord.appendChild(correctAnswer);
+    writeTheWord.appendChild(buttonCheck);
+    return writeTheWord;
+};
+// Добавляем в словарь функцию для создания тренировки "Узнай слово на слух"
+exerciseDictionary["Узнай слово на слух"] = function createLearnTheWordByEar(jsonData, wordIterator, showPicture){
+    let checkingWordsInTheLanguageBeingStudied = document.createElement("div");
+    checkingWordsInTheLanguageBeingStudied.id = "checkingWordsInTheLanguageBeingStudied";
+
+    if(jsonData.length < 3){
+        checkingWordsInTheLanguageBeingStudied.textContent = "Для того чтобы выполнять упражнение \"Проверка слов на изучаемом языке\" нужно добавить ещё слов для тренировки: " 
+        + (3 - jsonData.length);
+    }
+    else{
+        let picture = document.createElement('img');
+        let cardButtonSound = document.createElement('div');
+        picture.className = "exercisePicture";
+        if(jsonData[wordIterator].linkToPicture != null)
+            picture.src = jsonData[wordIterator].linkToPicture;
+        picture.alt = '';
+        if(String(showPicture) == "true"){
+            picture.style.display = "block";
+            cardButtonSound.style.margin = "5px 0 10px 0";
+        }
+        else
+            cardButtonSound.style.margin = "10px 0 10px 0";
+        // Создание div для кнопки "Звук"
+        cardButtonSound.className = 'card-button-sound';
+        cardButtonSound.onclick = function(event){
+            event.stopPropagation(); // Функция останавливает выполнение функции по нажатию на категорию
+            speakWord(jsonData[wordIterator].wordsInTheTargetLanguage);
+        }
+        let soundSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        soundSvg.setAttribute("width", "29");
+        soundSvg.setAttribute("height", "25");
+        soundSvg.setAttribute("viewBox", "0 0 29 25");
+        let soundPath1 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        soundPath1.setAttribute("d", "M21.8125 3.45654C25.0701 9.15209 25.0841 15.0339 21.8125 20.7395");
+        soundPath1.setAttribute("fill", "rgba(0,0,0,0)");
+        soundPath1.setAttribute("stroke", "black");
+        let soundPath2 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        soundPath2.setAttribute("d", "M26.709 2.30432C28.3378 7.32484 28.3448 16.8623 26.709 21.8917");
+        soundPath2.setAttribute("fill", "rgba(0,0,0,0)");
+        soundPath2.setAttribute("stroke", "black");
+        let soundPath3 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        soundPath3.setAttribute("d", "M1 16.0796V8.11651C1 7.56422 1.44772 7.11651 2 7.11651H7.98428C8.21762 7.11651 8.44363 7.0349 8.62315 6.88582L15.2761 1.36098C15.9277 0.819834 16.9149 1.28326 16.9149 2.1303V22.0658C16.9149 22.9129 15.9277 23.3763 15.2761 22.8351L8.62315 17.3103C8.44363 17.1612 8.21762 17.0796 7.98428 17.0796H2C1.44772 17.0796 1 16.6319 1 16.0796Z");
+        soundPath3.setAttribute("fill", "rgba(0,0,0,0)");
+        soundPath3.setAttribute("stroke", "black");
+        soundSvg.appendChild(soundPath1);
+        soundSvg.appendChild(soundPath2);
+        soundSvg.appendChild(soundPath3);
+        cardButtonSound.appendChild(soundSvg);
+
+        checkingWordsInTheLanguageBeingStudied.appendChild(picture);
+        checkingWordsInTheLanguageBeingStudied.appendChild(cardButtonSound);
+
+        // Создаем массив слов на родном языке
+        let wordsInNativeLanguage = [];
+        for(let i = wordIterator, j = 0; i != jsonData.length && j < 3; i++, j++){
+            wordsInNativeLanguage.push(jsonData[i].wordsInNativeLanguage);
+            if(i == jsonData.length - 1) // Если слова закончились начать брать их сначала
+                i = -1;
+        }
+        // Создаём массив с перемешанными элементами (Слова на родном языке)
+        let shuffledArray = wordsInNativeLanguage.slice();
+        // Пока массив совпадает с оригиналом, продолжаем его перемешивать
+        while (JSON.stringify(shuffledArray) === JSON.stringify(wordsInNativeLanguage)) {
+        for (let i = shuffledArray.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+        }
+        }
+        
+        for(let i = 0; i < shuffledArray.length; i++){
+            let nativeWord = document.createElement("div"); // Слово на родном языке
+            nativeWord.className = "nativeWordFormationOfAWord";
+            nativeWord.textContent = shuffledArray[i];
+            nativeWord.onclick = function(){
+                let arrayNativeWord = checkingWordsInTheLanguageBeingStudied.getElementsByClassName("nativeWordFormationOfAWord");
+                // Обнуляем задний фон
+                for(let i = 0; i < arrayNativeWord.length; i++){
+                    arrayNativeWord[i].removeAttribute("style");
+                    arrayNativeWord[i].value = false;
+                }
+                nativeWord.style.backgroundColor = "rgba(51, 51, 51, 0.5)"; // Выделяем выбранный элемент
+                nativeWord.value = true;
+            }
+            checkingWordsInTheLanguageBeingStudied.appendChild(nativeWord);
+        }
+
+        let incorrectAnswer = document.createElement("div");
+        incorrectAnswer.id = "incorrectAnswer";
+        incorrectAnswer.textContent = "Не правильный ответ";
+
+        let correctAnswer = document.createElement("div");
+        correctAnswer.id = "correctAnswer";
+        correctAnswer.textContent = "Правильный ответ: " + jsonData[wordIterator].wordsInNativeLanguage;
+
+        let buttonCheck = document.createElement("button");
+        buttonCheck.id = "buttonCheck";
+        buttonCheck.textContent = "Проверить";
+        buttonCheck.onclick = function(){
+            let arrayNativeWord = checkingWordsInTheLanguageBeingStudied.getElementsByClassName("nativeWordFormationOfAWord");
+            for(let i = 0; i < arrayNativeWord.length; i++){
+                if(arrayNativeWord[i].value == true){
+                    if(arrayNativeWord[i].textContent == jsonData[wordIterator].wordsInNativeLanguage){ // Если ответ правильный
+                        arrayNativeWord[i].removeAttribute("style"); // Удаляем выделение
+                        arrayNativeWord[i].style.border = "1px solid #718A66";
+                    }
+                    else{ // Если ответ не правильный
+                        arrayNativeWord[i].removeAttribute("style"); // Удаляем выделение
+                        arrayNativeWord[i].style.border = "1px solid #8A666A";
+                        incorrectAnswer.style.display = "block";
+                        correctAnswer.style.display = "block";
+                    }
+                }
+            }
+            buttonCheck.style.display = "none";
+            document.getElementById("buttonNext").style.display = "block";
+        }
+
+        checkingWordsInTheLanguageBeingStudied.appendChild(incorrectAnswer);
+        checkingWordsInTheLanguageBeingStudied.appendChild(correctAnswer);
+        checkingWordsInTheLanguageBeingStudied.appendChild(buttonCheck);
+    }
+    
+    return checkingWordsInTheLanguageBeingStudied;
+};
 //--------------------------------------------------
 // Функция для создания подвкладки тренировать слова
 function createPracticeWords(jsonData)
@@ -937,7 +1148,7 @@ function createPracticeWords(jsonData)
         }
     }
     practiceWords.appendChild(buttonNext);
-}
+};
 // Функция для получения данных карточек для тренировки
 function getPracticeWords()
 {
@@ -964,7 +1175,7 @@ function getPracticeWords()
     }
     xhrPracticeWords.open("POST", "../PHP/trainCards.php"); // Открываем соединение с сервером с помощью метода "POST" и адреса
     xhrPracticeWords.send(); // Отправляем запрос на сервер
-}
+};
 //
 practiceWords.onclick = function()
 {
@@ -994,7 +1205,7 @@ practiceWords.onclick = function()
         practiceWords.appendChild(endWords);
         bodyContainer.appendChild(practiceWords);
     }
-}
+};
 //
 settings.onclick = function()
 {
@@ -1006,7 +1217,7 @@ settings.onclick = function()
     }
     settings.classList.add("tab_active");
     getSettingCards();
-}
+};
 //--------------------------------------------------
 // Вкладка личный кабинет
 // 
@@ -1025,7 +1236,7 @@ dictionary.onclick = function()
     }
     dictionary.classList.add("tab_active");
     getUserCategories();
-}
+};
 //
 achievements.onclick = function()
 {
@@ -1036,7 +1247,7 @@ achievements.onclick = function()
         tabUserActive[i].classList.remove("tab_active");
     }
     achievements.classList.add("tab_active");
-}
+};
 //
 statistics.onclick = function()
 {
@@ -1047,7 +1258,7 @@ statistics.onclick = function()
         tabUserActive[i].classList.remove("tab_active");
     }
     statistics.classList.add("tab_active");
-}
+};
 /* ==================================================================================================== */
 // Функция срабатывает при загрузке страницы
 window.addEventListener('load', function()
@@ -1069,7 +1280,7 @@ function openBurger()
     burgerOpen.setAttribute("style", "display: none;");
     burgerOpen.value = true;
     burgerClose.removeAttribute("style");
-}
+};
 // Функция для закрытия бургера
 function closeBurger()
 {
@@ -1081,7 +1292,7 @@ function closeBurger()
     document.getElementById("exit").style.display = "none";
     document.getElementById("body__training").style.display = "none";
     document.getElementById("body__user").style.display = "none";
-}
+};
 // Для открытия и закрытия бургера
 burger.onclick = function()
 {
@@ -1089,5 +1300,5 @@ burger.onclick = function()
         closeBurger();
     else
         openBurger();
-}
+};
 //==================================================

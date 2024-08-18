@@ -18,6 +18,27 @@ function switchButtonClass(buttonClass)
         buttonClass.classList.remove("entered-button");
     }
 }
+// Функция для озвучки слов
+function speakWord(word) {
+    // Проверяем, поддерживается ли Web Speech API
+    if ('speechSynthesis' in window) {
+        // Создаем новый объект SpeechSynthesisUtterance
+        let utterance = new SpeechSynthesisUtterance(word);
+        
+        // Устанавливаем язык на английский
+        utterance.lang = 'en-US';
+
+        // Устанавливаем параметры (по желанию)
+        utterance.pitch = 1; // Устанавливаем высоту голоса "Тональность" (1 - стандартное значение)
+        utterance.rate = 1; // Устанавливаем скорость речи (1 - стандартное значение)
+        utterance.volume = 1; // Устанавливаем громкость (1 - максимум)
+
+        // Воспроизводим звук
+        window.speechSynthesis.speak(utterance);
+    } else {
+        console.error('Ваш браузер не поддерживает Web Speech API');
+    }
+}
 /* ==================================================================================================== */
 /* -----------------------------------------------Создание--------------------------------------------- */
 // Создаём функцию для создания категорий
@@ -660,6 +681,9 @@ function createOpenCard(cardId, linkToPicture, wordsInTheTargetLanguage, wordsIn
     // Создание div для кнопки "Звук"
     let cardButtonSound = document.createElement('div');
     cardButtonSound.className = 'card-button-sound';
+    cardButtonSound.onclick = function(){
+        speakWord(wordsInTheTargetLanguage);
+    }
 
     let soundSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     soundSvg.setAttribute("width", "29");
@@ -807,6 +831,10 @@ function createCard(cardId, linkToPicture, wordsInTheTargetLanguage, wordsInNati
     // Создание div для кнопки "Звук"
     let cardButtonSound = document.createElement('div');
     cardButtonSound.className = 'card-button-sound';
+    cardButtonSound.onclick = function(event){
+        event.stopPropagation(); // Функция останавливает выполнение функции по нажатию на категорию
+        speakWord(wordsInTheTargetLanguage);
+    }
 
     let soundSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     soundSvg.setAttribute("width", "29");
@@ -922,6 +950,10 @@ function createCardForTrain(cardId, linkToPicture, wordsInTheTargetLanguage, wor
     // Создание div для кнопки "Звук"
     let cardButtonSound = document.createElement('div');
     cardButtonSound.className = 'card-button-sound';
+    cardButtonSound.onclick = function(event){
+        event.stopPropagation(); // Функция останавливает выполнение функции по нажатию на категорию
+        speakWord(wordsInTheTargetLanguage);
+    }
 
     let soundSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     soundSvg.setAttribute("width", "29");
@@ -1050,6 +1082,10 @@ function createCardForUser(cardId, linkToPicture, wordsInTheTargetLanguage, word
     let cardButtonSound = document.createElement('div');
     cardButtonSound.className = 'card-button-sound';
     cardButtonSound.style.width = "60px";
+    cardButtonSound.onclick = function(event){
+        event.stopPropagation(); // Функция останавливает выполнение функции по нажатию на категорию
+        speakWord(wordsInTheTargetLanguage);
+    }
 
     let soundSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     soundSvg.setAttribute("width", "29");
