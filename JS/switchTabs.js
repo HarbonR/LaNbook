@@ -230,7 +230,7 @@ function createDailyWorkout(jsonData)
             correctAnswer.textContent = "";
             correctAnswer.style.display = "none";
             variableAnswer = false;
-            targetWord.style.border = "none";
+            targetWord.removeAttribute("style");
             if(iterator != jsonData.length)
             {
                 nativeWord.textContent = jsonData[iterator].wordsInNativeLanguage;
@@ -244,22 +244,24 @@ function createDailyWorkout(jsonData)
         else if(jsonData[iterator].wordsInTheTargetLanguage.toUpperCase() == targetWord.value.toUpperCase().trim())
         {
             variableAnswer = true;
-            targetWord.style.border = "1px solid #718A66";
+            targetWord.style.boxShadow = "inset 0 0 0 3px #718A66";
             correctAnswer.style.display = "block";
-            correctAnswer.textContent = jsonData[iterator].wordsInTheTargetLanguage;
+            correctAnswer.textContent = "Правильный ответ: " + jsonData[iterator].wordsInTheTargetLanguage;
             buttonFurther.textContent = "Далее";
+            speakWord(jsonData[iterator].wordsInTheTargetLanguage);
             сhangeDailyWorkout(jsonData[iterator].cardId, jsonData[iterator].counter, jsonData[iterator].maxCounter, "+", jsonData[iterator].level);
         }
         // Если пользователь нажал на кнопку проверить в первый раз и ответ оказался не правильным
         else if(jsonData[iterator].wordsInTheTargetLanguage.toUpperCase() != targetWord.value.toUpperCase().trim() && !variableAnswer)
         {
             variableAnswer = true
-            targetWord.style.border = "1px solid #8A666A";
+            targetWord.style.boxShadow = "inset 0 0 0 3px #8A666A";
             incorrectAnswer.style.display = "block";
-            incorrectAnswer.textContent = targetWord.value;
+            incorrectAnswer.textContent = "Не правильный ответ";
             correctAnswer.style.display = "block";
-            correctAnswer.textContent = jsonData[iterator].wordsInTheTargetLanguage;
+            correctAnswer.textContent = "Правильный ответ: " + jsonData[iterator].wordsInTheTargetLanguage;
             buttonFurther.textContent = "Далее";
+            speakWord(jsonData[iterator].wordsInTheTargetLanguage);
             сhangeDailyWorkout(jsonData[iterator].cardId, jsonData[iterator].counter, jsonData[iterator].maxCounter, "-");
             // Отправляем запрос на добавление карточки для тренировки
             let xhr = new XMLHttpRequest();
@@ -279,7 +281,7 @@ function createDailyWorkout(jsonData)
             incorrectAnswer.style.display = "none";
             correctAnswer.textContent = "";
             correctAnswer.style.display = "none";
-            targetWord.style.border = "none";
+            targetWord.removeAttribute("style");
             if(iterator != jsonData.length)
             {
                 nativeWord.textContent = jsonData[iterator].wordsInNativeLanguage;
@@ -370,21 +372,23 @@ let exerciseDictionary = {"Напиши слово" : function createWriteTheWor
     {
         if(jsonData[wordIterator].wordsInTheTargetLanguage.toUpperCase() == targetWord.value.toUpperCase().trim())
         {
-            targetWord.style.border = "1px solid #718A66";
-            correctAnswer.textContent = jsonData[wordIterator].wordsInTheTargetLanguage;
+            correctAnswer.textContent = "Правильный ответ: " + jsonData[wordIterator].wordsInTheTargetLanguage;
             correctAnswer.style.display = "block";
+            targetWord.style.boxShadow = "inset 0 0 0 3px #718A66";
             buttonCheck.style.display = "none";
             document.getElementById("buttonNext").style.display = "block";
+            speakWord(jsonData[wordIterator].wordsInTheTargetLanguage);
         }
         else
         {
-            targetWord.style.border = "1px solid #8A666A";
-            incorrectAnswer.textContent = targetWord.value;
+            targetWord.style.boxShadow = "inset 0 0 0 3px #8A666A";
+            incorrectAnswer.textContent = "Не правильный ответ";
             incorrectAnswer.style.display = "block";
-            correctAnswer.textContent = jsonData[wordIterator].wordsInTheTargetLanguage;
+            correctAnswer.textContent = "Правильный ответ: " + jsonData[wordIterator].wordsInTheTargetLanguage;
             correctAnswer.style.display = "block";
             buttonCheck.style.display = "none";
             document.getElementById("buttonNext").style.display = "block";
+            speakWord(jsonData[wordIterator].wordsInTheTargetLanguage);
         }
     }
     writeTheWord.appendChild(picture);
@@ -507,14 +511,15 @@ exerciseDictionary["Составление слова"] = function createFormati
         }
         if(answer)
         {
-            correctAnswer.textContent = "Правильный ответ";
+            correctAnswer.textContent = "Правильный ответ: " + jsonData[wordIterator].wordsInTheTargetLanguage;
             correctAnswer.style.display = "block";
             for(let i = 0; i < arrayContainerForTargetLetters.length; i++)
             {
-                arrayContainerForTargetLetters[i].style.borderColor = "#718A66";
+                arrayContainerForTargetLetters[i].style.boxShadow = "inset 0 0 0 3px #718A66";
             }
             buttonCheck.style.display = "none";
             document.getElementById("buttonNext").style.display = "block";
+            speakWord(jsonData[wordIterator].wordsInTheTargetLanguage);
         }
         else
         {
@@ -522,12 +527,13 @@ exerciseDictionary["Составление слова"] = function createFormati
             incorrectAnswer.style.display = "block";
             for(let i = 0; i < arrayContainerForTargetLetters.length; i++)
             {
-                arrayContainerForTargetLetters[i].style.borderColor = "#8A666A";
+                arrayContainerForTargetLetters[i].style.boxShadow = "inset 0 0 0 3px #8A666A";
             }
-            correctAnswer.textContent = jsonData[wordIterator].wordsInTheTargetLanguage;
+            correctAnswer.textContent = "Правильный ответ: " + jsonData[wordIterator].wordsInTheTargetLanguage;
             correctAnswer.style.display = "block";
             buttonCheck.style.display = "none";
             document.getElementById("buttonNext").style.display = "block";
+            speakWord(jsonData[wordIterator].wordsInTheTargetLanguage);
         }
     }
     matchingWords.appendChild(buttonCheck);
@@ -651,11 +657,11 @@ exerciseDictionary["Сопоставление слов"] = function createMatch
             let isCorrect = true;
             for(let i = 0; i < nativeWordFormationOfAWord.length; i++){
                 if(nativeWordFormationOfAWord[i].textContent != wordsInNativeLanguage[i]){
-                    nativeWordFormationOfAWord[i].style.border = "1px solid #8A666A";
+                    nativeWordFormationOfAWord[i].style.boxShadow = "inset 0 0 0 3px #8A666A";
                     isCorrect = false
                 }
                 else
-                    nativeWordFormationOfAWord[i].style.border = "1px solid #718A66";
+                    nativeWordFormationOfAWord[i].style.boxShadow = "inset 0 0 0 3px #718A66";
             }
             if(isCorrect)
                 correctAnswer.style.display = "block";
@@ -695,6 +701,11 @@ exerciseDictionary["Проверка слов на изучаемом языке
         checkingWordsInTheLanguageBeingStudied.appendChild(picture);
         checkingWordsInTheLanguageBeingStudied.appendChild(targetWord);
 
+        let context = document.createElement("div"); // Контекст
+        context.className = "context";
+        context.textContent = jsonData[wordIterator].context;
+        checkingWordsInTheLanguageBeingStudied.appendChild(context);
+
         // Создаем массив слов на родном языке
         let wordsInNativeLanguage = [];
         for(let i = wordIterator, j = 0; i != jsonData.length && j < 3; i++, j++){
@@ -723,7 +734,7 @@ exerciseDictionary["Проверка слов на изучаемом языке
                     arrayNativeWord[i].removeAttribute("style");
                     arrayNativeWord[i].value = false;
                 }
-                nativeWord.style.backgroundColor = "rgba(51, 51, 51, 0.5)"; // Выделяем выбранный элемент
+                nativeWord.style.boxShadow = 'inset 0 0 0 3px rgba(51, 51, 51, 0.5)'; // Добавляем внутреннюю границу, выделяя выбранный элемент
                 nativeWord.value = true;
             }
             checkingWordsInTheLanguageBeingStudied.appendChild(nativeWord);
@@ -731,11 +742,9 @@ exerciseDictionary["Проверка слов на изучаемом языке
 
         let incorrectAnswer = document.createElement("div");
         incorrectAnswer.id = "incorrectAnswer";
-        incorrectAnswer.textContent = "Не правильный ответ";
 
         let correctAnswer = document.createElement("div");
         correctAnswer.id = "correctAnswer";
-        correctAnswer.textContent = "Правильный ответ: " + jsonData[wordIterator].wordsInNativeLanguage;
 
         let buttonCheck = document.createElement("button");
         buttonCheck.id = "buttonCheck";
@@ -745,14 +754,20 @@ exerciseDictionary["Проверка слов на изучаемом языке
             for(let i = 0; i < arrayNativeWord.length; i++){
                 if(arrayNativeWord[i].value == true){
                     if(arrayNativeWord[i].textContent == jsonData[wordIterator].wordsInNativeLanguage){ // Если ответ правильный
+                        correctAnswer.textContent = "Правильный ответ: " + jsonData[wordIterator].wordsInNativeLanguage;
+                        correctAnswer.style.display = "block";
                         arrayNativeWord[i].removeAttribute("style"); // Удаляем выделение
-                        arrayNativeWord[i].style.border = "1px solid #718A66";
+                        arrayNativeWord[i].style.boxShadow = "inset 0 0 0 3px #718A66";
+                        speakWord(jsonData[wordIterator].wordsInTheTargetLanguage);
                     }
                     else{ // Если ответ не правильный
                         arrayNativeWord[i].removeAttribute("style"); // Удаляем выделение
-                        arrayNativeWord[i].style.border = "1px solid #8A666A";
+                        arrayNativeWord[i].style.boxShadow = "inset 0 0 0 3px #8A666A";
+                        incorrectAnswer.textContent = "Не правильный ответ";
                         incorrectAnswer.style.display = "block";
+                        correctAnswer.textContent = "Правильный ответ: " + jsonData[wordIterator].wordsInNativeLanguage;
                         correctAnswer.style.display = "block";
+                        speakWord(jsonData[wordIterator].wordsInTheTargetLanguage);
                     }
                 }
             }
@@ -792,6 +807,11 @@ exerciseDictionary["Проверка слов на родном языке"] = f
         checkWordsInYourNativeLanguage.appendChild(picture);
         checkWordsInYourNativeLanguage.appendChild(nativeWord);
 
+        let context = document.createElement("div"); // Контекст
+        context.className = "context";
+        context.textContent = jsonData[wordIterator].context;
+        checkWordsInYourNativeLanguage.appendChild(context);
+
         // Создаем массив слов на изучаемом языке
         let wordsInTheTargetLanguage = [];
         for(let i = wordIterator, j = 0; i != jsonData.length && j < 3; i++, j++){
@@ -820,7 +840,7 @@ exerciseDictionary["Проверка слов на родном языке"] = f
                     arrayTargetWord[i].removeAttribute("style");
                     arrayTargetWord[i].value = false;
                 }
-                targetWord.style.backgroundColor = "rgba(51, 51, 51, 0.5)"; // Выделяем выбранный элемент
+                targetWord.style.boxShadow = 'inset 0 0 0 3px rgba(51, 51, 51, 0.5)'; // Добавляем внутреннюю границу, выделяя выбранный элемент
                 targetWord.value = true;
             }
             checkWordsInYourNativeLanguage.appendChild(targetWord);
@@ -828,11 +848,9 @@ exerciseDictionary["Проверка слов на родном языке"] = f
 
         let incorrectAnswer = document.createElement("div");
         incorrectAnswer.id = "incorrectAnswer";
-        incorrectAnswer.textContent = "Не правильный ответ";
 
         let correctAnswer = document.createElement("div");
         correctAnswer.id = "correctAnswer";
-        correctAnswer.textContent = "Правильный ответ: " + jsonData[wordIterator].wordsInTheTargetLanguage;
 
         let buttonCheck = document.createElement("button");
         buttonCheck.id = "buttonCheck";
@@ -842,14 +860,20 @@ exerciseDictionary["Проверка слов на родном языке"] = f
             for(let i = 0; i < arrayTargetWord.length; i++){
                 if(arrayTargetWord[i].value == true){
                     if(arrayTargetWord[i].textContent == jsonData[wordIterator].wordsInTheTargetLanguage){ // Если ответ правильный
+                        correctAnswer.textContent = "Правильный ответ: " + jsonData[wordIterator].wordsInTheTargetLanguage;
+                        correctAnswer.style.display = "block";
                         arrayTargetWord[i].removeAttribute("style"); // Удаляем выделение
-                        arrayTargetWord[i].style.border = "1px solid #718A66";
+                        arrayTargetWord[i].style.boxShadow = "inset 0 0 0 3px #718A66";
+                        speakWord(jsonData[wordIterator].wordsInTheTargetLanguage);
                     }
                     else{ // Если ответ не правильный
                         arrayTargetWord[i].removeAttribute("style"); // Удаляем выделение
-                        arrayTargetWord[i].style.border = "1px solid #8A666A";
+                        arrayTargetWord[i].style.boxShadow = "inset 0 0 0 3px #8A666A";
+                        incorrectAnswer.textContent = "Не правильный ответ";
                         incorrectAnswer.style.display = "block";
+                        correctAnswer.textContent = "Правильный ответ: " + jsonData[wordIterator].wordsInTheTargetLanguage;
                         correctAnswer.style.display = "block";
+                        speakWord(jsonData[wordIterator].wordsInTheTargetLanguage);
                     }
                 }
             }
@@ -914,6 +938,7 @@ exerciseDictionary["Напиши, что услышал"] = function createWrite
     targetWord.name = "targetWord";
     targetWord.autocomplete = "Off";
     targetWord.textContent = "";
+    targetWord.placeholder = "Количество букв в слове: " + jsonData[wordIterator].wordsInTheTargetLanguage.length; // Добавляем количество букв в слове как подсказку
     let incorrectAnswer = document.createElement("div");
     incorrectAnswer.id = "incorrectAnswer";
     let correctAnswer = document.createElement("div");
@@ -925,21 +950,23 @@ exerciseDictionary["Напиши, что услышал"] = function createWrite
     {
         if(jsonData[wordIterator].wordsInTheTargetLanguage.toUpperCase() == targetWord.value.toUpperCase().trim())
         {
-            targetWord.style.border = "1px solid #718A66";
-            correctAnswer.textContent = jsonData[wordIterator].wordsInTheTargetLanguage;
+            targetWord.style.boxShadow = "inset 0 0 0 3px #718A66";
+            correctAnswer.textContent = "Правильный ответ: " + jsonData[wordIterator].wordsInTheTargetLanguage;
             correctAnswer.style.display = "block";
             buttonCheck.style.display = "none";
             document.getElementById("buttonNext").style.display = "block";
+            speakWord(jsonData[wordIterator].wordsInTheTargetLanguage);
         }
         else
         {
-            targetWord.style.border = "1px solid #8A666A";
-            incorrectAnswer.textContent = targetWord.value;
+            targetWord.style.boxShadow = "inset 0 0 0 3px #8A666A";
+            incorrectAnswer.textContent = "Не правильный ответ";
             incorrectAnswer.style.display = "block";
-            correctAnswer.textContent = jsonData[wordIterator].wordsInTheTargetLanguage;
+            correctAnswer.textContent = "Правильный ответ: " + jsonData[wordIterator].wordsInTheTargetLanguage;
             correctAnswer.style.display = "block";
             buttonCheck.style.display = "none";
             document.getElementById("buttonNext").style.display = "block";
+            speakWord(jsonData[wordIterator].wordsInTheTargetLanguage);
         }
     }
     writeTheWord.appendChild(picture);
@@ -1003,6 +1030,11 @@ exerciseDictionary["Узнай слово на слух"] = function createLearn
         checkingWordsInTheLanguageBeingStudied.appendChild(picture);
         checkingWordsInTheLanguageBeingStudied.appendChild(cardButtonSound);
 
+        let context = document.createElement("div"); // Контекст
+        context.className = "context";
+        context.textContent = jsonData[wordIterator].context;
+        checkingWordsInTheLanguageBeingStudied.appendChild(context);
+
         // Создаем массив слов на родном языке
         let wordsInNativeLanguage = [];
         for(let i = wordIterator, j = 0; i != jsonData.length && j < 3; i++, j++){
@@ -1031,7 +1063,7 @@ exerciseDictionary["Узнай слово на слух"] = function createLearn
                     arrayNativeWord[i].removeAttribute("style");
                     arrayNativeWord[i].value = false;
                 }
-                nativeWord.style.backgroundColor = "rgba(51, 51, 51, 0.5)"; // Выделяем выбранный элемент
+                nativeWord.style.boxShadow = 'inset 0 0 0 3px rgba(51, 51, 51, 0.5)'; // Добавляем внутреннюю границу, выделяя выбранный элемент
                 nativeWord.value = true;
             }
             checkingWordsInTheLanguageBeingStudied.appendChild(nativeWord);
@@ -1039,11 +1071,9 @@ exerciseDictionary["Узнай слово на слух"] = function createLearn
 
         let incorrectAnswer = document.createElement("div");
         incorrectAnswer.id = "incorrectAnswer";
-        incorrectAnswer.textContent = "Не правильный ответ";
 
         let correctAnswer = document.createElement("div");
         correctAnswer.id = "correctAnswer";
-        correctAnswer.textContent = "Правильный ответ: " + jsonData[wordIterator].wordsInNativeLanguage;
 
         let buttonCheck = document.createElement("button");
         buttonCheck.id = "buttonCheck";
@@ -1053,14 +1083,20 @@ exerciseDictionary["Узнай слово на слух"] = function createLearn
             for(let i = 0; i < arrayNativeWord.length; i++){
                 if(arrayNativeWord[i].value == true){
                     if(arrayNativeWord[i].textContent == jsonData[wordIterator].wordsInNativeLanguage){ // Если ответ правильный
+                        correctAnswer.textContent = "Правильный ответ: " + jsonData[wordIterator].wordsInNativeLanguage;
+                        correctAnswer.style.display = "block";
                         arrayNativeWord[i].removeAttribute("style"); // Удаляем выделение
-                        arrayNativeWord[i].style.border = "1px solid #718A66";
+                        arrayNativeWord[i].style.boxShadow = "inset 0 0 0 3px #718A66";
+                        speakWord(jsonData[wordIterator].wordsInTheTargetLanguage);
                     }
                     else{ // Если ответ не правильный
                         arrayNativeWord[i].removeAttribute("style"); // Удаляем выделение
-                        arrayNativeWord[i].style.border = "1px solid #8A666A";
+                        arrayNativeWord[i].style.boxShadow = "inset 0 0 0 3px #8A666A";
+                        incorrectAnswer.textContent = "Не правильный ответ";
                         incorrectAnswer.style.display = "block";
+                        correctAnswer.textContent = "Правильный ответ: " + jsonData[wordIterator].wordsInNativeLanguage;
                         correctAnswer.style.display = "block";
+                        speakWord(jsonData[wordIterator].wordsInTheTargetLanguage);
                     }
                 }
             }
