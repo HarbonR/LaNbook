@@ -1167,10 +1167,12 @@ function createSettingCards(settingLabel)
     checkbox.id = "checkbox id: " + settingLabel;
     checkbox.name = "checkbox name: " + settingLabel;
     checkbox.autocomplete = "Off";
+        
     if(sessionStorage.getItem("active-picture: " + settingLabel) == "true")
         checkbox.checked = true;
     else
         checkbox.checked = false;
+
     checkbox.onclick = function()
     {
         if(checkbox.checked)
@@ -1182,6 +1184,12 @@ function createSettingCards(settingLabel)
     // Создаем элемент span с классом "slider"
     let slider = document.createElement("span");
     slider.classList.add("slider-settings");
+
+    if(settingLabel == "Сопоставление слов") // Блокируем кнопку включения, выключения картинки для упражнения "Сопоставление слов"
+    {
+        label.style.pointerEvents = "none"; // Отключаем все события мыши
+        label.style.opacity = "0.5"; // Делаем элемент полупрозрачным
+    }
 
     // Добавляем элементы checkbox и slider внутрь элемента label
     label.appendChild(checkbox);
