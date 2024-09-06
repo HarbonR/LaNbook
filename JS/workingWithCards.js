@@ -41,6 +41,63 @@ function speakWord(word) {
 }
 /* ==================================================================================================== */
 /* -----------------------------------------------Создание--------------------------------------------- */
+// Создаём функцию для создания книг
+function createBook(idBook, title, bookFile){
+    let book = document.createElement('div');
+    book.classList.add('book');
+    book.id = "idBook: " + idBook;
+    book.onclick = function(){
+        if(bookFile != null){
+            let bodyContainer = document.getElementById("body__container");
+            bodyContainer.innerHTML = ""; // Отчищаем рабочую область перед добавление групп категорий
+            let titleCategory = document.createElement("p");
+            titleCategory.id = "title-category";
+            titleCategory.textContent = title;
+            viewCards.prepend(titleCategory);
+            // Получение данных о книгах
+            let xhrBooks = new XMLHttpRequest(); // Создаем новый объект XMLHttpRequest
+            xhrBooks.onreadystatechange = function() // Устанавливаем функцию, которая будет вызываться при изменении состояния объекта `xhr`
+            {
+                if (xhrBooks.readyState === 4 && xhrBooks.status === 200) // Проверяем, что запрос завершен и успешен
+                {
+                    bodyContainer.innerHTML = this.responseText;
+                }
+            };
+            xhrBooks.open("POST", bookFile); // Открываем соединение с сервером с помощью метода "POST" и адреса ""
+            xhrBooks.send(); // Отправляем запрос на сервер
+        }
+    }
+
+    let binding = document.createElement('div');
+    binding.classList.add('binding');
+
+    let container = document.createElement('div');
+    container.classList.add('body__categories');
+
+    let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("class", "bookmark");
+    svg.setAttribute("width", "42");
+    svg.setAttribute("height", "43");
+    svg.setAttribute("viewBox", "0 0 42 43");
+    svg.style.fill = "#B58686";
+
+    let path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    path.setAttribute("d", "M1 1H41V41.5L21 30L1 41V1Z");
+    svg.appendChild(path);
+    book.appendChild(svg);
+
+    let bookTitle = document.createElement('div');
+    bookTitle.classList.add('book-title');
+    bookTitle.textContent = title;
+
+    container.appendChild(svg);
+    container.appendChild(bookTitle);
+
+    book.appendChild(binding);
+    book.appendChild(container);
+
+    return book;
+}
 // Создаём функцию для создания категорий
 function createCategory(idCategory, title, linkToPicture)
 {
@@ -1250,6 +1307,52 @@ function createSettingCards(settingLabel)
 }
 /* ==================================================================================================== */
 /* ----------------------------------------------Отображение------------------------------------------- */
+// Функция для отображения грамматики
+function getGrammar(){
+    let bodyContainer = document.getElementById("body__container");
+    bodyContainer.innerHTML = ""; // Отчищаем рабочую область перед добавление групп категорий
+    let bodyBooks = document.createElement('div'); // Создаём контейнер для книг
+    bodyBooks.classList.add('body__categories');
+    bodyContainer.appendChild(bodyBooks);
+
+    // Получение данных о книгах
+    let xhrBooks = new XMLHttpRequest(); // Создаем новый объект XMLHttpRequest
+    xhrBooks.onreadystatechange = function() // Устанавливаем функцию, которая будет вызываться при изменении состояния объекта `xhr`
+    {
+        if (xhrBooks.readyState === 4 && xhrBooks.status === 200) // Проверяем, что запрос завершен и успешен
+        {
+            let jsonData = JSON.parse(xhrBooks.responseText); // Разбираем JSON-данные
+            let groupBookJsonData = jsonData.groupBookData;
+            let bookJsonData = jsonData.bookData;
+            for (let i = 0; i < groupBookJsonData.length; i++) // Пробегаемся по группе книг и создаем под них контейнеры
+            {
+                let groupBookData = groupBookJsonData[i];
+
+                let groupBook = document.createElement('div');
+                groupBook.classList.add('group-category');
+                groupBook.textContent = groupBookData.title;
+
+                let bookContainer = document.createElement('div');
+                bookContainer.classList.add('category__container');
+                bookContainer.id = "groupBook: " + groupBookData.idGroupBook;
+
+                bodyBooks.appendChild(groupBook);
+                bodyBooks.appendChild(bookContainer);
+            }
+
+            for (let i = 0; i < bookJsonData.length; i++)
+            {
+                let bookJson = bookJsonData[i];
+                let book = createBook(bookJson.idBook, bookJson.title, bookJson.book);
+                let bookContainer = document.getElementById("groupBook: " + bookJson.groupBook);
+                bookContainer.appendChild(book);
+            }
+        }
+    };
+    xhrBooks.open("POST", "../PHP/books.php"); // Открываем соединение с сервером с помощью метода "POST" и адреса ""
+    xhrBooks.send(); // Отправляем запрос на сервер
+}
+//==================================================
 // Функция для отображения категорий
 function getCategories()
 {
@@ -1296,6 +1399,7 @@ function getCategories()
     xhrCategories.open("POST", "../PHP/categories.php"); // Открываем соединение с сервером с помощью метода "POST" и адреса ""
     xhrCategories.send(); // Отправляем запрос на сервер
 }
+//==================================================
 // Функция для отображения пользовательских категорий
 function getUserCategories()
 {

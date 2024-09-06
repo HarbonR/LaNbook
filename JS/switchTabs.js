@@ -6,6 +6,9 @@ let burgerOpen = document.getElementById("burger-open");
 burgerOpen.value = false;
 let burgerClose = document.getElementById("burger-close");
 //--------------------------------------------------
+// Вкладки грамматика
+let menuGrammar = document.getElementById("menu__grammar");
+//--------------------------------------------------
 // Вкладки меню
 let menuCards = document.getElementById("menu__cards");
 let menuTraining = document.getElementById("menu__training");
@@ -32,6 +35,32 @@ let tabTrainingActive = bodyTraining.getElementsByClassName("tab_active");
 let tabUserActive = bodyUser.getElementsByClassName("tab_active");
 /* ==================================================================================================== */
 /* ---------------------------------------------Вкладки меню------------------------------------------- */
+// Вкладка грамматика
+menuGrammar.onclick = function()
+{
+    if(burgerOpen.style.display == "none")
+        closeBurger();
+    bodyTraining.setAttribute("style", "display: none;"); // Закрываем дополнительное меню для тренировки
+    bodyUser.setAttribute("style", "display: none;"); // Закрываем дополнительное меню для личного кабинета
+    bodyTraining.value = false; // Назначаем значение вкладки тренировка "Не активная"
+    bodyUser.value = false; // Назначаем значение вкладки личный кабинет "Не активная"
+    if(document.getElementById("title-category")) // Удаление названия категории
+    {
+        document.getElementById("title-category").remove();
+    }
+    document.getElementById("body__container").style.paddingTop = "0";
+    for (let i = 0; i < menuActive.length; i++)
+    {
+        menuActive[i].classList.remove("menu_active");
+        svgActive[i].classList.remove("svg_active");
+        textActive[i].classList.remove("text_active");
+    }
+    menuGrammar.classList.add("menu_active");
+    menuGrammar.getElementsByTagName("svg")[0].classList.add("svg_active");
+    menuGrammar.getElementsByClassName("menu__text")[0].classList.add("text_active");
+    getGrammar();
+};
+//--------------------------------------------------
 // Вкладка карточки
 menuCards.onclick = function()
 {
@@ -1300,7 +1329,7 @@ statistics.onclick = function()
 // Функция срабатывает при загрузке страницы
 window.addEventListener('load', function()
 {
-    menuCards.click();
+    menuGrammar.click();
 });
 //==================================================
 // Функция для открытия бургера

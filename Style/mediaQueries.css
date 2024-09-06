@@ -139,7 +139,7 @@
     {
         display: none;
     }
-    .menu__grammar
+    #menu__grammar
     {
         align-items: center;
         flex-direction: column;

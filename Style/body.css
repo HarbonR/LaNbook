@@ -219,6 +219,37 @@ input:checked + .slider:before
     z-index: 5;
 }
 /* ================================================== */
+/* Книга */
+.book{
+    display: flex;
+    flex-direction: row;
+    width: 230px;
+    height: 330px;
+    margin: 20px;
+    background-color: #CDB7A0;
+    border-radius: 10px;
+}
+.binding{
+    height: 100%;
+    width: 40px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    background-color: #735C4F;
+}
+.bookmark{
+    display: flex;
+    align-self: flex-end;
+    margin-right: 30px;
+}
+.book-title{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 40px;
+    color: #333333;
+    font-weight: 600;
+}
+/* ================================================== */
 /* Категория */
 .body__categories
 {
