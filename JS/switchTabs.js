@@ -15,11 +15,12 @@ let menuTraining = document.getElementById("menu__training");
 let menuPersonalArea = document.getElementById("menu__personal-area");
 //--------------------------------------------------
 // Вкладка тренировки
-let bodyTraining = document.getElementById("body__training");
-let wordsToPractice = document.getElementById("words-to-practice");
-let dailyWorkout = document.getElementById("daily-workout");
-let practiceWords = document.getElementById("practice-words");
-let settings = document.getElementById("settings");
+let bodyTraining = document.getElementById("body__training"); // Тело подвкладок тренировки
+let wordsToPractice = document.getElementById("words-to-practice"); // Подвкладка "Слова для тренировки"
+let exercises = document.getElementById("exercises"); // Подвкладка "Упражнения"
+let dailyWorkout = document.getElementById("daily-workout"); // Подвкладка "Интервальное повторение"
+let practiceWords = document.getElementById("practice-words"); // Подвкладка "Тренировать слова"
+let settings = document.getElementById("settings"); // Подвкладка "Настройки"
 //--------------------------------------------------
 // Вкладка личный кабинет
 let bodyUser = document.getElementById("body__user");
@@ -141,10 +142,14 @@ menuPersonalArea.onclick = function()
 /* ==================================================================================================== */
 /* ---------------------------------------------Вкладки тела------------------------------------------- */
 // Вкладка тренировки
-wordsToPractice.onclick = function()
+wordsToPractice.onclick = function() // Подвкладка "Слова для тренировки"
 {
     if(burgerOpen.style.display == "none")
         closeBurger();
+    if(document.getElementById("title-category")) // Удаление названия категории
+    {
+        document.getElementById("title-category").remove();
+    }
     for (let i = 0; i < tabTrainingActive.length; i++)
     {
         tabTrainingActive[i].classList.remove("tab_active");
@@ -152,6 +157,21 @@ wordsToPractice.onclick = function()
     wordsToPractice.classList.add("tab_active");
     getCards("../PHP/trainCards.php", "Train");
 };
+// Подвкладка упражнения
+exercises.onclick = function(){
+    if(burgerOpen.style.display == "none")
+        closeBurger();
+    if(document.getElementById("title-category")) // Удаление названия категории
+    {
+        document.getElementById("title-category").remove();
+    }
+    for (let i = 0; i < tabTrainingActive.length; i++)
+    {
+        tabTrainingActive[i].classList.remove("tab_active");
+    }
+    exercises.classList.add("tab_active");
+    getModule();
+}
 // Функция для создания окончания слов для интервального повторения
 function getEndWordsDailyWorkout()
 {
@@ -354,11 +374,15 @@ function getDailyWorkout()
     xhrDailyWorkout.open("POST", "../PHP/dailyWorkout.php"); // Открываем соединение с сервером с помощью метода "POST" и адреса
     xhrDailyWorkout.send(); // Отправляем запрос на сервер
 };
-// 
+// Подвкладка интервальное повторение
 dailyWorkout.onclick = function()
 {
     if(burgerOpen.style.display == "none")
         closeBurger();
+    if(document.getElementById("title-category")) // Удаление названия категории
+    {
+        document.getElementById("title-category").remove();
+    }
     for (let i = 0; i < tabTrainingActive.length; i++)
     {
         tabTrainingActive[i].classList.remove("tab_active");
@@ -1247,6 +1271,10 @@ practiceWords.onclick = function()
 {
     if(burgerOpen.style.display == "none")
         closeBurger();
+    if(document.getElementById("title-category")) // Удаление названия категории
+    {
+        document.getElementById("title-category").remove();
+    }
     for (let i = 0; i < tabTrainingActive.length; i++)
     {
         tabTrainingActive[i].classList.remove("tab_active");
@@ -1272,11 +1300,15 @@ practiceWords.onclick = function()
         bodyContainer.appendChild(practiceWords);
     }
 };
-//
+// Функция открытия подвкладки настройки во вкладке упражнения
 settings.onclick = function()
 {
     if(burgerOpen.style.display == "none")
         closeBurger();
+    if(document.getElementById("title-category")) // Удаление названия категории
+    {
+        document.getElementById("title-category").remove();
+    }
     for (let i = 0; i < tabTrainingActive.length; i++)
     {
         tabTrainingActive[i].classList.remove("tab_active");

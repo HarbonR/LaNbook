@@ -199,6 +199,9 @@
             <div id="words-to-practice">
                 Слова для тренировки
             </div>
+            <div id="exercises">
+                Упражнения
+            </div>
             <div id="daily-workout">
                 Интервальное повторение
             </div>

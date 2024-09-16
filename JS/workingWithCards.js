@@ -98,6 +98,7 @@ function createBook(idBook, title, bookFile){
 
     return book;
 }
+//==================================================
 // Создаём функцию для создания категорий
 function createCategory(idCategory, title, linkToPicture)
 {
@@ -1043,6 +1044,192 @@ function createCardForTrain(cardId, linkToPicture, wordsInTheTargetLanguage, wor
     return card;
 }
 //==================================================
+// Создаем функцию для создания модулей во вкладке упражнения
+function createModule(idModule, title){
+    let module = document.createElement('div');
+    module.classList.add('module');
+    module.id = "idModule: " + idModule;
+    module.onclick = function()
+    {
+        document.getElementById("body__container").innerHTML = "";   
+        let titleModule = document.createElement("p");
+        titleModule.id = "title-category";
+        titleModule.textContent = title;
+        viewCards.prepend(titleModule);
+        getGroupExercise(idModule);
+    }
+
+    let moduleInside = document.createElement('div');
+    moduleInside.classList.add('module-inside');
+
+    let moduleTitle = document.createElement('div');
+    moduleTitle.classList.add('category-title');
+    moduleTitle.textContent = title;
+
+    // Добавление элементов в DOM
+    module.appendChild(moduleInside);
+    moduleInside.appendChild(moduleTitle);
+
+    return module;
+}
+//==================================================
+// Создаем функцию для создания групп упражнений во вкладке упражнения
+function createGroupExercise(idGroupExercise, task, title, level){
+    let groupExercise = document.createElement('div');
+    groupExercise.classList.add('groupExercise');
+    groupExercise.id = "idGroupExercise: " + idGroupExercise;
+    groupExercise.onclick = function()
+    {
+        document.getElementById("title-category").textContent = title;
+        getExercise(idGroupExercise);
+    }
+
+    let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("class", "groupExercise-level");
+    svg.setAttribute("width", "42");
+    svg.setAttribute("height", "43");
+    svg.setAttribute("viewBox", "0 0 42 43");
+    switch(Number(level))
+    {
+        case 1: svg.style.fill = "#B58686"; break;
+        case 2: svg.style.fill = "#8693B5"; break;
+        case 3: svg.style.fill = "#87B586"; break;
+    }
+
+    let path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    path.setAttribute("d", "M1 1H41V41.5L21 30L1 41V1Z");
+    svg.appendChild(path);
+
+    let groupExerciseTask = document.createElement('div');
+    groupExerciseTask.classList.add('groupExercise-title');
+    groupExerciseTask.textContent = task;
+
+    let groupExerciseButton = document.createElement('div');
+    groupExerciseButton.classList.add('category-button');
+    groupExerciseButton.textContent = title;
+
+    // Добавление элементов в DOM
+    groupExercise.appendChild(svg);
+    groupExercise.appendChild(groupExerciseTask);
+    groupExercise.appendChild(groupExerciseButton);
+    
+    return groupExercise;
+}
+//==================================================
+// Создаем функцию для создания упражнений во вкладке упражнения
+function createExercise(jsonData){
+    let exercise = document.createElement("div");
+    exercise.id = "practiceWords";
+    let counter = document.createElement("div"); // Счетчик для отображения сколько из скольки пройдено упражнений
+    counter.id = "counter"
+    let exerciseIterator = 0; // Итератор упражнения
+    counter.textContent = exerciseIterator + "/" + jsonData.length;
+    let exerciseContainer = document.createElement("div"); // Контейнер для самого упражнения
+    exerciseContainer.appendChild(grammarVocabularyExercises[jsonData[exerciseIterator].exerciseType](jsonData, exerciseIterator));
+    let buttonNext = document.createElement("button"); // Кнопка для переключения на следующее упражнение
+    buttonNext.textContent = "Далее";
+    buttonNext.id = "buttonNext";
+    buttonNext.onclick = function(){
+        exerciseIterator++; // Увеличиваем значение итератора упражнения
+        counter.textContent = exerciseIterator + "/" + jsonData.length; // Обновляем значение счетчика
+        exerciseContainer.innerHTML = ""; // Отчищаем контейнер для упражнений
+        if(exerciseIterator != jsonData.length)
+        {
+            buttonNext.style.display = "none";
+            exerciseContainer.appendChild(grammarVocabularyExercises[jsonData[exerciseIterator].exerciseType](jsonData, exerciseIterator));
+        }    
+        else{
+            exercise.innerHTML = ""; // Отчищаем рабочую область
+            let endWords = document.createElement("div");
+            endWords.textContent = "Упражнений больше нет";
+            exercise.appendChild(endWords);
+        }
+    }
+
+    exercise.appendChild(counter);
+    exercise.appendChild(exerciseContainer);
+    exercise.appendChild(buttonNext);
+
+    return exercise;
+}
+//--------------------------------------------------
+// Создаём "грамматика, словарь упражнений" и добавляем в него функцию для создания упражнения "Write"
+let grammarVocabularyExercises = {"Write" : function createExerciseWrite(jsonData, exerciseIterator){
+        let exerciseWrite =  document.createElement("div");
+        exerciseWrite.id = "writeTheWord";
+
+        let task = document.createElement("div"); // Задание
+        task.classList.add('task');
+        task.textContent = jsonData[exerciseIterator].task;
+
+        let sentence = document.createElement("div"); // Предложение
+        sentence.classList.add('sentence');
+        sentence.textContent = jsonData[exerciseIterator].sentence;
+
+        let variableCorrectAnswer = jsonData[exerciseIterator].correctAnswer;
+        let arrayWordsCorrectAnswer = variableCorrectAnswer.split(" "); // Создаем массив из правильного ответа
+        let variableIncorrectAnswer = jsonData[exerciseIterator].incorrectAnswer;
+        let arrayWordsIncorrectAnswer = variableIncorrectAnswer.split(" "); // Создаем массив из не правильного ответа
+        let arrayWords = arrayWordsCorrectAnswer.concat(arrayWordsIncorrectAnswer); // Создаем общий массив из правильного и не правильного ответа
+        arrayWords.sort(() => Math.random() - 0.5); // Перемешиваем общий массив
+        
+        let containerForWords = document.createElement("div");
+        containerForWords.id = "containerForTargetWord";
+        arrayWords.forEach(element => {
+            let containerForWord = document.createElement("div");
+            containerForWord.classList.add('containerForWord');
+            containerForWord.textContent = element;
+            containerForWords.appendChild(containerForWord);
+        });
+
+        let targetWord = document.createElement("input"); // Слово на изучаемом языке
+        targetWord.id = "targetWord";
+        targetWord.name = "targetWord";
+        targetWord.autocomplete = "Off";
+        targetWord.textContent = "";
+
+        let incorrectAnswer = document.createElement("div");
+        incorrectAnswer.id = "incorrectAnswer";
+        let correctAnswer = document.createElement("div");
+        correctAnswer.id = "correctAnswer";
+        let buttonCheck = document.createElement("button");
+        buttonCheck.id = "buttonCheck";
+        buttonCheck.textContent = "Проверить";
+        buttonCheck.onclick = function(){
+            if(jsonData[exerciseIterator].correctAnswer.toUpperCase() == targetWord.value.toUpperCase().trim())
+                {
+                    correctAnswer.textContent = "Правильный ответ: " + jsonData[exerciseIterator].correctAnswer;
+                    correctAnswer.style.display = "block";
+                    targetWord.style.boxShadow = "inset 0 0 0 3px #718A66";
+                    buttonCheck.style.display = "none";
+                    document.getElementById("buttonNext").style.display = "block";
+                    speakWord(jsonData[exerciseIterator].correctAnswer);
+                }
+                else
+                {
+                    targetWord.style.boxShadow = "inset 0 0 0 3px #8A666A";
+                    incorrectAnswer.textContent = "Не правильный ответ";
+                    incorrectAnswer.style.display = "block";
+                    correctAnswer.textContent = "Правильный ответ: " + jsonData[exerciseIterator].correctAnswer;
+                    correctAnswer.style.display = "block";
+                    buttonCheck.style.display = "none";
+                    document.getElementById("buttonNext").style.display = "block";
+                    speakWord(jsonData[exerciseIterator].correctAnswer);
+                }
+        }
+
+        exerciseWrite.appendChild(task);
+        exerciseWrite.appendChild(sentence);
+        exerciseWrite.appendChild(containerForWords);
+        exerciseWrite.appendChild(targetWord);
+        exerciseWrite.appendChild(incorrectAnswer);
+        exerciseWrite.appendChild(correctAnswer);
+        exerciseWrite.appendChild(buttonCheck);
+
+        return exerciseWrite;
+    }
+}
+//==================================================
 // Создаем функцию для создания карточки для пользователя
 function createCardForUser(cardId, linkToPicture, wordsInTheTargetLanguage, wordsInNativeLanguage, train, level, author, transcriptionContent, contextContent)
 {
@@ -1519,6 +1706,99 @@ function getCards(path, type, idCategory, author)
     xhrCards.open("POST", path); // Открываем соединение с сервером с помощью метода "POST" и адреса "cards.php"
     xhrCards.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Устанавливаем заголовок Content-Type
     xhrCards.send("idCategory=" + encodeURIComponent(idCategory));
+}
+//==================================================
+// Функция для отображения модулей
+function getModule(){
+    let bodyContainer = document.getElementById("body__container");
+    bodyContainer.innerHTML = ""; // Отчищаем рабочую область перед добавление групп категорий
+    let bodyModule = document.createElement('div'); // Создаём контейнер для книг
+    bodyModule.classList.add('body__categories');
+    bodyContainer.appendChild(bodyModule);
+    //--------------------------------------------------
+    // Получение данных о упражнениях
+    let xhrModule = new XMLHttpRequest(); // Создаем новый объект XMLHttpRequest
+    xhrModule.onreadystatechange = function() // Устанавливаем функцию, которая будет вызываться при изменении состояния объекта `xhr`
+    {
+        if (xhrModule.readyState === 4 && xhrModule.status === 200) // Проверяем, что запрос завершен и успешен
+        {
+            let jsonData = JSON.parse(xhrModule.responseText); // Разбираем JSON-данные
+            let groupModuleJsonData = jsonData.groupModuleData;
+            let moduleJsonData = jsonData.moduleData;
+            for (let i = 0; i < groupModuleJsonData.length; i++) // Пробегаемся по группе книг и создаем под них контейнеры
+            {
+                let groupModuleData = groupModuleJsonData[i];
+
+                let groupModule = document.createElement('div');
+                groupModule.classList.add('group-category');
+                groupModule.textContent = groupModuleData.title;
+
+                let moduleContainer = document.createElement('div');
+                moduleContainer.classList.add('category__container');
+                moduleContainer.id = "groupModule: " + groupModuleData.idGroupModule;
+
+                bodyModule.appendChild(groupModule);
+                bodyModule.appendChild(moduleContainer);
+            }
+
+            for (let i = 0; i < moduleJsonData.length; i++)
+            {
+                let moduleJson = moduleJsonData[i];
+                let module = createModule(moduleJson.idModule, moduleJson.title);
+                let moduleContainer = document.getElementById("groupModule: " + moduleJson.groupModule);
+                moduleContainer.appendChild(module);
+            }
+        }
+    };
+    xhrModule.open("POST", "../PHP/module.php"); // Открываем соединение с сервером с помощью метода "POST" и адреса ""
+    xhrModule.send(); // Отправляем запрос на сервер
+}
+//==================================================
+// Функция для отображения групп упражнений
+function getGroupExercise(idModule){
+    let bodyContainer = document.getElementById("body__container");
+    // Не нужно очищать контейнер т.к. мы его очистили раньше
+    let bodyGroupExercise = document.createElement('div'); // Создаём контейнер для книг
+    bodyGroupExercise.classList.add('body__categories');
+    bodyContainer.appendChild(bodyGroupExercise);
+    //--------------------------------------------------
+    // Получение данных о упражнениях
+    let xhrGroupExercise = new XMLHttpRequest(); // Создаем новый объект XMLHttpRequest
+    xhrGroupExercise.onreadystatechange = function() // Устанавливаем функцию, которая будет вызываться при изменении состояния объекта `xhr`
+    {
+        if (xhrGroupExercise.readyState === 4 && xhrGroupExercise.status === 200) // Проверяем, что запрос завершен и успешен
+        {
+            let jsonData = JSON.parse(xhrGroupExercise.responseText); // Разбираем JSON-данные
+            for (let i = 0; i < jsonData.length; i++)
+            {
+                let groupExercise = createGroupExercise(jsonData[i].idGroupExercise, jsonData[i].task, jsonData[i].title);
+                bodyGroupExercise.appendChild(groupExercise);
+            }
+        }
+    };
+    xhrGroupExercise.open("POST", "../PHP/groupExercise.php"); // Открываем соединение с сервером с помощью метода "POST" и адреса ""
+    xhrGroupExercise.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Устанавливаем заголовок Content-Type
+    xhrGroupExercise.send("idModule=" + encodeURIComponent(idModule));
+}
+//==================================================
+// Функция для отображения упражнений
+function getExercise(idGroupExercise){
+    let bodyContainer = document.getElementById("body__container");
+    bodyContainer.innerHTML = ""; // Отчищаем рабочую область перед добавление групп категорий
+    //--------------------------------------------------
+    // Получение данных о упражнениях
+    let xhrExercise = new XMLHttpRequest(); // Создаем новый объект XMLHttpRequest
+    xhrExercise.onreadystatechange = function() // Устанавливаем функцию, которая будет вызываться при изменении состояния объекта `xhr`
+    {
+        if (xhrExercise.readyState === 4 && xhrExercise.status === 200) // Проверяем, что запрос завершен и успешен
+        {
+            let jsonData = JSON.parse(xhrExercise.responseText); // Разбираем JSON-данные
+            bodyContainer.appendChild(createExercise(jsonData));
+        }
+    };
+    xhrExercise.open("POST", "../PHP/exercise.php"); // Открываем соединение с сервером с помощью метода "POST" и адреса ""
+    xhrExercise.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Устанавливаем заголовок Content-Type
+    xhrExercise.send("idGroupExercise=" + encodeURIComponent(idGroupExercise));
 }
 //==================================================
 // Функция для отображения карточек настроек
