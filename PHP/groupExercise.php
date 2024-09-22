@@ -8,17 +8,19 @@
     {
         die("Ошибка подключения: " . mysqli_connect_error());
     }
-    // IdModule
-    $idModule = $_POST['idModule'];
+    $userId = $_SESSION['userId'];
+    $idModule = $_POST['idModule']; // IdModule
     $sql = "
         SELECT
-            GroupExercise.Id
-            ,GroupExercise.Title
-            ,GroupExercise.Task
+            GroupExercise.Id,
+            GroupExercise.Title,
+            GroupExercise.Task,
+            UserGroupExercise.Grade
         FROM
             GroupExerciseModule
         JOIN GroupExercise ON GroupExerciseModule.IdGroupExercise = GroupExercise.Id
         JOIN Module ON GroupExerciseModule.IdModule = Module.Id
+        LEFT JOIN UserGroupExercise ON GroupExercise.Id = UserGroupExercise.IdGroupExercise AND UserGroupExercise.IdUser = '$userId'
         WHERE
             Module.Id = '$idModule'
         "; // SQL запрос
@@ -31,7 +33,8 @@
             $data[] = array(
                 'idGroupExercise' => $row['Id'],
                 'title' => $row['Title'],
-                'task' => $row['Task']
+                'task' => $row['Task'],
+                'grade' => $row['Grade']
             );
         }
     }

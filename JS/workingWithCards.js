@@ -1074,7 +1074,7 @@ function createModule(idModule, title){
 }
 //==================================================
 // Создаем функцию для создания групп упражнений во вкладке упражнения
-function createGroupExercise(idGroupExercise, task, title, level){
+function createGroupExercise(idGroupExercise, task, title, grade){
     let groupExercise = document.createElement('div');
     groupExercise.classList.add('groupExercise');
     groupExercise.id = "idGroupExercise: " + idGroupExercise;
@@ -1089,6 +1089,16 @@ function createGroupExercise(idGroupExercise, task, title, level){
     svg.setAttribute("width", "42");
     svg.setAttribute("height", "43");
     svg.setAttribute("viewBox", "0 0 42 43");
+    let level;
+    if(grade != null)
+    {
+        if (grade >= 0 && grade <= 33)
+            level = 1;
+        else if (grade > 33 && grade <= 66)
+            level = 2;
+        else if (grade > 66 && grade <= 100)
+            level = 3;
+    }
     switch(Number(level))
     {
         case 1: svg.style.fill = "#B58686"; break;
@@ -1117,15 +1127,20 @@ function createGroupExercise(idGroupExercise, task, title, level){
 }
 //==================================================
 // Создаем функцию для создания упражнений во вкладке упражнения
-function createExercise(jsonData){
+function createExercise(jsonData, idGroupExercise){
     let exercise = document.createElement("div");
     exercise.id = "practiceWords";
     let counter = document.createElement("div"); // Счетчик для отображения сколько из скольки пройдено упражнений
     counter.id = "counter"
     let exerciseIterator = 0; // Итератор упражнения
+    let numberOfCorrectAnswers = 0; // Количество правильных ответов
+    // Кол-бэк функция для обновления количества правильных ответов
+    function updateCorrectAnswers() {
+        numberOfCorrectAnswers++;
+    }
     counter.textContent = exerciseIterator + "/" + jsonData.length;
     let exerciseContainer = document.createElement("div"); // Контейнер для самого упражнения
-    exerciseContainer.appendChild(grammarVocabularyExercises[jsonData[exerciseIterator].exerciseType](jsonData, exerciseIterator));
+    exerciseContainer.appendChild(grammarVocabularyExercises[jsonData[exerciseIterator].exerciseType](jsonData, exerciseIterator, updateCorrectAnswers));
     let buttonNext = document.createElement("button"); // Кнопка для переключения на следующее упражнение
     buttonNext.textContent = "Далее";
     buttonNext.id = "buttonNext";
@@ -1136,12 +1151,18 @@ function createExercise(jsonData){
         if(exerciseIterator != jsonData.length)
         {
             buttonNext.style.display = "none";
-            exerciseContainer.appendChild(grammarVocabularyExercises[jsonData[exerciseIterator].exerciseType](jsonData, exerciseIterator));
+            exerciseContainer.appendChild(grammarVocabularyExercises[jsonData[exerciseIterator].exerciseType](jsonData, exerciseIterator, updateCorrectAnswers));
         }    
         else{
             exercise.innerHTML = ""; // Отчищаем рабочую область
             let endWords = document.createElement("div");
-            endWords.textContent = "Упражнений больше нет";
+            endWords.textContent = "Упражнений больше нет. Правильных ответов " + numberOfCorrectAnswers + " из " + jsonData.length + ".";
+            // Запрос на создание или обновление оценки за тест.
+            let xhr = new XMLHttpRequest(); // Создаем новый объект XMLHTTPrequest
+            xhr.open("POST", "../PHP/addUserExercises.php", true);
+            // Отправляем запрос на сервер
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Устанавливаем заголовок Content-Type
+            xhr.send("grade=" + encodeURIComponent(numberOfCorrectAnswers * 100 / jsonData.length) + "&idGroupExercise=" + encodeURIComponent(idGroupExercise));
             exercise.appendChild(endWords);
         }
     }
@@ -1154,7 +1175,7 @@ function createExercise(jsonData){
 }
 //--------------------------------------------------
 // Создаём "грамматика, словарь упражнений" и добавляем в него функцию для создания упражнения "Write"
-let grammarVocabularyExercises = {"Write" : function createExerciseWrite(jsonData, exerciseIterator){
+let grammarVocabularyExercises = {"Write" : function createExerciseWrite(jsonData, exerciseIterator, updateCorrectAnswers){
         let exerciseWrite =  document.createElement("div");
         exerciseWrite.id = "writeTheWord";
 
@@ -1203,6 +1224,7 @@ let grammarVocabularyExercises = {"Write" : function createExerciseWrite(jsonDat
                     targetWord.style.boxShadow = "inset 0 0 0 3px #718A66";
                     buttonCheck.style.display = "none";
                     document.getElementById("buttonNext").style.display = "block";
+                    updateCorrectAnswers(); // Обновляем количество правильных ответов
                     speakWord(jsonData[exerciseIterator].correctAnswer);
                 }
                 else
@@ -1759,7 +1781,7 @@ function getGroupExercise(idModule){
     let bodyContainer = document.getElementById("body__container");
     // Не нужно очищать контейнер т.к. мы его очистили раньше
     let bodyGroupExercise = document.createElement('div'); // Создаём контейнер для книг
-    bodyGroupExercise.classList.add('body__categories');
+    bodyGroupExercise.classList.add('category__container');
     bodyContainer.appendChild(bodyGroupExercise);
     //--------------------------------------------------
     // Получение данных о упражнениях
@@ -1771,7 +1793,7 @@ function getGroupExercise(idModule){
             let jsonData = JSON.parse(xhrGroupExercise.responseText); // Разбираем JSON-данные
             for (let i = 0; i < jsonData.length; i++)
             {
-                let groupExercise = createGroupExercise(jsonData[i].idGroupExercise, jsonData[i].task, jsonData[i].title);
+                let groupExercise = createGroupExercise(jsonData[i].idGroupExercise, jsonData[i].task, jsonData[i].title, jsonData[i].grade);
                 bodyGroupExercise.appendChild(groupExercise);
             }
         }
@@ -1793,7 +1815,7 @@ function getExercise(idGroupExercise){
         if (xhrExercise.readyState === 4 && xhrExercise.status === 200) // Проверяем, что запрос завершен и успешен
         {
             let jsonData = JSON.parse(xhrExercise.responseText); // Разбираем JSON-данные
-            bodyContainer.appendChild(createExercise(jsonData));
+            bodyContainer.appendChild(createExercise(jsonData, idGroupExercise));
         }
     };
     xhrExercise.open("POST", "../PHP/exercise.php"); // Открываем соединение с сервером с помощью метода "POST" и адреса ""
