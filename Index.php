@@ -216,6 +216,9 @@
             <div id="dictionary">
                 Словарь
             </div>
+            <div id="user-exercises">
+                Упражнения
+            </div>
             <div id="achievements">
                 Достижения
             </div>

@@ -1816,4 +1816,59 @@ function getSettingCards()
         settingsContainer.appendChild(settingCard);
     }
 }
+//==================================================
+// Функция для отображения упражнений пользователей
+function getUserExercises(){
+    let bodyContainer = document.getElementById("body__container");
+    bodyContainer.innerHTML = ""; // Отчищаем рабочую область перед добавление групп категорий
+    let bodyExercise = document.createElement('div'); // Создаём контейнер для книг
+    bodyExercise.classList.add('body__categories');
+    bodyContainer.appendChild(bodyExercise);
+    //--------------------------------------------------
+    // Получение данных о упражнениях
+    let xhrUserExercises = new XMLHttpRequest(); // Создаем новый объект XMLHttpRequest
+    xhrUserExercises.onreadystatechange = function() // Устанавливаем функцию, которая будет вызываться при изменении состояния объекта `xhr`
+    {
+        if (xhrUserExercises.readyState === 4 && xhrUserExercises.status === 200) // Проверяем, что запрос завершен и успешен
+        {
+            let jsonData = JSON.parse(xhrUserExercises.responseText); // Разбираем JSON-данные
+            let moduleAndGroupModuleData = jsonData.moduleAndGroupModuleData;
+            let exerciseGradeData = jsonData.exerciseGradeData;
+
+            // Создаем контейнер для название модуля и группы модуля
+            for(let i = 0; i < moduleAndGroupModuleData.length; i++){
+                let moduleAndGroupModule = document.createElement("div"); // Создаем контейнер для название модуля и группы модуля
+                moduleAndGroupModule.classList.add("moduleAndGroupModule");
+                moduleAndGroupModule.id = "idModuleAndGroupModule: " + moduleAndGroupModuleData[i].idModule;
+                moduleAndGroupModule.textContent = moduleAndGroupModuleData[i].moduleTitle + "( " +
+                moduleAndGroupModuleData[i].groupModuleTitle + ")"; // Заполняем название модуля и группы модуля
+                bodyExercise.appendChild(moduleAndGroupModule);
+            }
+
+            // Создаем строку с упражнением и оценкой и помещаем её в контейнер для название модуля и группы модуля
+            for(let i = 0; i < exerciseGradeData.length; i++){
+                let exerciseGrade = document.createElement("div"); // Создаем строку с упражнением и оценкой
+                exerciseGrade.classList.add("exerciseGrade");
+                
+                let groupExerciseTitle = document.createElement("div"); // Группа упражнений название
+                groupExerciseTitle.textContent = exerciseGradeData[i].groupExerciseTitle;
+
+                let groupExerciseTask = document.createElement("div"); // Группа упражнений задание
+                groupExerciseTask.textContent = exerciseGradeData[i].groupExerciseTask;
+
+                let userGroupExerciseGrade = document.createElement("div"); // Группа упражнений оценка
+                userGroupExerciseGrade.textContent = exerciseGradeData[i].userGroupExerciseGrade + "%";
+
+                exerciseGrade.appendChild(groupExerciseTitle);
+                exerciseGrade.appendChild(groupExerciseTask);
+                exerciseGrade.appendChild(userGroupExerciseGrade);
+
+                let moduleAndGroupModule = document.getElementById("idModuleAndGroupModule: " + exerciseGradeData[i].idModule);
+                moduleAndGroupModule.appendChild(exerciseGrade);
+            }
+        }
+    };
+    xhrUserExercises.open("POST", "../PHP/userExercises.php"); // Открываем соединение с сервером с помощью метода "POST" и адреса ""
+    xhrUserExercises.send();
+}
 /* ==================================================================================================== */

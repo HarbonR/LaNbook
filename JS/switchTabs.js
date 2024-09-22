@@ -23,10 +23,11 @@ let practiceWords = document.getElementById("practice-words"); // Подвкла
 let settings = document.getElementById("settings"); // Подвкладка "Настройки"
 //--------------------------------------------------
 // Вкладка личный кабинет
-let bodyUser = document.getElementById("body__user");
-let dictionary = document.getElementById("dictionary");
-let achievements = document.getElementById("achievements");
-let statistics = document.getElementById("statistics");
+let bodyUser = document.getElementById("body__user"); // Тело подвкладок личного кабинета
+let dictionary = document.getElementById("dictionary"); // Подвкладка "Словарь"
+let userExercises = document.getElementById("user-exercises"); // Подвкладка "Упражнения"
+let achievements = document.getElementById("achievements"); // Подвкладка "Достижения"
+let statistics = document.getElementById("statistics"); // Подвкладка "Статистика"
 //--------------------------------------------------
 // Массивы активных элементов
 let menuActive = menu.getElementsByClassName("menu_active");
@@ -1318,7 +1319,7 @@ settings.onclick = function()
 };
 //--------------------------------------------------
 // Вкладка личный кабинет
-// 
+// Подвкладка "Словарь"
 dictionary.onclick = function()
 {
     document.getElementById("body__container").style.paddingTop = "0"; // Удаляет отступ создаваемый кнопкой тренировать всё
@@ -1335,7 +1336,18 @@ dictionary.onclick = function()
     dictionary.classList.add("tab_active");
     getUserCategories();
 };
-//
+// Подвкладка "Упражнения"
+userExercises.onclick = function(){
+    if(burgerOpen.style.display == "none")
+        closeBurger();
+    for (let i = 0; i < tabUserActive.length; i++)
+    {
+        tabUserActive[i].classList.remove("tab_active");
+    }
+    userExercises.classList.add("tab_active");
+    getUserExercises();
+}
+// Подвкладка "Достижения"
 achievements.onclick = function()
 {
     if(burgerOpen.style.display == "none")
@@ -1346,7 +1358,7 @@ achievements.onclick = function()
     }
     achievements.classList.add("tab_active");
 };
-//
+// Подвкладка "Статистика"
 statistics.onclick = function()
 {
     if(burgerOpen.style.display == "none")
@@ -1386,7 +1398,9 @@ function closeBurger()
     burgerOpen.value = false;
     burgerClose.setAttribute("style", "display: none;");
     document.getElementById("backgroundBurger").style.display = "none";
-    document.getElementById("view-cards").style.display = "none";
+    // Исправляет баг закрытия view-cards в десктопной версии при нажатии на вкладку авторизация
+    if(window.getComputedStyle(burger).display != "none") // Получает стиль дисплея в самом файле css стилей
+        document.getElementById("view-cards").style.removeProperty("display"); // Удаляем стиль, так как при изменении стиля view-cards на десктопе все равно закрывается
     document.getElementById("exit").style.display = "none";
     document.getElementById("body__training").style.display = "none";
     document.getElementById("body__user").style.display = "none";

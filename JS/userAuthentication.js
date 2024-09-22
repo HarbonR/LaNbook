@@ -176,7 +176,7 @@ buttonFormEnter.onclick = function(event)
                 let data = JSON.parse(xhr.responseText);
                 if(data.answer == "Правильный логин и пароль")
                 {
-                    menu__cards.click();
+                    menuPersonalArea.click();
                     menu.removeAttribute("style");
                     body.removeAttribute("style");
                     enterRegister.setAttribute("style","display:none;");
@@ -243,6 +243,6 @@ exit.onclick = function()
     sessionStorage.removeItem("exit");
     menuEnterRegister.removeAttribute("style");
     menuPersonalArea.style.display = "none";
-    menu__cards.click();
+    menuGrammar.click();
 }
 //==================================================
